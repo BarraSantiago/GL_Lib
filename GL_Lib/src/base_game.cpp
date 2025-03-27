@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Camera.h"
+#include "CameraController.h"
 #include "Input.h"
 
 using namespace gllib;
@@ -18,17 +20,36 @@ BaseGame::BaseGame() {
 		glfwTerminate();
 		return;
 	}
+	glfwSetWindowUserPointer(window->getReference(), this);
+	glfwSetInputMode(window->getReference(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	// Make the window's context current
 	window->makeContextCurrent();
 	// Initialize the GLAD library
 	gllib::LibCore::initGlad();
 	
 	input = new Input(window->getReference());
+	
+	camera = new Camera();
+	cameraController = new CameraController(camera);
+	
+	// Set up perspective projection
+	camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 100.0f);
+	
+	// Set up mouse callback for camera control
+	glfwSetCursorPosCallback(window->getReference(), [](GLFWwindow* window, double xpos, double ypos) {
+	    BaseGame* game = static_cast<BaseGame*>(glfwGetWindowUserPointer(window));
+	    if (game)
+	        game->getCameraController()->processMouseMovement(xpos, ypos);
+	});
+	
 }
 
 BaseGame::~BaseGame() {
 	delete input;
 	delete window;
+	delete cameraController;
+	delete camera;
 }
 
 // Private
@@ -59,6 +80,7 @@ void BaseGame::updateInternal() {
 	// Loop until the user closes the window
 	while (!window->getShouldClose()) {
 
+		cameraController->processInput();
 		update();
 
 		// Swap front and back buffers

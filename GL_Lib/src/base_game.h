@@ -14,6 +14,8 @@
 #include "shader.h"
 
 namespace gllib {
+	class Camera;
+	class CameraController;
 
 	class DLLExport BaseGame {
 	private:
@@ -26,18 +28,23 @@ namespace gllib {
 	protected:
 		Window* window;
 		Input* input;
-
+		Camera* camera;
+		CameraController* cameraController;
+		
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;
 
-		virtual void init() {};
-		virtual void update() {};
-		virtual void uninit() {};
+		virtual void init() {}
+		virtual void update() {}
+		virtual void uninit() {}
 
 	public:
 		BaseGame();
 		virtual ~BaseGame();
-
+		
+		Camera* getCamera() { return camera; }
+		CameraController* getCameraController() { return cameraController; }
+		
 		void start();
 	};
 

@@ -5,7 +5,7 @@
 using namespace gllib;
 using namespace std;
 
-glm::mat4 Renderer::projMatrix = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+glm::mat4 Renderer::projMatrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
 
@@ -25,6 +25,12 @@ void Renderer::setUpVertexAttributes() {
 }
 
 void Renderer::setUpMVP() {
+    // Set the view matrix to position the camera
+    Renderer::viewMatrix = glm::lookAt(
+        glm::vec3(0.0f, 0.0f, 3.0f), // Camera position
+        glm::vec3(0.0f, 0.0f, 0.0f), // Look at point
+        glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
+    );
     // TRS
     // the mpv matrix is calculated multiplying p*v*m
     glm::mat4 mvp = projMatrix * viewMatrix * modelMatrix;
@@ -130,6 +136,19 @@ void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
 
 void Renderer::setOrthoProjectionMatrix(float width, float height) {
     projMatrix = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
+}
+void Renderer::setPerspectiveProjectionMatrix(float fov, float aspectRatio, float nearPlane, float farPlane) {
+    projMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+}
+
+glm::mat4 Renderer::getViewMatrix()
+{
+    return viewMatrix;
+}
+
+void Renderer::setViewMatrix(glm::mat4 newViewMatrix)
+{
+    viewMatrix = newViewMatrix;
 }
 
 void Renderer::clear() {

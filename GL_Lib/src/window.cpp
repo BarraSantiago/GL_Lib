@@ -8,7 +8,8 @@ using namespace std;
 Window::Window(int width, int height, string title) {
 	window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 	cout << "Window created!\n";
-	Renderer::setOrthoProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
+	//Renderer::setOrthoProjectionMatrix(static_cast<float>(width), static_cast<float>(height));
+	Renderer::setPerspectiveProjectionMatrix(45.0f, static_cast<float>(width) / static_cast<float>(height), 0.1f, 100.0f);
 }
 
 Window::~Window() {

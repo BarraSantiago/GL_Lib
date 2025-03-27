@@ -28,8 +28,8 @@ namespace gllib {
 	class DLLExport Renderer {
 	private:
 		static glm::mat4 projMatrix;
-		static glm::mat4 viewMatrix;
 		static glm::mat4 modelMatrix;
+		static glm::mat4 viewMatrix;
 
 	public:
 		static void setUpVertexAttributes();
@@ -50,7 +50,11 @@ namespace gllib {
 
 		static void setModelMatrix(glm::mat4 newModelMatrix);
 		static void setOrthoProjectionMatrix(float width, float height);
+		static void setPerspectiveProjectionMatrix(float fov, float aspectRatio, float nearPlane, float farPlane);
 
+		static glm::mat4 getViewMatrix();
+		static void setViewMatrix(glm::mat4 newViewMatrix);
+		
 		static void clear();
 	};
 

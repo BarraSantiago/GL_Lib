@@ -38,13 +38,13 @@ Game::Game()
 
     gllib::Transform trs;
     trs.position = { 100.0f, 100.0f, 0.0f };
-    trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs.rotationQuat = { 1.0f, 0.0f, 0.0f, 1.0f };
     trs.scale = { 57.74f, 50.0f, 0.0f };
     triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
     
     gllib::Transform trs2;
     trs2.position = { 400.0f, 400.0f, 0.0f };
-    trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
+    trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 90.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -119,9 +119,11 @@ void Game::update() {
     coin->update();
     player->update();
 
-    gllib::Quaternion rot = triangle->getRotationQuat();
-    rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
-    triangle->setRotationQuat(rot);
+    if (triangle != nullptr) {
+        gllib::Quaternion rot = triangle->getRotationQuat();
+        rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
+        triangle->setRotationQuat(rot);
+    }
 
     moveRectangle(100);
 
