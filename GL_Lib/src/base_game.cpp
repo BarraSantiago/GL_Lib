@@ -35,6 +35,8 @@ BaseGame::BaseGame() {
 	
 	// Set up perspective projection
 	camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 100.0f);
+	camera->setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
+	camera->setRotation(-90.0f, 0.0f);
 	
 	// Set up mouse callback for camera control
 	glfwSetCursorPosCallback(window->getReference(), [](GLFWwindow* window, double xpos, double ypos) {

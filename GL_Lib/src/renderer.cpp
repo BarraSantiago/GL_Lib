@@ -26,11 +26,11 @@ void Renderer::setUpVertexAttributes() {
 
 void Renderer::setUpMVP() {
     // Set the view matrix to position the camera
-    Renderer::viewMatrix = glm::lookAt(
-        glm::vec3(0.0f, 0.0f, 3.0f), // Camera position
-        glm::vec3(0.0f, 0.0f, 0.0f), // Look at point
-        glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
-    );
+    //Renderer::viewMatrix = glm::lookAt(
+    //    glm::vec3(0.0f, 0.0f, 3.0f), // Camera position
+    //    glm::vec3(0.0f, 0.0f, 0.0f), // Look at point
+    //    glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
+    //);
     // TRS
     // the mpv matrix is calculated multiplying p*v*m
     glm::mat4 mvp = projMatrix * viewMatrix * modelMatrix;
@@ -48,6 +48,7 @@ unsigned int Renderer::createVertexArrayObject() {
 
 unsigned int Renderer::createVertexBufferObject(const float vertexData[], GLsizei bufferSize) {
     unsigned int VBO;
+    glEnable(GL_DEPTH_TEST);
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, bufferSize, vertexData, GL_STATIC_DRAW);
@@ -152,5 +153,5 @@ void Renderer::setViewMatrix(glm::mat4 newViewMatrix)
 }
 
 void Renderer::clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

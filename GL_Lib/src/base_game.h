@@ -12,6 +12,7 @@
 #include "sprite.h"
 #include "animation.h"
 #include "shader.h"
+#include "Camera.h"
 
 namespace gllib {
 	class Camera;

@@ -38,7 +38,7 @@ Game::Game()
 
     gllib::Transform trs;
     trs.position = { 100.0f, 100.0f, 0.0f };
-    trs.rotationQuat = { 1.0f, 0.0f, 0.0f, 1.0f };
+    trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 1.0f };
     trs.scale = { 57.74f, 50.0f, 0.0f };
     triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
     
@@ -105,10 +105,10 @@ Game::~Game() {
 }
 
 void Game::init() {
-    cout << "External init!!!!\n";
+    cout << "External init!\n";
 
     srand(time(nullptr));
-    window->setTitle("Example game lmao");
+    window->setTitle("Engine");
 }
 
 
