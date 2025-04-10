@@ -37,16 +37,17 @@ Game::Game()
     cout << "Game created!\n";
 
     gllib::Transform trs;
-    trs.position = { 100.0f, 100.0f, 0.0f };
+    trs.position = { 100.0f, 100.0f, -2.0f };
     trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 1.0f };
     trs.scale = { 57.74f, 50.0f, 0.0f };
     triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
     
     gllib::Transform trs2;
-    trs2.position = { 400.0f, 400.0f, 0.0f };
+    trs2.position = { 400.0f, 400.0f, 1.0f };
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 90.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
+    trs2.position = { 400.0f, 400.0f, 2.0f };
     coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     trs2.position = { window->getWidth() * .5f, window->getHeight() * .5f, 0.0f };
     player = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -59,7 +60,7 @@ Game::Game()
     background->addTexture("background.png", true);
 
     gllib::Transform trs4;
-    trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 0};
+    trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 3};
     trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs4.scale = {static_cast<float>(window->getWidth()), 80, 0};
     floorCollision = new gllib::Rectangle(trs4, {0.8f, 0.0f, 1.0f, 0.5f});
@@ -107,6 +108,13 @@ Game::~Game() {
 void Game::init() {
     cout << "External init!\n";
 
+    camera->setTarget(player);
+    camera->setDistance(100.0f); // Distance behind player
+    camera->setHeight(2.0f);   // Height above player
+    
+    // Set initial camera rotation
+    camera->setRotation(0.0f, 0.0f);
+
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -115,6 +123,7 @@ void Game::init() {
 void Game::update() {
     // Update
     movement(player);
+    camera->updateThirdPersonPosition();
 
     coin->update();
     player->update();

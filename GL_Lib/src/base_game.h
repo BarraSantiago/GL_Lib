@@ -13,10 +13,9 @@
 #include "animation.h"
 #include "shader.h"
 #include "Camera.h"
+#include "CameraController.h"
 
 namespace gllib {
-	class Camera;
-	class CameraController;
 
 	class DLLExport BaseGame {
 	private:

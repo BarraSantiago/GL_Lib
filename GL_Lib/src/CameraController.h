@@ -4,7 +4,7 @@
 #include "lib_time.h"
 
 namespace gllib {
-    class CameraController {
+    class DLLExport CameraController {
     private:
         Camera* camera;
         float moveSpeed;

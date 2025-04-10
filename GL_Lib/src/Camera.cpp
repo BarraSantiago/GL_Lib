@@ -74,4 +74,19 @@ namespace gllib
         this->farPlane = farPlane;
         Renderer::setPerspectiveProjectionMatrix(fov, aspectRatio, nearPlane, farPlane);
     }
+
+    void Camera::updateThirdPersonPosition()
+    {
+        if (!target) return;
+        
+        glm::vec3 targetPos = glm::vec3(target->getPosition().x, target->getPosition().y, target->getPosition().z);
+        
+        // Calculate camera position behind target
+        glm::vec3 offset = -front * distance; // Move backward from target
+        offset.y += height; // Add height offset
+        
+        // Update camera position
+        position = targetPos + offset;
+        updateViewMatrix();
+    }
 }

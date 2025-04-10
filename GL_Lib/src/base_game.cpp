@@ -31,7 +31,7 @@ BaseGame::BaseGame() {
 	input = new Input(window->getReference());
 	
 	camera = new Camera();
-	cameraController = new CameraController(camera);
+	cameraController = new CameraController(camera, 10);
 	
 	// Set up perspective projection
 	camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 100.0f);
