@@ -1,6 +1,9 @@
 #pragma once
-#include "deps.h"
+#include <fwd.hpp>
 
+#include "deps.h"
+#include "glm.hpp"
+#include <gtc/matrix_transform.hpp>
 #include <iostream>
 
 namespace gllib {
@@ -17,5 +20,7 @@ namespace gllib {
 		static const char* loadShader(std::string filePath);
 		static void useShaderProgram(unsigned int shaderProgram);
 		static void setShaderProgram(unsigned int shaderProgram);
+		static void setVec3(unsigned int shaderProgram, const char* name, float x, float y, float z);
+		static void setMat4(unsigned int programID, const char* name, const glm::mat4& value);
 	};
 };

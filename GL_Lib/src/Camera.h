@@ -41,7 +41,8 @@ namespace gllib {
         
         void setPosition(const glm::vec3& pos);
         glm::vec3 getPosition() const; 
-        glm::vec3 getFront() const; 
+        glm::vec3 getFront() const;
+        glm::mat4 getProjectionMatrix() const;
         
         void setRotation(float newYaw, float newPitch);
         void rotate(float yawDelta, float pitchDelta);

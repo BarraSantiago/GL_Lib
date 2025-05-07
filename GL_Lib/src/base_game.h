@@ -14,6 +14,7 @@
 #include "shader.h"
 #include "Camera.h"
 #include "CameraController.h"
+#include "Cube.h"
 
 namespace gllib {
 
@@ -33,6 +34,7 @@ namespace gllib {
 		
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;
+		unsigned int shaderProgramLighting;
 
 		virtual void init() {}
 		virtual void update() {}

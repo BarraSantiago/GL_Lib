@@ -2,10 +2,10 @@
 #include "transform.h"
 #include "deps.h"
 
-namespace gllib {
-    
-    class DLLExport Entity {
-        
+namespace gllib
+{
+    class DLLExport Entity
+    {
     protected:
         Transform transform;
 
@@ -21,7 +21,7 @@ namespace gllib {
         Vector3 upward() const;
         Vector3 forward() const;
         Vector3 right() const;
-        
+
         Transform getTransform() const;
         Vector3 getPosition() const;
         Vector3 getScale() const;
@@ -35,6 +35,6 @@ namespace gllib {
         void setRotationEuler(const Vector3& rotation);
         bool isColliding(const Transform& _transform) const;
         bool isColliding(float x, float y, float width, float height) const;
-
+        glm::mat4 getModelMatrix() const;
     };
 }

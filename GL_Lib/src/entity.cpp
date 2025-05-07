@@ -1,10 +1,12 @@
 ﻿#include "entity.h"
 
 #include "myMaths.h"
+#include "shape.h"
 
 namespace gllib
 {
-    Entity::Entity(const Vector3& translation, const Vector3& rotationEuler, const Vector3& scale) {
+    Entity::Entity(const Vector3& translation, const Vector3& rotationEuler, const Vector3& scale)
+    {
         transform.position = translation;
         transform.rotationQuat = Maths::Euler(rotationEuler);
         transform.scale = scale;
@@ -17,11 +19,13 @@ namespace gllib
     Entity::~Entity()
     = default;
 
-    void Entity::move(const Vector3 direction) {
+    void Entity::move(const Vector3 direction)
+    {
         transform.position += direction;
     }
 
-    void Entity::rotate(const Vector3 eulerRotation) {
+    void Entity::rotate(const Vector3 eulerRotation)
+    {
         Quaternion rotationQuat;
         rotationQuat.x = eulerRotation.x;
         rotationQuat.y = eulerRotation.y;
@@ -29,21 +33,25 @@ namespace gllib
         transform.rotationQuat += rotationQuat;
     }
 
-    void Entity::updateTransform() {
+    void Entity::updateTransform()
+    {
         transform.forward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 0, 1));
         transform.upward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 1, 0));
         transform.right = Maths::Quat2Vec3(transform.rotationQuat, Vector3(1, 0, 0));
     }
 
-    Vector3 Entity::upward() const {
+    Vector3 Entity::upward() const
+    {
         return transform.upward;
     }
 
-    Vector3 Entity::forward() const {
+    Vector3 Entity::forward() const
+    {
         return transform.forward;
     }
 
-    Vector3 Entity::right() const {
+    Vector3 Entity::right() const
+    {
         return transform.right;
     }
 
@@ -64,7 +72,7 @@ namespace gllib
 
     Vector3 Entity::getRotationEuler() const
     {
-        return Maths::Quat2Vec3( transform.rotationQuat, Vector3(1, 1, 1));
+        return Maths::Quat2Vec3(transform.rotationQuat, Vector3(1, 1, 1));
     }
 
     Quaternion Entity::getRotationQuat() const
@@ -72,23 +80,28 @@ namespace gllib
         return transform.rotationQuat;
     }
 
-    void Entity::setTransform(const Transform& transform) {
+    void Entity::setTransform(const Transform& transform)
+    {
         this->transform = transform;
     }
 
-    void Entity::setPosition(const Vector3& position) {
+    void Entity::setPosition(const Vector3& position)
+    {
         transform.position = position;
     }
 
-    void Entity::setScale(const Vector3& scale) {
+    void Entity::setScale(const Vector3& scale)
+    {
         transform.scale = scale;
     }
 
-    void Entity::setRotationQuat(const Quaternion& rotation) {
+    void Entity::setRotationQuat(const Quaternion& rotation)
+    {
         transform.rotationQuat = rotation;
     }
 
-    void Entity::setRotationEuler(const Vector3& rotation)	{
+    void Entity::setRotationEuler(const Vector3& rotation)
+    {
         transform.rotationQuat = Maths::Euler(rotation);
     }
 
@@ -119,12 +132,29 @@ namespace gllib
 
     bool Entity::isColliding(float x, float y, float width, float height) const
     {
-        if (transform.position.x + transform.scale.x >= x &&		
-            transform.position.x <= x + width &&    
-            transform.position.y + transform.scale.y >= y &&			
-            transform.position.y <= y + height) {    
+        if (transform.position.x + transform.scale.x >= x &&
+            transform.position.x <= x + width &&
+            transform.position.y + transform.scale.y >= y &&
+            transform.position.y <= y + height)
+        {
             return true;
         }
         return false;
+    }
+
+    glm::mat4 Entity::getModelMatrix() const
+    {
+        glm::mat4 model = glm::mat4(1.0f);
+
+        model = glm::translate(model, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+
+        glm::quat glmQuat(transform.rotationQuat.w, transform.rotationQuat.x, 
+                  transform.rotationQuat.y, transform.rotationQuat.z);
+        glm::mat4 rotationMatrix = glm::mat4_cast(glmQuat);
+        model = model * rotationMatrix;
+
+        model = glm::scale(model, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
+
+        return model;
     }
 }

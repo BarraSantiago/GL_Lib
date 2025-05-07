@@ -51,6 +51,10 @@ namespace gllib
         return front;
     }
 
+    glm::mat4 Camera::getProjectionMatrix() const {
+        return glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+    }
+
     void Camera::setRotation(float newYaw, float newPitch)
     {
         yaw = newYaw;

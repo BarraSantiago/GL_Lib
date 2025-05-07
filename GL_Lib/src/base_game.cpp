@@ -65,9 +65,13 @@ bool BaseGame::initInternal() {
 	const char* fragmentSource1 = gllib::Shader::loadShader("solidColorF.glsl");
 	const char* vertexSource2 = gllib::Shader::loadShader("textureV.glsl");
 	const char* fragmentSource2 = gllib::Shader::loadShader("textureF.glsl");
+	const char* vertexLightingSource = gllib::Shader::loadShader("lightingV.glsl");
+	const char* fragmentLightingSource = gllib::Shader::loadShader("lightingF.glsl");
+
 	// Create shader program
 	shaderProgramSolidColor = gllib::Shader::createShader(vertexSource1, fragmentSource1);
 	shaderProgramTexture = gllib::Shader::createShader(vertexSource2, fragmentSource2);
+	shaderProgramLighting = gllib::Shader::createShader(vertexLightingSource, fragmentLightingSource);
 	// Set current shader program
 	Shader::useShaderProgram(shaderProgramSolidColor);
 
