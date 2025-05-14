@@ -33,6 +33,7 @@
     <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\loader.cpp" />
+    <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\myMaths.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\rectangle.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="src\lib_time.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\loader.h" />
+    <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\myMaths.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\rectangle.h" />

@@ -18,7 +18,7 @@ private:
     gllib::collisionManager* collisionManager;
     gllib::Cube* cube;
     gllib::AmbientLight* ambientLight;
-    
+
     float animSpeed, nextFrame;
 
     void moveRectangle(float speed);
@@ -52,10 +52,10 @@ Game::Game()
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 90.0f};
     trs2.scale = {100.0f, 100.0f, 0.0f};
     sprite = new gllib::Sprite(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
-    
+
     trs2.position = {400.0f, 400.0f, 2.0f};
     coin = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
-    
+
     trs2.position = {0, 0, 0.0f};
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.scale = {50.0f, 50.0f, 50.0f};
@@ -77,10 +77,10 @@ Game::Game()
     cubeTrs.position = {0.0f, 0.0f, -10.0f};
     cubeTrs.rotationQuat = {10.0f, 10.0f, 10.0f, 10.0f};
     cubeTrs.scale = {10.0f, 10.0f, 10.0f};
-    cube = new gllib::Cube(cubeTrs, {0.8f, 0.2f, 0.2f, 1.0f});
+    cube = new gllib::Cube(cubeTrs, new gllib::Material(gllib::Material::gold()));
 
     ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.4f);
-    
+
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
 
     sprite->addTexture("sus.png", true);
@@ -148,7 +148,7 @@ void Game::update()
 
     coin->update();
     player->update();
-    
+
     // In your update() function, replace the current quaternion code with:
     float rotationSpeed = 30.0f * gllib::LibTime::getDeltaTime();
     float angleInRadians = glm::radians(rotationSpeed);
@@ -165,17 +165,21 @@ void Game::update()
 
     // Multiply the quaternions (the order matters here)
     gllib::Quaternion newRotation;
-    newRotation.w = rotationZ.w * cubeRot.w - rotationZ.x * cubeRot.x - rotationZ.y * cubeRot.y - rotationZ.z * cubeRot.z;
-    newRotation.x = rotationZ.w * cubeRot.x + rotationZ.x * cubeRot.w + rotationZ.y * cubeRot.z - rotationZ.z * cubeRot.y;
-    newRotation.y = rotationZ.w * cubeRot.y - rotationZ.x * cubeRot.z + rotationZ.y * cubeRot.w + rotationZ.z * cubeRot.x;
-    newRotation.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.w;
+    newRotation.w = rotationZ.w * cubeRot.w - rotationZ.x * cubeRot.x - rotationZ.y * cubeRot.y - rotationZ.z * cubeRot.
+        z;
+    newRotation.x = rotationZ.w * cubeRot.x + rotationZ.x * cubeRot.w + rotationZ.y * cubeRot.z - rotationZ.z * cubeRot.
+        y;
+    newRotation.y = rotationZ.w * cubeRot.y - rotationZ.x * cubeRot.z + rotationZ.y * cubeRot.w + rotationZ.z * cubeRot.
+        x;
+    newRotation.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.
+        w;
 
     // Normalize to ensure it's a pure rotation
     newRotation.normalize();
 
     // Apply the new rotation
     cube->setRotationQuat(newRotation);
-    
+
     if (triangle != nullptr)
     {
         gllib::Quaternion rot = triangle->getRotationQuat();
@@ -193,52 +197,52 @@ void Game::update()
 
 void Game::drawObjects()
 {
-    gllib::Shader::useShaderProgram(shaderProgramLighting);
+    gllib::Shader::setShaderProgram(shaderProgramLighting);
 
     ambientLight->apply(shaderProgramLighting);
-    // Add point light parameters
+    // Point light setup
     gllib::Shader::setVec3(shaderProgramLighting, "lightColor", 1.0f, 1.0f, 1.0f);
     gllib::Shader::setVec3(shaderProgramLighting, "lightPos", 5.0f, 5.0f, 5.0f);
-    
-    // Set attenuation values
     gllib::Shader::setFloat(shaderProgramLighting, "light.constant", 1.0f);
     gllib::Shader::setFloat(shaderProgramLighting, "light.linear", 0.09f);
     gllib::Shader::setFloat(shaderProgramLighting, "light.quadratic", 0.032f);
 
+    // The material is now automatically applied in cube->draw()
     cube->draw();
-    
-    gllib::Shader::useShaderProgram(shaderProgramTexture);
+
+    gllib::Shader::setShaderProgram(shaderProgramTexture);
     //background->draw();
     //sprite->draw();
     //coin->draw();
     player->draw();
 
-    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+    gllib::Shader::setShaderProgram(shaderProgramSolidColor);
     triangle->draw();
 }
 
-void Game::prepareRendering() {
+void Game::prepareRendering()
+{
     gllib::Renderer::clear();
-    
+
     // Set up lighting shader
-    gllib::Shader::useShaderProgram(shaderProgramLighting);
+    gllib::Shader::setShaderProgram(shaderProgramLighting);
     glm::mat4 projection = camera->getProjectionMatrix();
     glm::mat4 view = camera->getViewMatrix();
-    
+
     gllib::Shader::setMat4(shaderProgramLighting, "projection", projection);
     gllib::Shader::setMat4(shaderProgramLighting, "view", view);
     gllib::Shader::setVec3(shaderProgramLighting, "viewPos",
-                          camera->getPosition().x,
-                          camera->getPosition().y,
-                          camera->getPosition().z);
-                          
+                           camera->getPosition().x,
+                           camera->getPosition().y,
+                           camera->getPosition().z);
+
     // Set up texture shader
-    gllib::Shader::useShaderProgram(shaderProgramTexture);
+    gllib::Shader::setShaderProgram(shaderProgramTexture);
     gllib::Shader::setMat4(shaderProgramTexture, "projection", projection);
     gllib::Shader::setMat4(shaderProgramTexture, "view", view);
-    
+
     // Set up solid color shader
-    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+    gllib::Shader::setShaderProgram(shaderProgramSolidColor);
     gllib::Shader::setMat4(shaderProgramSolidColor, "projection", projection);
     gllib::Shader::setMat4(shaderProgramSolidColor, "view", view);
 }

@@ -16,6 +16,9 @@
 #include "CameraController.h"
 #include "Cube.h"
 #include "AmbientLight.h"
+#include "PointLight.h"
+#include "Material.h"
+#include "transform.h"
 
 namespace gllib {
 

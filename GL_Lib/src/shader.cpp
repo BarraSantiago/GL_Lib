@@ -12,6 +12,7 @@ using namespace std;
 // Private
 unsigned int Shader::shapeShaderProgram = 0;
 unsigned int Shader::textureShaderProgram = 0;
+unsigned int Shader::currentShaderProgram = 0;
 
 string Shader::getShaderType(unsigned int type)
 {
@@ -124,14 +125,10 @@ const char* Shader::loadShader(string filePath)
     return Loader::loadTextFile(filePath);
 }
 
-void Shader::useShaderProgram(unsigned int shaderProgram)
-{
-    glUseProgram(shaderProgram);
-}
-
 void Shader::setShaderProgram(unsigned int shaderProgram)
 {
     glUseProgram(shaderProgram);
+    currentShaderProgram = shaderProgram;
 }
 
 void Shader::setVec3(unsigned int shaderProgram, const char* name, float x, float y, float z)
@@ -162,4 +159,9 @@ void Shader::setFloat(unsigned int shaderProgram, const char* name, float value)
     {
         std::cerr << "Warning: Uniform '" << name << "' not found in shader program " << shaderProgram << std::endl;
     }
+}
+
+unsigned int Shader::getCurrentShaderProgram()
+{
+    return currentShaderProgram;
 }

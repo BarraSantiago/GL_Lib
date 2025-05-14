@@ -78,7 +78,7 @@ bool BaseGame::initInternal()
     shaderProgramLighting = gllib::Shader::createShader(vertexLightingSource, fragmentLightingSource);
 
     // Set current shader program
-    Shader::useShaderProgram(shaderProgramSolidColor);
+    Shader::setShaderProgram(shaderProgramSolidColor);
     
     // Add point light parameters
     gllib::Shader::setVec3(shaderProgramLighting, "lightColor", 1.0f, 1.0f, 1.0f);
