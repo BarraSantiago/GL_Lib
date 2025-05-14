@@ -93,4 +93,10 @@ namespace gllib
         position = targetPos + offset;
         updateViewMatrix();
     }
+
+    void Camera::invertYAxis()
+    {
+        worldUp.y = -worldUp.y;
+        updateCameraVectors();
+    }
 }

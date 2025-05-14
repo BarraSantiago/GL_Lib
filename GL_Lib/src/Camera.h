@@ -53,5 +53,6 @@ namespace gllib {
         void setDistance(float dist) { distance = dist; }
         void setHeight(float h) { height = h; }
         void updateThirdPersonPosition();
+        void invertYAxis();
     };
 }
