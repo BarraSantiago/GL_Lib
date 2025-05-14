@@ -55,7 +55,7 @@ Game::Game()
     coin = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
     
     trs2.position = {0, 0, 0.0f};
-    trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 180.0f};
+    trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.scale = {50.0f, 50.0f, 50.0f};
     player = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
 
@@ -72,8 +72,8 @@ Game::Game()
     floorCollision = new gllib::Rectangle(trs4, {0.8f, 0.0f, 1.0f, 0.5f});
 
     gllib::Transform cubeTrs;
-    cubeTrs.position = {0.0f, 0.0f, -100.0f};
-    cubeTrs.rotationQuat = {0.0f, 0.0f, 0.0f, 1.0f};
+    cubeTrs.position = {0.0f, 0.0f, -10.0f};
+    cubeTrs.rotationQuat = {10.0f, 10.0f, 10.0f, 10.0f};
     cubeTrs.scale = {10.0f, 10.0f, 10.0f};
     cube = new gllib::Cube(cubeTrs, {0.8f, 0.2f, 0.2f, 1.0f});
 
@@ -126,6 +126,7 @@ void Game::init()
     camera->setDistance(100.0f); // Distance behind player
     camera->setHeight(2.0f); // Height above player
     camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 1000.0f);
+    camera->invertYAxis();
     const char* vertexLightingSource = gllib::Shader::loadShader("lightingV.glsl");
     const char* fragmentLightingSource = gllib::Shader::loadShader("lightingF.glsl");
     shaderProgramLighting = gllib::Shader::createShader(vertexLightingSource, fragmentLightingSource);
@@ -153,9 +154,34 @@ void Game::update()
 
     coin->update();
     player->update();
+    
+    // In your update() function, replace the current quaternion code with:
+    float rotationSpeed = 30.0f * gllib::LibTime::getDeltaTime();
+    float angleInRadians = glm::radians(rotationSpeed);
+
+    // Create a rotation quaternion for the z-axis
+    gllib::Quaternion rotationZ;
+    rotationZ.w = std::cos(angleInRadians / 2.0f);
+    rotationZ.x = 0.0f;
+    rotationZ.z = 0.0f;
+    rotationZ.y = std::sin(angleInRadians / 2.0f);
+
+    // Get the current rotation
     gllib::Quaternion cubeRot = cube->getRotationQuat();
-    cubeRot.y += gllib::LibTime::getDeltaTime() * 30.0f;
-    cube->setRotationQuat(cubeRot);
+
+    // Multiply the quaternions (the order matters here)
+    gllib::Quaternion newRotation;
+    newRotation.w = rotationZ.w * cubeRot.w - rotationZ.x * cubeRot.x - rotationZ.y * cubeRot.y - rotationZ.z * cubeRot.z;
+    newRotation.x = rotationZ.w * cubeRot.x + rotationZ.x * cubeRot.w + rotationZ.y * cubeRot.z - rotationZ.z * cubeRot.y;
+    newRotation.y = rotationZ.w * cubeRot.y - rotationZ.x * cubeRot.z + rotationZ.y * cubeRot.w + rotationZ.z * cubeRot.x;
+    newRotation.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.w;
+
+    // Normalize to ensure it's a pure rotation
+    newRotation.normalize();
+
+    // Apply the new rotation
+    cube->setRotationQuat(newRotation);
+    
     if (triangle != nullptr)
     {
         gllib::Quaternion rot = triangle->getRotationQuat();
@@ -191,11 +217,6 @@ void Game::drawObjects()
                            camera->getPosition().y,
                            camera->getPosition().z);
     
-    gllib::Shader::setVec3(shaderProgramLighting, "viewPos",
-                          camera->getPosition().x,
-                          camera->getPosition().y,
-                          camera->getPosition().z);
-    
     cube->draw();
     
     gllib::Shader::useShaderProgram(shaderProgramTexture);
@@ -205,7 +226,7 @@ void Game::drawObjects()
     player->draw();
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
-    //triangle->draw();
+    triangle->draw();
 }
 
 static int x = 1;
