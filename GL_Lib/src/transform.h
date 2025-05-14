@@ -8,8 +8,8 @@
 
 namespace gllib
 {
-    struct DLLExport Vector3 {
-        
+    struct DLLExport Vector3
+    {
         float x; // width | pitch
         float y; // height | yaw
         float z; // depth | roll
@@ -53,7 +53,7 @@ namespace gllib
         float x;
         float y;
         float z;
-        
+
         Quaternion& operator+=(const Quaternion& quaternion)
         {
             w += quaternion.w;
@@ -61,6 +61,28 @@ namespace gllib
             y += quaternion.y;
             z += quaternion.z;
             return *this;
+        }
+
+        void normalize()
+        {
+            float magnitude = std::sqrt(w * w + x * x + y * y + z * z);
+
+            // Avoid division by zero
+            if (magnitude > 0.0000001f)
+            {
+                w /= magnitude;
+                x /= magnitude;
+                y /= magnitude;
+                z /= magnitude;
+            }
+            else
+            {
+                // If the quaternion is too close to zero, set it to identity
+                w = 1.0f;
+                x = 0.0f;
+                y = 0.0f;
+                z = 0.0f;
+            }
         }
     };
 
@@ -100,7 +122,8 @@ namespace gllib
         Vector3 forward;
         Vector3 upward;
         Vector3 right;
-        Transform operator/(float i) 
+
+        Transform operator/(float i)
         {
             return {
                 position / i,
@@ -122,8 +145,9 @@ namespace gllib
                 upward * i,
                 right * i
             };
-        }    };
-    
+        }
+    };
+
     struct DLLExport ModelMatrix
     {
         glm::mat4 model;
@@ -133,6 +157,4 @@ namespace gllib
         glm::mat4 rotationZ;
         glm::mat4 scale;
     };
-    
 }
-        
