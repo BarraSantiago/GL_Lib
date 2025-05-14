@@ -144,7 +144,22 @@ void Shader::setVec3(unsigned int shaderProgram, const char* name, float x, floa
     glUniform3f(location, x, y, z);
 }
 
-void Shader::setMat4(unsigned int programID, const char* name, const glm::mat4& matrix) {
+void Shader::setMat4(unsigned int programID, const char* name, const glm::mat4& matrix)
+{
     int location = glGetUniformLocation(programID, name);
     glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+}
+
+void Shader::setFloat(unsigned int shaderProgram, const char* name, float value)
+{
+    glUseProgram(shaderProgram);
+    GLint location = glGetUniformLocation(shaderProgram, name);
+    if (location != -1)
+    {
+        glUniform1f(location, value);
+    }
+    else
+    {
+        std::cerr << "Warning: Uniform '" << name << "' not found in shader program " << shaderProgram << std::endl;
+    }
 }

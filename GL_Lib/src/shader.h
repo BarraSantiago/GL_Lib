@@ -22,5 +22,6 @@ namespace gllib {
 		static void setShaderProgram(unsigned int shaderProgram);
 		static void setVec3(unsigned int shaderProgram, const char* name, float x, float y, float z);
 		static void setMat4(unsigned int programID, const char* name, const glm::mat4& value);
+		static void setFloat(unsigned int shaderProgram, const char* name, float value);
 	};
 };

@@ -17,7 +17,8 @@ private:
     gllib::Rectangle* floorCollision;
     gllib::collisionManager* collisionManager;
     gllib::Cube* cube;
-
+    gllib::AmbientLight* ambientLight;
+    
     float animSpeed, nextFrame;
 
     void moveRectangle(float speed);
@@ -26,6 +27,7 @@ private:
 protected:
     void init() override;
     void drawObjects();
+    void prepareRendering();
     void update() override;
     void uninit() override;
 
@@ -77,6 +79,8 @@ Game::Game()
     cubeTrs.scale = {10.0f, 10.0f, 10.0f};
     cube = new gllib::Cube(cubeTrs, {0.8f, 0.2f, 0.2f, 1.0f});
 
+    ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.4f);
+    
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
 
     sprite->addTexture("sus.png", true);
@@ -123,21 +127,11 @@ void Game::init()
     cout << "External init!\n";
 
     camera->setTarget(player);
-    camera->setDistance(100.0f); // Distance behind player
-    camera->setHeight(2.0f); // Height above player
+    camera->setDistance(100.0f);
+    camera->setHeight(2.0f);
     camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 1000.0f);
     camera->invertYAxis();
-    const char* vertexLightingSource = gllib::Shader::loadShader("lightingV.glsl");
-    const char* fragmentLightingSource = gllib::Shader::loadShader("lightingF.glsl");
-    shaderProgramLighting = gllib::Shader::createShader(vertexLightingSource, fragmentLightingSource);
 
-    // Set light properties
-    gllib::Shader::useShaderProgram(shaderProgramLighting);
-    gllib::Shader::setVec3(shaderProgramLighting, "lightPos", 5.0f, 5.0f, 5.0f);
-    gllib::Shader::setVec3(shaderProgramLighting, "lightColor", 1.0f, 1.0f, 1.0f);
-    gllib::Shader::setVec3(shaderProgramLighting, "ambientStrength", 0.4f, 0.4f, 0.4f);
-    gllib::Shader::setVec3(shaderProgramLighting, "viewPos", camera->getPosition().x, camera->getPosition().y,
-                           camera->getPosition().z);
     // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
 
@@ -192,31 +186,25 @@ void Game::update()
     moveRectangle(100);
 
     // Draw
-
-
+    prepareRendering();
     drawObjects();
 }
 
 
 void Game::drawObjects()
 {
-    gllib::Renderer::clear();
-
     gllib::Shader::useShaderProgram(shaderProgramLighting);
-    glm::mat4 projection = camera->getProjectionMatrix();
-    glm::mat4 view = camera->getViewMatrix();
 
-    // Use the gllib shader functions instead of direct OpenGL calls
-    gllib::Shader::useShaderProgram(shaderProgramLighting);
-    gllib::Shader::setMat4(shaderProgramLighting, "projection", projection);
-    gllib::Shader::setMat4(shaderProgramLighting, "view", view);
-
-    // Set the view position for lighting
-    gllib::Shader::setVec3(shaderProgramLighting, "viewPos",
-                           camera->getPosition().x,
-                           camera->getPosition().y,
-                           camera->getPosition().z);
+    ambientLight->apply(shaderProgramLighting);
+    // Add point light parameters
+    gllib::Shader::setVec3(shaderProgramLighting, "lightColor", 1.0f, 1.0f, 1.0f);
+    gllib::Shader::setVec3(shaderProgramLighting, "lightPos", 5.0f, 5.0f, 5.0f);
     
+    // Set attenuation values
+    gllib::Shader::setFloat(shaderProgramLighting, "light.constant", 1.0f);
+    gllib::Shader::setFloat(shaderProgramLighting, "light.linear", 0.09f);
+    gllib::Shader::setFloat(shaderProgramLighting, "light.quadratic", 0.032f);
+
     cube->draw();
     
     gllib::Shader::useShaderProgram(shaderProgramTexture);
@@ -227,6 +215,32 @@ void Game::drawObjects()
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
     triangle->draw();
+}
+
+void Game::prepareRendering() {
+    gllib::Renderer::clear();
+    
+    // Set up lighting shader
+    gllib::Shader::useShaderProgram(shaderProgramLighting);
+    glm::mat4 projection = camera->getProjectionMatrix();
+    glm::mat4 view = camera->getViewMatrix();
+    
+    gllib::Shader::setMat4(shaderProgramLighting, "projection", projection);
+    gllib::Shader::setMat4(shaderProgramLighting, "view", view);
+    gllib::Shader::setVec3(shaderProgramLighting, "viewPos",
+                          camera->getPosition().x,
+                          camera->getPosition().y,
+                          camera->getPosition().z);
+                          
+    // Set up texture shader
+    gllib::Shader::useShaderProgram(shaderProgramTexture);
+    gllib::Shader::setMat4(shaderProgramTexture, "projection", projection);
+    gllib::Shader::setMat4(shaderProgramTexture, "view", view);
+    
+    // Set up solid color shader
+    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
+    gllib::Shader::setMat4(shaderProgramSolidColor, "projection", projection);
+    gllib::Shader::setMat4(shaderProgramSolidColor, "view", view);
 }
 
 static int x = 1;
@@ -341,6 +355,7 @@ void Game::movement(gllib::Animation* player)
 void Game::uninit()
 {
     cout << "External uninit!!!\n";
+    delete ambientLight;
     delete cube;
     delete triangle;
     delete sprite;

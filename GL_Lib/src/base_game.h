@@ -15,6 +15,7 @@
 #include "Camera.h"
 #include "CameraController.h"
 #include "Cube.h"
+#include "AmbientLight.h"
 
 namespace gllib {
 

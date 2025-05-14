@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AmbientLight.cpp" />
     <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\base_game.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -30,8 +31,10 @@
     <ClCompile Include="src\glad\src\glad.c" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\lib_time.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\myMaths.cpp" />
+    <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\rectangle.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\shader.cpp" />
@@ -41,6 +44,7 @@
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AmbientLight.h" />
     <ClInclude Include="src\animation.h" />
     <ClInclude Include="src\base_game.h" />
     <ClInclude Include="src\Camera.h" />
@@ -52,8 +56,10 @@
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\lib_time.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\loader.h" />
     <ClInclude Include="src\myMaths.h" />
+    <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\rectangle.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\shader.h" />
