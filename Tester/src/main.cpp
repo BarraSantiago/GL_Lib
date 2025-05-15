@@ -77,9 +77,9 @@ Game::Game()
     cubeTrs.position = {0.0f, 0.0f, -10.0f};
     cubeTrs.rotationQuat = {10.0f, 10.0f, 10.0f, 10.0f};
     cubeTrs.scale = {10.0f, 10.0f, 10.0f};
-    cube = new gllib::Cube(cubeTrs, new gllib::Material(gllib::Material::gold()));
+    cube = new gllib::Cube(cubeTrs, new gllib::Material(gllib::Material::emerald()));
 
-    ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.4f);
+    ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.8f);
 
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
 
@@ -103,8 +103,7 @@ Game::Game()
     player->addFrame(sonicTex, 595, 118, 37, 41);
     player->addFrame(sonicTex, 636, 118, 34, 41);
     player->addFrame(sonicTex, 673, 118, 32, 41);
-
-    //player->addFramesFromAtlas(sonicTex, 277, 118, 35, 40, 12, 1);
+    //gllib::Shader::setVec3(shaderProgramLighting, "lightPos", 3.0f, 3.0f, 3.0f);
 
     player->setCurrentFrame(0);
     player->setDurationInSecs(1.f);
@@ -164,21 +163,17 @@ void Game::update()
     gllib::Quaternion cubeRot = cube->getRotationQuat();
 
     // Multiply the quaternions (the order matters here)
-    gllib::Quaternion newRotation;
-    newRotation.w = rotationZ.w * cubeRot.w - rotationZ.x * cubeRot.x - rotationZ.y * cubeRot.y - rotationZ.z * cubeRot.
-        z;
-    newRotation.x = rotationZ.w * cubeRot.x + rotationZ.x * cubeRot.w + rotationZ.y * cubeRot.z - rotationZ.z * cubeRot.
-        y;
-    newRotation.y = rotationZ.w * cubeRot.y - rotationZ.x * cubeRot.z + rotationZ.y * cubeRot.w + rotationZ.z * cubeRot.
-        x;
-    newRotation.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.
-        w;
+    gllib::Quaternion newRot;
+    newRot.w = rotationZ.w * cubeRot.w - rotationZ.x * cubeRot.x - rotationZ.y * cubeRot.y - rotationZ.z * cubeRot.z;
+    newRot.x = rotationZ.w * cubeRot.x + rotationZ.x * cubeRot.w + rotationZ.y * cubeRot.z - rotationZ.z * cubeRot.y;
+    newRot.y = rotationZ.w * cubeRot.y - rotationZ.x * cubeRot.z + rotationZ.y * cubeRot.w + rotationZ.z * cubeRot.x;
+    newRot.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.w;
 
     // Normalize to ensure it's a pure rotation
-    newRotation.normalize();
+    newRot.normalize();
 
     // Apply the new rotation
-    cube->setRotationQuat(newRotation);
+    cube->setRotationQuat(newRot);
 
     if (triangle != nullptr)
     {
@@ -200,14 +195,9 @@ void Game::drawObjects()
     gllib::Shader::setShaderProgram(shaderProgramLighting);
 
     ambientLight->apply(shaderProgramLighting);
-    // Point light setup
-    gllib::Shader::setVec3(shaderProgramLighting, "lightColor", 1.0f, 1.0f, 1.0f);
-    gllib::Shader::setVec3(shaderProgramLighting, "lightPos", 5.0f, 5.0f, 5.0f);
-    gllib::Shader::setFloat(shaderProgramLighting, "light.constant", 1.0f);
-    gllib::Shader::setFloat(shaderProgramLighting, "light.linear", 0.09f);
-    gllib::Shader::setFloat(shaderProgramLighting, "light.quadratic", 0.032f);
-
+    
     // The material is now automatically applied in cube->draw()
+    
     cube->draw();
 
     gllib::Shader::setShaderProgram(shaderProgramTexture);

@@ -15,13 +15,9 @@ namespace gllib
         float quadratic;
 
     public:
-        PointLight(const Vector3& position = {0.0f, 0.0f, 0.0f},
-                   const Color& color = {1.0f, 1.0f, 1.0f, 1.0f},
-                   float constant = 1.0f,
-                   float linear = 0.09f,
-                   float quadratic = 0.032f)
-            : Light(color), position(position),
-              constant(constant), linear(linear), quadratic(quadratic)
+        PointLight(const Vector3& position = {0.0f, 0.0f, 0.0f}, const Color& color = {1.0f, 1.0f, 1.0f, 1.0f},
+                   float constant = 1.0f, float linear = 0.09f, float quadratic = 0.032f)
+            : Light(color), position(position), constant(constant), linear(linear), quadratic(quadratic)
         {
         }
 
