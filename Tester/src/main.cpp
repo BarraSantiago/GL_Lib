@@ -77,7 +77,7 @@ Game::Game()
     cubeTrs.position = {0.0f, 0.0f, -10.0f};
     cubeTrs.rotationQuat = {10.0f, 10.0f, 10.0f, 10.0f};
     cubeTrs.scale = {10.0f, 10.0f, 10.0f};
-    cube = new gllib::Cube(cubeTrs, new gllib::Material(gllib::Material::emerald()));
+    cube = new gllib::Cube(cubeTrs, new gllib::Material(gllib::Material::bronze()));
 
     ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.8f);
 
