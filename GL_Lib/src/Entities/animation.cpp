@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "lib_time.h"
-#include "loader.h"
+#include "../lib_time.h"
+#include "../loader.h"
 
 using namespace std;
 

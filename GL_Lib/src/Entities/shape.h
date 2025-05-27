@@ -1,6 +1,5 @@
 #pragma once
 
-#include "renderer.h"
 #include "entity.h"
 
 namespace gllib {

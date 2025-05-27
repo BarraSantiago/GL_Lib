@@ -1,8 +1,6 @@
 #pragma once
 #include "glm.hpp"
 #include "Light.h"
-#include "transform.h"
-#include "Shader.h"
 
 namespace gllib
 {

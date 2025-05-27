@@ -1,6 +1,10 @@
 ﻿#pragma once
-#include "transform.h"
-#include "deps.h"
+#include "../transform.h"
+#include "../deps.h"
+#include "../renderer.h"
+#include "../Material.h"
+#include "../myMaths.h"
+#include "../renderer.h"
 
 namespace gllib
 {

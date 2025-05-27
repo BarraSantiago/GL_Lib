@@ -1,6 +1,6 @@
 ﻿#include "entity.h"
 
-#include "myMaths.h"
+
 #include "shape.h"
 
 namespace gllib

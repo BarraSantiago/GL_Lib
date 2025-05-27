@@ -3,7 +3,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/quaternion.hpp>
 
-#include "entity.h"
+#include "Entities/entity.h"
 #include "renderer.h"
 
 namespace gllib {

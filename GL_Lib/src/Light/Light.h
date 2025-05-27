@@ -1,7 +1,7 @@
 #pragma once
 #include "glm.hpp"
-#include "transform.h"
-#include "Shader.h"
+#include "../transform.h"
+#include "../Shader.h"
 
 namespace gllib
 {
