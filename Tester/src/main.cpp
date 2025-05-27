@@ -13,16 +13,17 @@ private:
     gllib::Sprite* sprite;
     gllib::Sprite* background;
     gllib::Animation* coin;
-    gllib::Animation* player;
+    gllib::Cube* player;
     gllib::Rectangle* floorCollision;
     gllib::collisionManager* collisionManager;
     gllib::Cube* cube;
     gllib::AmbientLight* ambientLight;
+    gllib::PointLight* pointLight;
 
     float animSpeed, nextFrame;
 
     void moveRectangle(float speed);
-    void movement(gllib::Animation* player);
+    void movement(gllib::Entity* player);
 
 protected:
     void init() override;
@@ -58,8 +59,8 @@ Game::Game()
 
     trs2.position = {0, 0, 0.0f};
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
-    trs2.scale = {50.0f, 50.0f, 50.0f};
-    player = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
+    trs2.scale = {5.0f, 5.0f, 5.0f};
+    player = new gllib::Cube(trs2, new gllib::Material(gllib::Material::emerald()));
 
     gllib::Transform trs3;
     trs3.position = {window->getWidth() * .5f, window->getHeight() * .5f, -50.0f};
@@ -79,6 +80,8 @@ Game::Game()
     cubeTrs.scale = {10.0f, 10.0f, 10.0f};
     cube = new gllib::Cube(cubeTrs, new gllib::Material(gllib::Material::bronze()));
 
+
+    pointLight = new gllib::PointLight(trs2.position, {1.0f, 1.0f, 1.0f}, 1.0f, 0.09f, 0.012f);
     ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.8f);
 
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
@@ -89,24 +92,6 @@ Game::Game()
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
     coin->addFrames(coinTex, textureWidth, 16, 8, 1);
     coin->setCurrentFrame(7);
-
-    unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
-    player->addFrame(sonicTex, 273, 118, 33, 41);
-    player->addFrame(sonicTex, 305, 118, 33, 41);
-    player->addFrame(sonicTex, 340, 118, 35, 41);
-    player->addFrame(sonicTex, 379, 118, 38, 41);
-    player->addFrame(sonicTex, 418, 118, 36, 41);
-    player->addFrame(sonicTex, 456, 118, 32, 41);
-    player->addFrame(sonicTex, 488, 118, 32, 41);
-    player->addFrame(sonicTex, 522, 118, 32, 41);
-    player->addFrame(sonicTex, 558, 118, 34, 41);
-    player->addFrame(sonicTex, 595, 118, 37, 41);
-    player->addFrame(sonicTex, 636, 118, 34, 41);
-    player->addFrame(sonicTex, 673, 118, 32, 41);
-    //gllib::Shader::setVec3(shaderProgramLighting, "lightPos", 3.0f, 3.0f, 3.0f);
-
-    player->setCurrentFrame(0);
-    player->setDurationInSecs(1.f);
 
     coin->setCurrentFrame(0);
 
@@ -146,7 +131,6 @@ void Game::update()
     camera->updateThirdPersonPosition();
 
     coin->update();
-    player->update();
 
     // In your update() function, replace the current quaternion code with:
     float rotationSpeed = 30.0f * gllib::LibTime::getDeltaTime();
@@ -195,16 +179,16 @@ void Game::drawObjects()
     gllib::Shader::setShaderProgram(shaderProgramLighting);
 
     ambientLight->apply(shaderProgramLighting);
-    
+    pointLight->apply(shaderProgramLighting);
     // The material is now automatically applied in cube->draw()
-    
+
     cube->draw();
+    player->draw();
 
     gllib::Shader::setShaderProgram(shaderProgramTexture);
     //background->draw();
     //sprite->draw();
     //coin->draw();
-    player->draw();
 
     gllib::Shader::setShaderProgram(shaderProgramSolidColor);
     triangle->draw();
@@ -278,7 +262,7 @@ void Game::moveRectangle(float speed)
     //sprite->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * -60.0f) });
 }
 
-void Game::movement(gllib::Animation* player)
+void Game::movement(gllib::Entity* player)
 {
     gllib::Transform transform2 = player->getTransform();
     transform2.position.y += 1.f;
@@ -289,17 +273,6 @@ void Game::movement(gllib::Animation* player)
         //player->move({0.f, gravity, 0});
     }
 
-    if (Input::getKeyReleased(Key_R))
-    {
-        player->setAnimationPaused(true);
-        player->reset();
-    }
-
-    if (Input::getKeyPressed(Key_Q))
-    {
-        player->setAnimationPaused(false);
-    }
-
     if (!Input::isAnyKeyPressed()) return;
     gllib::Transform transform = player->getTransform();
 
@@ -307,7 +280,6 @@ void Game::movement(gllib::Animation* player)
     {
         // D
         transform.position.x += 2.0f;
-        player->setMirroredX(false);
         if (!collisionManager->checkCollision(transform))
         {
             player->move({speed, 0.f, 0.f});
@@ -318,7 +290,6 @@ void Game::movement(gllib::Animation* player)
     {
         // A
         transform.position.x -= 2.0f;
-        player->setMirroredX(true);
         if (!collisionManager->checkCollision(transform))
         {
             player->move({-speed, 0.f, 0.f});

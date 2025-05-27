@@ -35,6 +35,7 @@ void main()
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     
     vec3 ambient = ambientStrength * lightColor * material.ambient;
+    
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
