@@ -571,6 +571,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\glad\src\glad.c" />
+    <ClCompile Include="src\Importer\ModelImporter.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\Light\AmbientLight.cpp">
@@ -828,6 +829,7 @@
     <ClInclude Include="src\Entities\shape.h" />
     <ClInclude Include="src\Entities\sprite.h" />
     <ClInclude Include="src\Entities\triangle.h" />
+    <ClInclude Include="src\Importer\ModelImporter.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\lib_time.h" />
     <ClInclude Include="src\Light\AmbientLight.h" />
@@ -916,13 +918,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib;$(SolutionDir)lib\Assimp;$(ProjectDir)src;$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(SolutionDir)lib\Assimp;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)src;$(SolutionDir)lib\glfw-3.4.bin.WIN32\lib-vc2022;$(SolutionDir)lib\Assimp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
