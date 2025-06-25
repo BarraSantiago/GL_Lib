@@ -19,6 +19,7 @@
 #include "Light/PointLight.h"
 #include "Material.h"
 #include "transform.h"
+#include "Importer/ModelImporter.h"
 
 namespace gllib {
 

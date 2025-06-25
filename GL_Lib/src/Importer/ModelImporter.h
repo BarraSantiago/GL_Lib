@@ -1,7 +1,7 @@
 #pragma once
-#include <assimp/Importer.hpp>      // C++ importer interface
-#include <assimp/scene.h>           // Output data structure
-#include <assimp/postprocess.h>     // Post processing flags
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include <vector>
 #include <string>
 #include <memory>
@@ -10,15 +10,18 @@
 
 namespace gllib
 {
-    class ModelImporter {
+    class ModelImporter
+    {
     private:
-        struct Vertex {
+        struct Vertex
+        {
             glm::vec3 position;
             glm::vec3 normal;
             glm::vec2 texCoords;
         };
 
-        struct Mesh {
+        struct Mesh
+        {
             std::vector<Vertex> vertices;
             std::vector<unsigned int> indices;
             gllib::RenderData renderData;
@@ -26,7 +29,7 @@ namespace gllib
 
         std::vector<Mesh> meshes;
         std::string directory;
-    
+
         void processNode(aiNode* node, const aiScene* scene);
         Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 
@@ -36,16 +39,16 @@ namespace gllib
 
         // Load a model from file
         bool loadModel(const std::string& filePath);
-    
+
         // Get number of meshes in the model
         size_t getMeshCount() const;
-    
+
         // Get RenderData for a specific mesh
         gllib::RenderData getRenderData(size_t meshIndex) const;
-    
+
         // Get indices count for a specific mesh (needed for drawElements)
         size_t getIndicesCount(size_t meshIndex) const;
-    
+
         // Clean up all meshes
         void cleanup();
     };
