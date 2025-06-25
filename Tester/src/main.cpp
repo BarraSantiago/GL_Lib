@@ -19,7 +19,8 @@ private:
     gllib::Cube* cube;
     gllib::AmbientLight* ambientLight;
     gllib::PointLight* pointLight;
-
+    glm::vec3 modelPosition;
+    float modelScale;
     float animSpeed, nextFrame;
 
     void moveRectangle(float speed);
@@ -96,7 +97,8 @@ Game::Game()
     coin->setCurrentFrame(0);
 
     coin->setDurationInSecs(.6);
-
+    modelPosition = {0.0f, 0.0f, -5.0f};
+    modelScale = 1.0f;
     animSpeed = .075f;
     nextFrame = 0;
 }
@@ -118,7 +120,15 @@ void Game::init()
 
     // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
-
+    if (!importer->loadModel("scenev3.fbx"))
+    {
+        std::cout << "Failed to load backpack model!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Backpack model loaded successfully with " 
+                  << importer->getMeshCount() << " meshes." << std::endl;
+    }
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -126,6 +136,7 @@ void Game::init()
 
 void Game::update()
 {
+    
     // Update
     movement(player);
     camera->updateThirdPersonPosition();
@@ -180,7 +191,29 @@ void Game::drawObjects()
 
     ambientLight->apply(shaderProgramLighting);
     pointLight->apply(shaderProgramLighting);
-    // The material is now automatically applied in cube->draw()
+    
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(modelMatrix, modelPosition);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(modelScale));
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    
+    gllib::Shader::setMat4(shaderProgramLighting, "model", modelMatrix);
+    
+    for (size_t i = 0; i < importer->getMeshCount(); i++)
+    {
+        gllib::RenderData renderData = importer->getRenderData(i);
+        size_t indicesCount = importer->getIndicesCount(i);
+
+        if (importer->hasTexture(i))
+        {
+            gllib::Renderer::drawTexture(renderData, static_cast<GLsizei>(indicesCount),
+                                         importer->getTexture(i));
+        }
+        else
+        {
+            gllib::Renderer::drawElements(renderData, static_cast<GLsizei>(indicesCount));
+        }
+    }
 
     cube->draw();
     player->draw();

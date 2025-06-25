@@ -36,7 +36,8 @@ namespace gllib {
 		Input* input;
 		Camera* camera;
 		CameraController* cameraController;
-		
+		gllib::ModelImporter* importer;
+
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;
 		unsigned int shaderProgramLighting;

@@ -55,6 +55,7 @@ BaseGame::~BaseGame()
     delete window;
     delete cameraController;
     delete camera;
+    delete importer;
 }
 
 // Private
@@ -88,11 +89,13 @@ bool BaseGame::initInternal()
     gllib::Shader::setFloat(shaderProgramLighting, "light.constant", 1.0f);
     gllib::Shader::setFloat(shaderProgramLighting, "light.linear", 0.09f);
     gllib::Shader::setFloat(shaderProgramLighting, "light.quadratic", 0.032f);
-
+    importer = new ModelImporter();
+    importer->loadModel("backpack.obj");
     init();
     updateInternal();
     Shader::destroyShader(shaderProgramSolidColor);
     Shader::destroyShader(shaderProgramTexture);
+
     return true;
 }
 

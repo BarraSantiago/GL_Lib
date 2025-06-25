@@ -32,7 +32,7 @@ namespace gllib {
         }
         
         float xoffset = xpos - lastX;
-        float yoffset = lastY - ypos; // Reversed: y ranges bottom to top
+        float yoffset = lastY - ypos;
         
         lastX = xpos;
         lastY = ypos;

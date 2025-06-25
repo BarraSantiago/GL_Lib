@@ -1,9 +1,13 @@
 #include "ModelImporter.h"
+#include <iostream>
+#include <stb_image.h>
 
 namespace gllib
 {
     ModelImporter::ModelImporter()
     {
+        // Initialize stb_image to flip loaded textures vertically
+        stbi_set_flip_vertically_on_load(true);
     }
 
     ModelImporter::~ModelImporter()
@@ -16,21 +20,23 @@ namespace gllib
         // Clean up any existing data
         cleanup();
 
+        // Clear the texture cache
+        textures_loaded.clear();
+
         // Create an instance of the Importer class
         Assimp::Importer importer;
 
-        // Import the model with some common post-processing
-        // triangulate: convert all geometry to triangles
-        // GenNormals: create normals if model doesn't have them
-        // FlipUVs: flip texture coords (needed for OpenGL)
+        // Import the model with common post-processing
         const aiScene* scene = importer.ReadFile(filePath,
                                                  aiProcess_Triangulate |
                                                  aiProcess_GenSmoothNormals |
-                                                 aiProcess_FlipUVs);
+                                                 aiProcess_FlipUVs |
+                                                 aiProcess_CalcTangentSpace);
 
         // Check for errors
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
         {
+            std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
             return false;
         }
 
@@ -105,6 +111,26 @@ namespace gllib
             }
         }
 
+        // Process materials and textures
+        if (mesh->mMaterialIndex >= 0)
+        {
+            aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+            // Get material color
+            aiColor4D color(1.0f, 1.0f, 1.0f, 1.0f);
+            aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color);
+
+            // Load textures for the material
+            std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
+            result.textures.insert(result.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+            std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
+            result.textures.insert(result.textures.end(), specularMaps.begin(), specularMaps.end());
+
+            std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "normal");
+            result.textures.insert(result.textures.end(), normalMaps.begin(), normalMaps.end());
+        }
+
         // Create the OpenGL buffers using the renderer
         std::vector<float> vertexData;
         for (const auto& v : result.vertices)
@@ -114,10 +140,11 @@ namespace gllib
             vertexData.push_back(v.position.y);
             vertexData.push_back(v.position.z);
 
-            // Normal
-            vertexData.push_back(v.normal.x);
-            vertexData.push_back(v.normal.y);
-            vertexData.push_back(v.normal.z);
+            // Color (use 4 components: RGBA)
+            vertexData.push_back(1.0f); // r
+            vertexData.push_back(1.0f); // g
+            vertexData.push_back(1.0f); // b
+            vertexData.push_back(1.0f); // a
 
             // Texture Coordinates
             vertexData.push_back(v.texCoords.x);
@@ -130,12 +157,88 @@ namespace gllib
         // Create render data
         result.renderData = gllib::Renderer::createRenderData(
             vertexData.data(),
-            static_cast<GLsizei>(vertexData.size() * sizeof(float)),
+            static_cast<GLsizei>(vertexData.size()),
             indexData.data(),
-            static_cast<GLsizei>(indexData.size() * sizeof(int))
+            static_cast<GLsizei>(indexData.size())
         );
 
         return result;
+    }
+
+    std::vector<ModelImporter::Texture> ModelImporter::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+    {
+        std::vector<Texture> textures;
+        for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+        {
+            aiString str;
+            mat->GetTexture(type, i, &str);
+            bool skip = false;
+
+            // Check if texture was loaded before
+            for (unsigned int j = 0; j < textures_loaded.size(); j++)
+            {
+                if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+                {
+                    textures.push_back(textures_loaded[j]);
+                    skip = true;
+                    break;
+                }
+            }
+
+            if (!skip)
+            {
+                // If texture hasn't been loaded already, load it
+                Texture texture;
+                texture.id = textureFromFile(str.C_Str(), this->directory);
+                texture.type = typeName;
+                texture.path = str.C_Str();
+                textures.push_back(texture);
+                textures_loaded.push_back(texture); // Store it in loaded textures
+            }
+        }
+        return textures;
+    }
+
+    unsigned int ModelImporter::textureFromFile(const char* path, const std::string& directory, bool gamma)
+    {
+        std::string filename = std::string(path);
+        filename = directory + '/' + filename;
+
+        unsigned int textureID;
+        glGenTextures(1, &textureID);
+
+        int width, height, nrComponents;
+        unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+        if (data)
+        {
+            GLenum format;
+            if (nrComponents == 1)
+                format = GL_RED;
+            else if (nrComponents == 3)
+                format = GL_RGB;
+            else if (nrComponents == 4)
+                format = GL_RGBA;
+            else
+                format = GL_RGB;
+
+            glBindTexture(GL_TEXTURE_2D, textureID);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            stbi_image_free(data);
+        }
+        else
+        {
+            std::cout << "Texture failed to load at path: " << path << std::endl;
+            stbi_image_free(data);
+        }
+
+        return textureID;
     }
 
     size_t ModelImporter::getMeshCount() const
@@ -149,7 +252,7 @@ namespace gllib
         {
             return meshes[meshIndex].renderData;
         }
-        return gllib::RenderData{0, 0, 0}; // Return empty render data if index is out of bounds
+        return gllib::RenderData{0, 0, 0};
     }
 
     size_t ModelImporter::getIndicesCount(size_t meshIndex) const
@@ -161,13 +264,47 @@ namespace gllib
         return 0;
     }
 
+    unsigned int ModelImporter::getTexture(size_t meshIndex) const
+    {
+        if (meshIndex < meshes.size() && !meshes[meshIndex].textures.empty())
+        {
+            // Find first diffuse texture
+            for (const auto& texture : meshes[meshIndex].textures)
+            {
+                if (texture.type == "diffuse")
+                    return texture.id;
+            }
+
+            // If no diffuse texture, return the first texture
+            return meshes[meshIndex].textures[0].id;
+        }
+        return 0;
+    }
+
+    bool ModelImporter::hasTexture(size_t meshIndex) const
+    {
+        if (meshIndex < meshes.size())
+        {
+            return !meshes[meshIndex].textures.empty();
+        }
+        return false;
+    }
+
     void ModelImporter::cleanup()
     {
         // Clean up OpenGL resources
         for (auto& mesh : meshes)
         {
             gllib::Renderer::destroyRenderData(mesh.renderData);
+
+            // Delete textures
+            for (auto& texture : mesh.textures)
+            {
+                if (texture.id != 0)
+                    glDeleteTextures(1, &texture.id);
+            }
         }
         meshes.clear();
+        textures_loaded.clear();
     }
 }
