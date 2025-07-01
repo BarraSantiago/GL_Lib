@@ -303,20 +303,29 @@ namespace gllib
 
     void ModelImporter::drawMesh(size_t meshIndex) const
     {
-        if (meshIndex < meshes.size())
+        if (meshIndex >= meshes.size())
+            return;
+    
+        const Mesh& mesh = meshes[meshIndex];
+    
+        // Check if the mesh has valid data
+        if (mesh.VAO == 0 || mesh.indices.empty())
+            return;
+    
+        // Bind textures
+        for (unsigned int i = 0; i < mesh.textures.size(); i++)
         {
-            // Bind textures
-            for (unsigned int i = 0; i < meshes[meshIndex].textures.size(); i++)
-            {
-                glActiveTexture(GL_TEXTURE0 + i);
-                glBindTexture(GL_TEXTURE_2D, meshes[meshIndex].textures[i].id);
-            }
-
-            // Draw mesh using its VAO
-            glBindVertexArray(meshes[meshIndex].VAO);
-            glDrawElements(GL_TRIANGLES, meshes[meshIndex].indices.size(), GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, mesh.textures[i].id);
         }
+    
+        // Draw mesh using its VAO
+        glBindVertexArray(mesh.VAO);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh.indices.size()), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    
+        // Reset active texture
+        glActiveTexture(GL_TEXTURE0);
     }
 
     void ModelImporter::drawAllMeshes() const

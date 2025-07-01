@@ -120,7 +120,7 @@ void Game::init()
 
     // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
-    if (!importer->loadModel("models/kitty/FroggieKitty_11.fbx  "))
+    if (!importer->loadModel("models/pochita/pochita.fbx"))
     {
         std::cout << "Failed to load model!" << std::endl;
     }
@@ -135,7 +135,6 @@ void Game::init()
 
 void Game::update()
 {
-    
     // Update
     movement(player);
     camera->updateThirdPersonPosition();
@@ -190,29 +189,16 @@ void Game::drawObjects()
 
     ambientLight->apply(shaderProgramLighting);
     pointLight->apply(shaderProgramLighting);
-    
+
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, modelPosition);
     modelMatrix = glm::scale(modelMatrix, glm::vec3(modelScale));
     modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    
-    gllib::Shader::setMat4(shaderProgramLighting, "model", modelMatrix);
-    
-    for (size_t i = 0; i < importer->getMeshCount(); i++)
-    {
-        gllib::RenderData renderData = importer->getRenderData(i);
-        size_t indicesCount = importer->getIndicesCount(i);
 
-        if (importer->hasTexture(i))
-        {
-            gllib::Renderer::drawTexture(renderData, static_cast<GLsizei>(indicesCount),
-                                         importer->getTexture(i));
-        }
-        else
-        {
-            gllib::Renderer::drawElements(renderData, static_cast<GLsizei>(indicesCount));
-        }
-    }
+    gllib::Shader::setMat4(shaderProgramLighting, "model", modelMatrix);
+
+    // Use the new drawing method instead of getRenderData/getIndicesCount
+    importer->drawAllMeshes();
 
     cube->draw();
     player->draw();

@@ -90,7 +90,6 @@ bool BaseGame::initInternal()
     gllib::Shader::setFloat(shaderProgramLighting, "light.linear", 0.09f);
     gllib::Shader::setFloat(shaderProgramLighting, "light.quadratic", 0.032f);
     importer = new ModelImporter();
-    importer->loadModel("backpack.obj");
     init();
     updateInternal();
     Shader::destroyShader(shaderProgramSolidColor);

@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
+#include "deps.h"
 
-struct DLLExport Vertex
+struct Vertex
 {
     glm::vec3 Position;
     glm::vec3 Normal;
@@ -12,7 +13,7 @@ struct DLLExport Vertex
     glm::vec3 Bitangent;
 };
 
-struct DLLExport Texture
+struct Texture
 {
     unsigned int id;
     std::string type;
@@ -27,9 +28,11 @@ public:
     std::vector<Texture> textures;
     unsigned int VAO;
 
-    const Mesh& getMesh(size_t meshIndex) const;
-    void drawMesh(size_t meshIndex) const;
-    void drawAllMeshes() const;
+    // Remove these lines - they don't belong in Mesh class:
+    // const Mesh& getMesh(size_t meshIndex) const;
+    // void drawMesh(size_t meshIndex) const;
+    // void drawAllMeshes() const;
+
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
     ~Mesh();
 
