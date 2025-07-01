@@ -98,7 +98,7 @@ Game::Game()
 
     coin->setDurationInSecs(.6);
     modelPosition = {0.0f, 0.0f, -5.0f};
-    modelScale = 1.0f;
+    modelScale = 10.0f;
     animSpeed = .075f;
     nextFrame = 0;
 }
@@ -120,14 +120,13 @@ void Game::init()
 
     // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
-    if (!importer->loadModel("scenev3.fbx"))
+    if (!importer->loadModel("models/kitty/FroggieKitty_11.fbx  "))
     {
-        std::cout << "Failed to load backpack model!" << std::endl;
+        std::cout << "Failed to load model!" << std::endl;
     }
     else
     {
-        std::cout << "Backpack model loaded successfully with " 
-                  << importer->getMeshCount() << " meshes." << std::endl;
+        std::cout << "Model loaded successfully with " << importer->getMeshCount() << " meshes." << std::endl;
     }
     srand(time(nullptr));
     window->setTitle("Engine");

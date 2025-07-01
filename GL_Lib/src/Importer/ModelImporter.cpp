@@ -65,40 +65,57 @@ namespace gllib
         }
     }
 
-    ModelImporter::Mesh ModelImporter::processMesh(aiMesh* mesh, const aiScene* scene)
+    Mesh ModelImporter::processMesh(aiMesh* mesh, const aiScene* scene)
     {
-        Mesh result;
+        std::vector<Vertex> vertices;
+        std::vector<unsigned int> indices;
+        std::vector<Texture> textures;
 
         // Process vertices
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             Vertex vertex;
 
-            // Position
-            vertex.position.x = mesh->mVertices[i].x;
-            vertex.position.y = mesh->mVertices[i].y;
-            vertex.position.z = mesh->mVertices[i].z;
+            // Position (use uppercase field names from Mesh.h)
+            vertex.Position.x = mesh->mVertices[i].x;
+            vertex.Position.y = mesh->mVertices[i].y;
+            vertex.Position.z = mesh->mVertices[i].z;
 
             // Normal
             if (mesh->HasNormals())
             {
-                vertex.normal.x = mesh->mNormals[i].x;
-                vertex.normal.y = mesh->mNormals[i].y;
-                vertex.normal.z = mesh->mNormals[i].z;
+                vertex.Normal.x = mesh->mNormals[i].x;
+                vertex.Normal.y = mesh->mNormals[i].y;
+                vertex.Normal.z = mesh->mNormals[i].z;
             }
 
             // Texture coordinates
             if (mesh->mTextureCoords[0])
             {
-                vertex.texCoords.x = mesh->mTextureCoords[0][i].x;
-                vertex.texCoords.y = mesh->mTextureCoords[0][i].y;
+                vertex.TexCoords.x = mesh->mTextureCoords[0][i].x;
+                vertex.TexCoords.y = mesh->mTextureCoords[0][i].y;
             }
             else
             {
-                vertex.texCoords = glm::vec2(0.0f, 0.0f);
+                vertex.TexCoords = glm::vec2(0.0f, 0.0f);
             }
 
-            result.vertices.push_back(vertex);
+            // Initialize tangent and bitangent if available
+            if (mesh->mTangents)
+            {
+                vertex.Tangent.x = mesh->mTangents[i].x;
+                vertex.Tangent.y = mesh->mTangents[i].y;
+                vertex.Tangent.z = mesh->mTangents[i].z;
+            }
+
+            if (mesh->mBitangents)
+            {
+                vertex.Bitangent.x = mesh->mBitangents[i].x;
+                vertex.Bitangent.y = mesh->mBitangents[i].y;
+                vertex.Bitangent.z = mesh->mBitangents[i].z;
+            }
+
+            vertices.push_back(vertex);
         }
 
         // Process indices
@@ -107,7 +124,7 @@ namespace gllib
             aiFace face = mesh->mFaces[i];
             for (unsigned int j = 0; j < face.mNumIndices; j++)
             {
-                result.indices.push_back(face.mIndices[j]);
+                indices.push_back(face.mIndices[j]);
             }
         }
 
@@ -116,56 +133,23 @@ namespace gllib
         {
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-            // Get material color
-            aiColor4D color(1.0f, 1.0f, 1.0f, 1.0f);
-            aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color);
-
             // Load textures for the material
             std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
-            result.textures.insert(result.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+            textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
             std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "specular");
-            result.textures.insert(result.textures.end(), specularMaps.begin(), specularMaps.end());
+            textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
             std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "normal");
-            result.textures.insert(result.textures.end(), normalMaps.begin(), normalMaps.end());
+            textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
         }
 
-        // Create the OpenGL buffers using the renderer
-        std::vector<float> vertexData;
-        for (const auto& v : result.vertices)
-        {
-            // Position
-            vertexData.push_back(v.position.x);
-            vertexData.push_back(v.position.y);
-            vertexData.push_back(v.position.z);
-
-            // Color (use 4 components: RGBA)
-            vertexData.push_back(1.0f); // r
-            vertexData.push_back(1.0f); // g
-            vertexData.push_back(1.0f); // b
-            vertexData.push_back(1.0f); // a
-
-            // Texture Coordinates
-            vertexData.push_back(v.texCoords.x);
-            vertexData.push_back(v.texCoords.y);
-        }
-
-        // Convert to int array for EBO
-        std::vector<int> indexData(result.indices.begin(), result.indices.end());
-
-        // Create render data
-        result.renderData = gllib::Renderer::createRenderData(
-            vertexData.data(),
-            static_cast<GLsizei>(vertexData.size()),
-            indexData.data(),
-            static_cast<GLsizei>(indexData.size())
-        );
-
-        return result;
+        // Return the Mesh using its constructor (this will call setupMesh automatically)
+        return Mesh(vertices, indices, textures);
     }
 
-    std::vector<ModelImporter::Texture> ModelImporter::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+    std::vector<Texture> ModelImporter::loadMaterialTextures(
+        aiMaterial* mat, aiTextureType type, std::string typeName)
     {
         std::vector<Texture> textures;
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -202,7 +186,15 @@ namespace gllib
     unsigned int ModelImporter::textureFromFile(const char* path, const std::string& directory, bool gamma)
     {
         std::string filename = std::string(path);
-        filename = directory + '/' + filename;
+
+        // Handle different path separators
+        if (!directory.empty())
+        {
+            if (directory.back() != '/' && directory.back() != '\\')
+                filename = directory + "/" + filename;
+            else
+                filename = directory + filename;
+        }
 
         unsigned int textureID;
         glGenTextures(1, &textureID);
@@ -231,10 +223,11 @@ namespace gllib
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             stbi_image_free(data);
+            std::cout << "Texture loaded successfully: " << filename << std::endl;
         }
         else
         {
-            std::cout << "Texture failed to load at path: " << path << std::endl;
+            std::cout << "Texture failed to load at path: " << filename << std::endl;
             stbi_image_free(data);
         }
 
@@ -246,23 +239,6 @@ namespace gllib
         return meshes.size();
     }
 
-    gllib::RenderData ModelImporter::getRenderData(size_t meshIndex) const
-    {
-        if (meshIndex < meshes.size())
-        {
-            return meshes[meshIndex].renderData;
-        }
-        return gllib::RenderData{0, 0, 0};
-    }
-
-    size_t ModelImporter::getIndicesCount(size_t meshIndex) const
-    {
-        if (meshIndex < meshes.size())
-        {
-            return meshes[meshIndex].indices.size();
-        }
-        return 0;
-    }
 
     unsigned int ModelImporter::getTexture(size_t meshIndex) const
     {
@@ -290,20 +266,77 @@ namespace gllib
         return false;
     }
 
-    void ModelImporter::cleanup()
+    void ModelImporter::assignTexture(size_t meshIndex, const std::string& texturePath, const std::string& textureType)
     {
-        // Clean up OpenGL resources
-        for (auto& mesh : meshes)
-        {
-            gllib::Renderer::destroyRenderData(mesh.renderData);
+        if (meshIndex >= meshes.size())
+            return;
 
-            // Delete textures
-            for (auto& texture : mesh.textures)
+        // Check if texture was already loaded
+        for (const auto& tex : textures_loaded)
+        {
+            if (tex.path == texturePath)
             {
-                if (texture.id != 0)
-                    glDeleteTextures(1, &texture.id);
+                Texture texture = tex;
+                texture.type = textureType;
+                meshes[meshIndex].textures.push_back(texture);
+                return;
             }
         }
+
+        // Load new texture
+        Texture texture;
+        texture.id = textureFromFile(texturePath.c_str(), directory);
+        texture.type = textureType;
+        texture.path = texturePath;
+        meshes[meshIndex].textures.push_back(texture);
+        textures_loaded.push_back(texture);
+    }
+
+    const Mesh& ModelImporter::getMesh(size_t meshIndex) const
+    {
+        if (meshIndex < meshes.size())
+        {
+            return meshes[meshIndex];
+        }
+        throw std::out_of_range("Mesh index out of range");
+    }
+
+    void ModelImporter::drawMesh(size_t meshIndex) const
+    {
+        if (meshIndex < meshes.size())
+        {
+            // Bind textures
+            for (unsigned int i = 0; i < meshes[meshIndex].textures.size(); i++)
+            {
+                glActiveTexture(GL_TEXTURE0 + i);
+                glBindTexture(GL_TEXTURE_2D, meshes[meshIndex].textures[i].id);
+            }
+
+            // Draw mesh using its VAO
+            glBindVertexArray(meshes[meshIndex].VAO);
+            glDrawElements(GL_TRIANGLES, meshes[meshIndex].indices.size(), GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
+        }
+    }
+
+    void ModelImporter::drawAllMeshes() const
+    {
+        for (size_t i = 0; i < meshes.size(); i++)
+        {
+            drawMesh(i);
+        }
+    }
+
+    void ModelImporter::cleanup()
+    {
+        // The Mesh destructor will handle VAO/VBO/EBO cleanup automatically
+        // Just need to clean up textures
+        for (auto& texture : textures_loaded)
+        {
+            if (texture.id != 0)
+                glDeleteTextures(1, &texture.id);
+        }
+
         meshes.clear();
         textures_loaded.clear();
     }

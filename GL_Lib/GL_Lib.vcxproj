@@ -571,7 +571,10 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\glad\src\glad.c" />
+    <ClCompile Include="src\Importer\Mesh.cpp" />
+    <ClCompile Include="src\Importer\Model.cpp" />
     <ClCompile Include="src\Importer\ModelImporter.cpp" />
+    <ClCompile Include="src\Importer\ModelLoader.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\lib_time.cpp" />
     <ClCompile Include="src\Light\AmbientLight.cpp">
@@ -829,6 +832,8 @@
     <ClInclude Include="src\Entities\shape.h" />
     <ClInclude Include="src\Entities\sprite.h" />
     <ClInclude Include="src\Entities\triangle.h" />
+    <ClInclude Include="src\Importer\Mesh.h" />
+    <ClInclude Include="src\Importer\Model.h" />
     <ClInclude Include="src\Importer\ModelImporter.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\lib_time.h" />
