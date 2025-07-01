@@ -2,6 +2,8 @@
 #include <iostream>
 #include <stb_image.h>
 
+#include "Material.h"
+
 namespace gllib
 {
     ModelImporter::ModelImporter()
@@ -182,7 +184,7 @@ namespace gllib
         return textures;
     }
 
-    unsigned int ModelImporter::textureFromFile(const char* path, const std::string& directory, bool gamma)
+    unsigned int ModelImporter::textureFromFile(const char* path, const std::string& directory)
     {
         std::string filename = std::string(path);
 
@@ -304,40 +306,46 @@ namespace gllib
     {
         if (meshIndex >= meshes.size())
         {
-            return; // Guard against invalid mesh index
-        }
-
-        const auto& mesh = meshes[meshIndex];
-
-        // Ensure VAO is valid before binding
-        if (mesh.VAO == 0)
-        {
-            // VAO not initialized - this would cause the crash
             return;
         }
-
-        // Bind the VAO before drawing
-        glBindVertexArray(mesh.VAO);
-
-        // Verify the mesh has indices to draw
-        if (mesh.indices.empty())
+    
+        const Mesh& mesh = meshes[meshIndex];
+    
+        if (mesh.VAO == 0 || mesh.indices.empty())
         {
-            glBindVertexArray(0);
             return;
         }
-
+    
+        // Get current shader program
+        GLint prog = 0;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &prog);
+    
+        // Apply a default material (you can change this to any predefined material)
+        Material defaultMaterial = Material::silver(); // or Material::plastic(), etc.
+        defaultMaterial.apply(prog);
+    
+        // Optional: Bind textures if they exist (for texture-based rendering)
+        for (unsigned int i = 0; i < mesh.textures.size(); i++)
+        {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, mesh.textures[i].id);
+            
+            // You could set texture samplers here if your shader supported them
+            // For now, we're using material properties instead
+        }
+    
         // Draw the mesh
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh.indices.size()), GL_UNSIGNED_INT, 0);
-
-        // Unbind VAO
-        glBindVertexArray(0);
+        Renderer::drawElements(mesh.renderData, mesh.indices.size());
+    
+        // Reset to default
+        glActiveTexture(GL_TEXTURE0);
     }
 
     void ModelImporter::drawAllMeshes() const
     {
         for (size_t i = 0; i < meshes.size(); i++)
         {
-             drawMesh(i);
+            drawMesh(i);
         }
     }
 

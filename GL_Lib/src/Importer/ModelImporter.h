@@ -23,7 +23,7 @@ namespace gllib
         void processNode(aiNode* node, const aiScene* scene);
         Mesh processMesh(aiMesh* mesh, const aiScene* scene);
         std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-        unsigned int textureFromFile(const char* path, const std::string& directory, bool gamma = false);
+        unsigned int textureFromFile(const char* path, const std::string& directory);
 
     public:
         ModelImporter();

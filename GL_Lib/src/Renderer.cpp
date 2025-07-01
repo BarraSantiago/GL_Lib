@@ -198,7 +198,7 @@ void Renderer::drawMesh(const std::vector<unsigned int>& indices, const std::vec
         }
     }
 
-    // Draw mesh
+    // Bind VAO and draw
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -206,7 +206,13 @@ void Renderer::drawMesh(const std::vector<unsigned int>& indices, const std::vec
     // Reset to default
     glActiveTexture(GL_TEXTURE0);
 }
-
+void Renderer::drawMesh(const Mesh& mesh)
+{
+    if (mesh.renderData.VAO != 0)
+    {
+        drawElements(mesh.renderData, mesh.indexSize);
+    }
+}
 glm::mat4 Renderer::getViewMatrix()
 {
     return viewMatrix;
