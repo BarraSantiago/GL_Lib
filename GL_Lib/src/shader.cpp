@@ -161,6 +161,20 @@ void Shader::setFloat(unsigned int shaderProgram, const char* name, float value)
     }
 }
 
+void Shader::setInt(unsigned int shaderProgram, const char* name, int value)
+{
+    glUseProgram(shaderProgram);
+    GLint location = glGetUniformLocation(shaderProgram, name);
+    if (location != -1)
+    {
+        glUniform1f(location, value);
+    }
+    else
+    {
+        std::cerr << "Warning: Uniform '" << name << "' not found in shader program " << shaderProgram << std::endl;
+    }
+}
+
 unsigned int Shader::getCurrentShaderProgram()
 {
     return currentShaderProgram;

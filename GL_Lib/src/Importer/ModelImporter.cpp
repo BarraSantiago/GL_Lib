@@ -148,8 +148,7 @@ namespace gllib
         return Mesh(vertices, indices, textures);
     }
 
-    std::vector<Texture> ModelImporter::loadMaterialTextures(
-        aiMaterial* mat, aiTextureType type, std::string typeName)
+    std::vector<Texture> ModelImporter::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
     {
         std::vector<Texture> textures;
         for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
@@ -304,35 +303,41 @@ namespace gllib
     void ModelImporter::drawMesh(size_t meshIndex) const
     {
         if (meshIndex >= meshes.size())
-            return;
-    
-        const Mesh& mesh = meshes[meshIndex];
-    
-        // Check if the mesh has valid data
-        if (mesh.VAO == 0 || mesh.indices.empty())
-            return;
-    
-        // Bind textures
-        for (unsigned int i = 0; i < mesh.textures.size(); i++)
         {
-            glActiveTexture(GL_TEXTURE0 + i);
-            glBindTexture(GL_TEXTURE_2D, mesh.textures[i].id);
+            return; // Guard against invalid mesh index
         }
-    
-        // Draw mesh using its VAO
+
+        const auto& mesh = meshes[meshIndex];
+
+        // Ensure VAO is valid before binding
+        if (mesh.VAO == 0)
+        {
+            // VAO not initialized - this would cause the crash
+            return;
+        }
+
+        // Bind the VAO before drawing
         glBindVertexArray(mesh.VAO);
+
+        // Verify the mesh has indices to draw
+        if (mesh.indices.empty())
+        {
+            glBindVertexArray(0);
+            return;
+        }
+
+        // Draw the mesh
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh.indices.size()), GL_UNSIGNED_INT, 0);
+
+        // Unbind VAO
         glBindVertexArray(0);
-    
-        // Reset active texture
-        glActiveTexture(GL_TEXTURE0);
     }
 
     void ModelImporter::drawAllMeshes() const
     {
         for (size_t i = 0; i < meshes.size(); i++)
         {
-            drawMesh(i);
+             drawMesh(i);
         }
     }
 

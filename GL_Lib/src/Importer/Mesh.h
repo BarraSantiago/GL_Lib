@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <glm/glm.hpp>
+#include <glm.hpp>
 #include "deps.h"
 
 struct Vertex

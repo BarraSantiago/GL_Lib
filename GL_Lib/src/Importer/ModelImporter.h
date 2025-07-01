@@ -8,7 +8,7 @@
 #include <map>
 #include <glm/glm.hpp>
 
-#include "renderer.h"
+#include "Renderer.h"
 #include "Mesh.h" 
 
 namespace gllib

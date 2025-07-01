@@ -187,9 +187,40 @@ void Game::drawObjects()
 {
     gllib::Shader::setShaderProgram(shaderProgramLighting);
 
+    // Set up view and projection matrices for lighting shader
+    glm::mat4 projection = camera->getProjectionMatrix();
+    glm::mat4 view = camera->getViewMatrix();
+
+    gllib::Shader::setMat4(shaderProgramLighting, "projection", projection);
+    gllib::Shader::setMat4(shaderProgramLighting, "view", view);
+    gllib::Shader::setVec3(shaderProgramLighting, "viewPos",
+                           camera->getPosition().x,
+                           camera->getPosition().y,
+                           camera->getPosition().z);
+
+    // Apply lighting
     ambientLight->apply(shaderProgramLighting);
     pointLight->apply(shaderProgramLighting);
 
+    // Set material texture uniforms (these bind to texture units)
+    gllib::Shader::setInt(shaderProgramLighting, "material.diffuse", 0);
+    gllib::Shader::setInt(shaderProgramLighting, "material.specular", 1);
+
+    // Set material properties that match your fragment shader
+    gllib::Shader::setVec3(shaderProgramLighting, "material.ambient", 1.0f, 1.0f, 1.0f);
+    gllib::Shader::setFloat(shaderProgramLighting, "material.shininess", 32.0f);
+
+    // Set light properties if not handled by pointLight->apply()
+    gllib::Shader::setFloat(shaderProgramLighting, "light.constant", 1.0f);
+    gllib::Shader::setFloat(shaderProgramLighting, "light.linear", 0.09f);
+    gllib::Shader::setFloat(shaderProgramLighting, "light.quadratic", 0.032f);
+
+    // Set lighting strength uniforms
+    gllib::Shader::setVec3(shaderProgramLighting, "ambientStrength", 0.2f, 0.2f, 0.2f);
+    gllib::Shader::setFloat(shaderProgramLighting, "diffuseStrength", 1.0f);
+    gllib::Shader::setFloat(shaderProgramLighting, "specularStrength", 1.0f);
+
+    // Set model matrix for the imported model
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, modelPosition);
     modelMatrix = glm::scale(modelMatrix, glm::vec3(modelScale));
@@ -197,18 +228,31 @@ void Game::drawObjects()
 
     gllib::Shader::setMat4(shaderProgramLighting, "model", modelMatrix);
 
-    // Use the new drawing method instead of getRenderData/getIndicesCount
-    importer->drawAllMeshes();
+    // Draw imported model meshes
+    for (size_t i = 0; i < importer->getMeshCount(); i++)
+    {
+        const auto& mesh = importer->getMesh(i);
+        gllib::Renderer::drawMesh(mesh.indices, mesh.textures, mesh.VAO, glm::vec3(1.0f, 1.0f, 1.0f));
+    }
 
+    // Draw other 3D objects (they handle their own model matrices)
     cube->draw();
     player->draw();
 
+    // Switch to texture shader for 2D sprites
     gllib::Shader::setShaderProgram(shaderProgramTexture);
+    gllib::Shader::setMat4(shaderProgramTexture, "projection", projection);
+    gllib::Shader::setMat4(shaderProgramTexture, "view", view);
+
     //background->draw();
     //sprite->draw();
     //coin->draw();
 
+    // Switch to solid color shader
     gllib::Shader::setShaderProgram(shaderProgramSolidColor);
+    gllib::Shader::setMat4(shaderProgramSolidColor, "projection", projection);
+    gllib::Shader::setMat4(shaderProgramSolidColor, "view", view);
+
     triangle->draw();
 }
 

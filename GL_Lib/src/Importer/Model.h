@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "Mesh.h"
-#include "../renderer.h"
+#include "../Renderer.h"
 
 namespace gllib
 {

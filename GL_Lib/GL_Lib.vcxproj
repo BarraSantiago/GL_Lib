@@ -813,7 +813,7 @@
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\myMaths.cpp" />
-    <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
@@ -842,7 +842,7 @@
     <ClInclude Include="src\loader.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\myMaths.h" />
-    <ClInclude Include="src\renderer.h" />
+    <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\transform.h" />

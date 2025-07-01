@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "renderer.h" // To set the proj matrix
+#include "Renderer.h" // To set the proj matrix
 
 using namespace gllib;
 using namespace std;

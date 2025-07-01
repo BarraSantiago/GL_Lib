@@ -3,7 +3,7 @@
 #include "core.h"
 #include "Input.h"
 #include "window.h"
-#include "renderer.h"
+#include "Renderer.h"
 #include "lib_time.h"
 #include "loader.h"
 
