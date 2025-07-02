@@ -147,8 +147,7 @@ void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material
         ));
 
     // Set material properties
-    glCall(
-        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.ambient"), 1, glm::value_ptr(material.ambient)));
+    //glCall(glUniform3fv(glGetUniformLocation(shader3DProgram, "material.ambient"), 1, glm::value_ptr(material.ambient)));
     glCall(
         glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(material.diffuse)));
     glCall(
@@ -161,7 +160,7 @@ void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material
     {
         light->apply(shader3DProgram);
         lightIndex++;
-        if (lightIndex >= 8) break; // Limit to 8 lights
+        if (lightIndex >= 8) break; 
     }
 
     // Set view position (camera position)

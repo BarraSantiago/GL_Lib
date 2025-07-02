@@ -163,7 +163,7 @@ void Shader::setFloat(unsigned int shaderProgram, const char* name, float value)
 
 void Shader::setMaterial(glm::uint shaderProgram, const Material material)
 {
-    setVec3(shaderProgram, "material.ambient", material.ambient.x, material.ambient.y, material.ambient.z);
+    //setVec3(shaderProgram, "material.ambient", material.ambient.x, material.ambient.y, material.ambient.z);
     setVec3(shaderProgram, "material.diffuse", material.diffuse.x, material.diffuse.y, material.diffuse.z);
     setVec3(shaderProgram, "material.specular", material.specular.x, material.specular.y, material.specular.z);
     setFloat(shaderProgram, "material.shininess", material.shininess);

@@ -15,6 +15,7 @@ private:
     gllib::Cube* cube;
     gllib::AmbientLight* ambientLight;
     gllib::PointLight* pointLight;
+    gllib::SpotLight* playerLight;
     gllib::Model* model;
     glm::vec3 modelPosition;
     float modelScale;
@@ -38,13 +39,18 @@ Game::Game()
     window->setVsyncEnabled(false);
     cout << "Game created!\n";
 
-   
 
     gllib::Transform trs2;
     trs2.position = {0, 0, 0.0f};
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.scale = {5.0f, 5.0f, 5.0f};
     player = new gllib::Cube(trs2, new gllib::Material(gllib::Material::gold()));
+
+    glm::vec3 playerPos = trs2.position;
+    playerPos.z -= 2.0f;
+    glm::vec3 spotDirection = {0.0f, 0.0f, -1.0f};
+    playerLight = new gllib::SpotLight(playerPos, spotDirection, {1.0f, 1.0f, 0.8f, 1.0f},
+                                       5.0f, 55.0f, 1.0f, 0.0045f, 0.00075f);
 
     gllib::Transform trs4;
     trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 3};
@@ -60,8 +66,8 @@ Game::Game()
 
     trs2.position = {-5, 0, 0.0f};
 
-    pointLight = new gllib::PointLight(trs2.position, {1.0f, 1.0f, 1.0f}, 1.0f, 0.0f, 0.0f);
-    ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.9f);
+    pointLight = new gllib::PointLight(trs2.position, {1.0f, 1.0f, 1.0f, 1.0f}, 1.0f, 0.0f, 0.0f);
+    ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f}, 0.2f);
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
 
     model = nullptr;
@@ -141,7 +147,7 @@ void Game::update()
 
     // Apply the new rotation
     cube->setRotationQuat(newRot);
-    
+
     // Draw
     prepareRendering();
     drawObjects();
@@ -154,6 +160,7 @@ void Game::drawObjects()
 
     ambientLight->apply(shaderProgramLighting);
     pointLight->apply(shaderProgramLighting);
+    playerLight->apply(shaderProgramLighting);
 
     // Draw the loaded scene model
     if (model != nullptr)
@@ -203,52 +210,97 @@ void Game::movement(gllib::Entity* player)
     transform2.position.y += 1.f;
     float speed = 80 * gllib::LibTime::getDeltaTime();
     float gravity = 40 * gllib::LibTime::getDeltaTime();
+
     if (!collisionManager->checkCollision(transform2))
     {
         //player->move({0.f, gravity, 0});
     }
 
-    if (!Input::isAnyKeyPressed()) return;
-    gllib::Transform transform = player->getTransform();
-
-    if (Input::getKeyPressed(Key_D))
+    if (!Input::isAnyKeyPressed())
     {
-        // D
+        glm::vec3 pos = player->getTransform().position;
+        pos.z -= 2.0f;
+        playerLight->setPosition(pos);
+        return;
+    }
+
+    gllib::Transform transform = player->getTransform();
+    glm::vec3 movementDirection = {0.0f, 0.0f, 0.0f};
+    bool playerMoved = false;
+    int dir = 0;
+    if (Input::getKeyPressed(Key_W))
+    {
         transform.position.x += 2.0f;
         if (!collisionManager->checkCollision(transform))
         {
             player->move({speed, 0.f, 0.f});
-        }
-    }
-
-    if (Input::getKeyPressed(Key_A))
-    {
-        // A
-        transform.position.x -= 2.0f;
-        if (!collisionManager->checkCollision(transform))
-        {
-            player->move({-speed, 0.f, 0.f});
-        }
-    }
-
-    if (Input::getKeyPressed(Key_W))
-    {
-        // W
-        transform.position.y -= 2.0f;
-        if (!collisionManager->checkCollision(transform))
-        {
-            player->move({0.f, -speed, 0.f});
+            movementDirection = {1.0f, 0.0f, -0.5f};
+            playerMoved = true;
+            dir = 0;
         }
     }
 
     if (Input::getKeyPressed(Key_S))
     {
-        // S
+        transform.position.x -= 2.0f;
+        if (!collisionManager->checkCollision(transform))
+        {
+            player->move({-speed, 0.f, 0.f});
+            movementDirection = {-1.0f, 0.0f, -0.5f}; // Moving left with forward bias
+            playerMoved = true;
+            dir = 1;
+        }
+    }
+
+    if (Input::getKeyPressed(Key_A))
+    {
+        transform.position.y -= 2.0f;
+        if (!collisionManager->checkCollision(transform))
+        {
+            player->move({0.f, 0.f, -speed});
+            movementDirection = {0.0f, 0.0f, -1.0f}; // Moving forward
+            playerMoved = true;
+            dir = 2;
+        }
+    }
+
+    if (Input::getKeyPressed(Key_D))
+    {
         transform.position.y += 2.0f;
         if (!collisionManager->checkCollision(transform))
         {
-            player->move({0.f, speed, 0.f});
+            player->move({0.f, 0, speed});
+            movementDirection = {0.0f, 0.0f, 1.0f}; // Moving backward
+            playerMoved = true;
+            dir = 3;
         }
+    }
+
+    glm::vec3 pos = player->getTransform().position;
+
+    switch (dir)
+    {
+    default:
+    case 0: // Moving right
+        pos.x += 2.0f;
+        break;
+    case 1: // Moving left
+        pos.x -= 2.0f;
+        break;
+    case 2: // Moving forward
+        pos.y -= 2.0f;
+        break;
+    case 3: // Moving backward
+        pos.y += 2.0f;
+        break;
+    }
+
+    playerLight->setPosition(pos);
+
+    if (playerMoved)
+    {
+        glm::vec3 spotDirection = glm::normalize(movementDirection);
+        playerLight->setDirection(spotDirection);
     }
 }
 
@@ -259,6 +311,7 @@ void Game::uninit()
     delete cube;
     delete player;
     delete model;
+    delete playerLight;
 }
 
 int main()

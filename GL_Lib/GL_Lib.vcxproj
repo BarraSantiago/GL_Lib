@@ -812,6 +812,7 @@
       <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN32\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\Light\SpotLight.cpp" />
     <ClCompile Include="src\loader.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\myMaths.cpp" />
@@ -843,6 +844,7 @@
     <ClInclude Include="src\Light\AmbientLight.h" />
     <ClInclude Include="src\Light\Light.h" />
     <ClInclude Include="src\Light\PointLight.h" />
+    <ClInclude Include="src\Light\SpotLight.h" />
     <ClInclude Include="src\loader.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\myMaths.h" />

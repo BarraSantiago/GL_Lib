@@ -16,15 +16,12 @@ namespace gllib
     public:
         inline  static std::list<Light*> lights;
 
-        Light(const Color& color = {1.0f, 1.0f, 1.0f, 1.0f}): color(color)
-        {
-            lights.push_back(this);
-        }
+        Light(const Color& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
         virtual ~Light();
 
-        void setColor(const Color& newColor) { color = newColor; }
-        Color getColor() const { return color; }
+        void setColor(const Color& newColor);
+        Color getColor() const;
 
         virtual void apply(unsigned int shaderProgram) const = 0;
     };

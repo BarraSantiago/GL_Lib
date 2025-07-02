@@ -24,6 +24,7 @@
 #include "Importer/Model.h"
 #include "myMaths.h"
 #include "Importer/Mesh.h"
+#include "Light/SpotLight.h"
 
 namespace gllib {
 
