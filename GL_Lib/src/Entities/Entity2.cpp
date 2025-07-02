@@ -16,7 +16,7 @@ namespace gllib
         transform = Transform();
         transform.position = glm::vec3(0.0f);
         transform.scale = glm::vec3(1.0f);
-        transform.rotationQuat = Quaternion{1.0f, 0.0f, 0.0f, 0.0f}; // Identity quaternion
+        transform.rotationQuat = Quaternion{1.0f, 0.0f, 0.0f, 0.0f};
     }
 
     Entity2::~Entity2()

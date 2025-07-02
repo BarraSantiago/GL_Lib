@@ -33,12 +33,6 @@ void Renderer::setUpVertexAttributes()
 
 void Renderer::setUpMVP()
 {
-    // Set the view matrix to position the camera
-    //Renderer::viewMatrix = glm::lookAt(
-    //    glm::vec3(0.0f, 0.0f, 3.0f), // Camera position
-    //    glm::vec3(0.0f, 0.0f, 0.0f), // Look at point
-    //    glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
-    //);
     // TRS
     // the mpv matrix is calculated multiplying p*v*m
     glm::mat4 mvp = projMatrix * viewMatrix * modelMatrix;
@@ -100,8 +94,6 @@ RenderData Renderer::createRenderData(const float vertexData[], GLsizei vertexDa
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //cout << "Render data created! VAO: " << rData.VAO << ", VBO: " << rData.VBO << ", EBO: " << rData.EBO << ".\n";
-
     // Unbinding after finishing simply for the sake of better binding understanding.
     glBindVertexArray(0);
     return rData;
@@ -112,8 +104,6 @@ void Renderer::destroyRenderData(RenderData rData)
     glDeleteBuffers(1, &rData.EBO);
     glDeleteBuffers(1, &rData.VBO);
     glDeleteVertexArrays(1, &rData.VAO);
-
-    //printf("Render data destroyed.\n");
 }
 
 void Renderer::drawElements(RenderData rData, GLsizei indexSize)
@@ -137,24 +127,20 @@ void Renderer::drawTexture(RenderData rData, GLsizei indexSize, unsigned int tex
 
 void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material, glm::mat4 trans)
 {
-    glCall(glUseProgram(shader3DProgram));
+    glUseProgram(shader3DProgram);
 
     // Set transformation matrices
-    glCall(glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "model"), 1, GL_FALSE, glm::value_ptr(trans)));
-    glCall(glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix)));
-    glCall(
-        glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projMatrix)
-        ));
+    glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "model"), 1, GL_FALSE, glm::value_ptr(trans));
+    glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projMatrix));
 
     // Set material properties
-    glCall(
-        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(material.diffuse)));
-    glCall(
-        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.specular"), 1, glm::value_ptr(material.specular)));
-    glCall(glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), material.shininess));
+    glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(material.diffuse));
+    glUniform3fv(glGetUniformLocation(shader3DProgram, "material.specular"), 1, glm::value_ptr(material.specular));
+    glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), material.shininess);
 
     // Explicitly set hasTexture to false for entities without textures
-    glCall(glUniform1i(glGetUniformLocation(shader3DProgram, "material.hasTexture"), 0));
+    glUniform1i(glGetUniformLocation(shader3DProgram, "material.hasTexture"), 0);
 
     // Apply lights from your Light system
     int lightIndex = 0;
@@ -169,24 +155,22 @@ void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material
     glUniform3f(glGetUniformLocation(shader3DProgram, "viewPos"), 0.0f, 0.0f, 3.0f);
 
     // Draw the mesh
-    glCall(glBindVertexArray(VAO));
-    glCall(glDrawElements(GL_TRIANGLES, indexQty, GL_UNSIGNED_INT, 0));
-    glCall(glBindVertexArray(0));
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indexQty, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 
-    glCall(glUseProgram(0));
+    glUseProgram(0);
 }
 
 void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, std::vector<Texture>& textures)
 {
-    glCall(glUseProgram(shader3DProgram));
-    glCall(glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "model"), 1, GL_FALSE, glm::value_ptr(trans)));
-    glCall(glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix)));
-    glCall(
-        glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projMatrix)
-        ));
+    glUseProgram(shader3DProgram);
+    glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "model"), 1, GL_FALSE, glm::value_ptr(trans));
+    glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projMatrix));
 
     // Set material properties
-    glCall(glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), 32.0f));
+    glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), 32.0f);
 
     // Bind textures
     unsigned int diffuseNr = 1;
@@ -223,20 +207,19 @@ void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, st
     glUniform3f(glGetUniformLocation(shader3DProgram, "viewPos"), 0.0f, 0.0f, 3.0f);
 
     // Draw the mesh
-    glCall(glBindVertexArray(VAO));
-    glCall(glDrawElements(GL_TRIANGLES, indexQty, GL_UNSIGNED_INT, 0));
-    glCall(glBindVertexArray(0));
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indexQty, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 
-    // IMPORTANT: Unbind all textures that were used
+    // Unbind textures
     for (unsigned int i = 0; i < textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    // Reset to texture unit 0
     glActiveTexture(GL_TEXTURE0);
-    glCall(glUseProgram(0));
+    glUseProgram(0);
 }
 
 void Renderer::bindTexture(unsigned int textureID)
@@ -285,34 +268,32 @@ void Renderer::clear()
 void Renderer::genVertexBuffer(unsigned int& VBO, unsigned int& VAO, float vertices[], unsigned int id,
                                unsigned int qty)
 {
-    glCall(glGenVertexArrays(id, &VAO));
-    glCall(glGenBuffers(id, &VBO));
+    glGenVertexArrays(id, &VAO);
+    glGenBuffers(id, &VBO);
 
-    glCall(glBindVertexArray(VAO));
+    glBindVertexArray(VAO);
 
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    glCall(glBufferData(GL_ARRAY_BUFFER, sizeof(float) * qty * 8, vertices, GL_STATIC_DRAW));
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * qty * 8, vertices, GL_STATIC_DRAW);
 
-    glCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), static_cast<void*>(0)));
-    glCall(glEnableVertexAttribArray(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), static_cast<void*>(0));
+    glEnableVertexAttribArray(0);
+    
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-    glCall(
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float))));
-    glCall(glEnableVertexAttribArray(1));
-
-    glCall(
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<void*>(6 * sizeof(float))));
-    glCall(glEnableVertexAttribArray(2));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<void*>(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 }
 
 void Renderer::genIndexBuffer(unsigned int& IBO, unsigned int indices[], unsigned int id, unsigned int qty)
 {
-    glCall(glGenBuffers(id, &IBO));
-    glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO));
-    glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * qty, indices, GL_STATIC_DRAW));
+    glGenBuffers(id, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * qty, indices, GL_STATIC_DRAW);
 
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    glCall(glBindVertexArray(0));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 void Renderer::deleteBuffers(unsigned int& VBO, unsigned int& IBO, unsigned int& EBO, unsigned int id)

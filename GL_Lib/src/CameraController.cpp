@@ -10,7 +10,6 @@ namespace gllib
 
     void CameraController::processInput()
     {
-        // Toggle camera mode with C key
         if (Input::getKeyPressed(Key_C))
         {
             if (!toggleKeyPressed)
@@ -26,14 +25,12 @@ namespace gllib
             toggleKeyPressed = false;
         }
 
-        // Only process WASD movement in first person mode
         if (currentMode == CameraMode::FirstPerson)
         {
             float velocity = moveSpeed * LibTime::getDeltaTime();
             glm::vec3 position = camera->getPosition();
             glm::vec3 front = camera->getFront();
 
-            // WASD movement
             if (Input::getKeyPressed(Key_W))
                 position += front * velocity;
             if (Input::getKeyPressed(Key_S))
@@ -45,7 +42,6 @@ namespace gllib
 
             camera->setPosition(position);
         }
-        // In third person mode, the camera position is handled by updateThirdPersonPosition()
     }
 
     void CameraController::processMouseMovement(float xpos, float ypos)

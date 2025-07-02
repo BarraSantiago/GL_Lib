@@ -15,15 +15,12 @@ namespace gllib {
         glm::vec3 right;
         glm::vec3 worldUp;
 
-        // third person camera
         gllib::Entity* target = nullptr;
         float distance = 5.0f;
         float height = 2.0f;
-        // Euler angles
         float yaw;
         float pitch;
         
-        // Perspective parameters
         float fov;
         float aspectRatio;
         float nearPlane;

@@ -8,7 +8,6 @@ namespace gllib
     {
     private:
         glm::vec3 position;
-        // Attenuation factors
         float constant;
         float linear;
         float quadratic;
