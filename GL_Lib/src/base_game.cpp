@@ -73,24 +73,24 @@ bool BaseGame::initInternal()
     const char* vertexLightingSource = gllib::Shader::loadShader("lightingV.glsl");
     const char* fragmentLightingSource = gllib::Shader::loadShader("lightingF.glsl");
 
+
     // Create shader program
     shaderProgramSolidColor = gllib::Shader::createShader(vertexSource1, fragmentSource1);
     shaderProgramTexture = gllib::Shader::createShader(vertexSource2, fragmentSource2);
     shaderProgramLighting = gllib::Shader::createShader(vertexLightingSource, fragmentLightingSource);
-
+    Renderer::shader3DProgram = shaderProgramLighting;
     // Set current shader program
     Shader::setShaderProgram(shaderProgramSolidColor);
-    
+
     // Add point light parameters
     gllib::Shader::setVec3(shaderProgramLighting, "lightColor", 1.0f, 1.0f, 1.0f);
     gllib::Shader::setVec3(shaderProgramLighting, "lightPos", 5.0f, 5.0f, 5.0f);
-    
+
     // Set attenuation values
     gllib::Shader::setFloat(shaderProgramLighting, "light.constant", 1.0f);
     gllib::Shader::setFloat(shaderProgramLighting, "light.linear", 0.09f);
     gllib::Shader::setFloat(shaderProgramLighting, "light.quadratic", 0.032f);
-    importer = new ModelImporter();
-    importer->loadModel("backpack.obj");
+    importer = new ModelLoader();
     init();
     updateInternal();
     Shader::destroyShader(shaderProgramSolidColor);

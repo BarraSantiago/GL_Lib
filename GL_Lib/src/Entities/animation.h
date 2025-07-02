@@ -13,7 +13,7 @@ namespace gllib
         bool paused;
 
     public:
-        Animation(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
+        Animation(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, Color color);
         Animation(Transform transform, Color color);
         virtual ~Animation() override;
 

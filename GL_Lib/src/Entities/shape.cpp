@@ -5,7 +5,7 @@
 using namespace gllib;
 using namespace std;
 
-Shape::Shape(Vector3 translation, Vector3 rotation, Vector3 scale) : 
+Shape::Shape(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale) : 
     Entity(translation, rotation, scale) {
     renderData.VAO = 0;
     renderData.VBO = 0;

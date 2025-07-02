@@ -9,7 +9,7 @@ using namespace std;
 
 namespace gllib
 {
-    Animation::Animation(Vector3 translation, Vector3 rotation, Vector3 scale, Color color) :
+    Animation::Animation(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, Color color) :
         Sprite(translation, rotation, scale, color)
     {
         durationInSecs = .0f;

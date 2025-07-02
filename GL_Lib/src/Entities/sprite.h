@@ -30,7 +30,7 @@ namespace gllib {
 		int getFrameCount();
 
 	public:
-		Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
+		Sprite(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, Color color);
 		Sprite(Transform transform, Color color);
 		Sprite(Sprite const& other);
 		virtual ~Sprite() override;

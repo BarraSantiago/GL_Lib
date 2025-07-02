@@ -19,7 +19,11 @@
 #include "Light/PointLight.h"
 #include "Material.h"
 #include "transform.h"
-#include "Importer/ModelImporter.h"
+#include "Light/Light.h"
+#include "Importer/ModelLoader.h"
+#include "Importer/Model.h"
+#include "myMaths.h"
+#include "Importer/Mesh.h"
 
 namespace gllib {
 
@@ -36,7 +40,7 @@ namespace gllib {
 		Input* input;
 		Camera* camera;
 		CameraController* cameraController;
-		gllib::ModelImporter* importer;
+		gllib::ModelLoader* importer;
 
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;

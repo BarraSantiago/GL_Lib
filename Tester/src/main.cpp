@@ -19,6 +19,7 @@ private:
     gllib::Cube* cube;
     gllib::AmbientLight* ambientLight;
     gllib::PointLight* pointLight;
+    gllib::Model* sceneModel; // Add this line
     glm::vec3 modelPosition;
     float modelScale;
     float animSpeed, nextFrame;
@@ -95,7 +96,7 @@ Game::Game()
     coin->setCurrentFrame(7);
 
     coin->setCurrentFrame(0);
-
+    sceneModel = nullptr;
     coin->setDurationInSecs(.6);
     modelPosition = {0.0f, 0.0f, -5.0f};
     modelScale = 1.0f;
@@ -120,15 +121,18 @@ void Game::init()
 
     // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
-    if (!importer->loadModel("scenev3.fbx"))
-    {
-        std::cout << "Failed to load backpack model!" << std::endl;
+    
+    // Load the model using Model class
+    try {
+        sceneModel = new gllib::Model("scenev3.fbx", false);
+        std::cout << "Scene model loaded successfully with " 
+                  << sceneModel->meshes.size() << " meshes." << std::endl;
     }
-    else
-    {
-        std::cout << "Backpack model loaded successfully with " 
-                  << importer->getMeshCount() << " meshes." << std::endl;
+    catch (const std::exception& e) {
+        std::cout << "Failed to load scene model: " << e.what() << std::endl;
+        sceneModel = nullptr;
     }
+    
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -191,28 +195,10 @@ void Game::drawObjects()
 
     ambientLight->apply(shaderProgramLighting);
     pointLight->apply(shaderProgramLighting);
-    
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::translate(modelMatrix, modelPosition);
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(modelScale));
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    
-    gllib::Shader::setMat4(shaderProgramLighting, "model", modelMatrix);
-    
-    for (size_t i = 0; i < importer->getMeshCount(); i++)
-    {
-        gllib::RenderData renderData = importer->getRenderData(i);
-        size_t indicesCount = importer->getIndicesCount(i);
 
-        if (importer->hasTexture(i))
-        {
-            gllib::Renderer::drawTexture(renderData, static_cast<GLsizei>(indicesCount),
-                                         importer->getTexture(i));
-        }
-        else
-        {
-            gllib::Renderer::drawElements(renderData, static_cast<GLsizei>(indicesCount));
-        }
+    // Draw the loaded scene model
+    if (sceneModel != nullptr) {
+        sceneModel->draw();
     }
 
     cube->draw();
@@ -268,7 +254,6 @@ void Game::moveRectangle(float speed)
     {
         x = -1;
         sprite->setMirroredX(false);
-        gllib::Vector3 scale = coin->getScale();
     }
 
     if (sprite->getPosition().y - (sprite->getScale().y * .5) <= 0)
@@ -281,11 +266,6 @@ void Game::moveRectangle(float speed)
         y = -1;
         sprite->setMirroredY(false);
     }
-
-    gllib::Vector3 scale = coin->getScale();
-    scale.x += (25.0f * gllib::LibTime::getDeltaTime()) * x;
-    scale.y += (25.0f * gllib::LibTime::getDeltaTime()) * x;
-    coin->setScale(scale);
 
     sprite->move({
         static_cast<float>(x * (speed * gllib::LibTime::getDeltaTime())),
@@ -359,6 +339,7 @@ void Game::uninit()
     delete sprite;
     delete coin;
     delete player;
+    delete sceneModel;
 }
 
 int main()

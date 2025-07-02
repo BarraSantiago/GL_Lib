@@ -7,8 +7,8 @@ namespace gllib
     class DLLExport Maths
     {
     public:
-        static Quaternion Euler(Vector3 euler);
+        static Quaternion Euler(glm::vec3 euler);
         static float deg2Rad();
-        static Vector3 Quat2Vec3(Quaternion Quat, Vector3 Vec);
+        static glm::vec3 Quat2Vec3(Quaternion Quat, glm::vec3 Vec);
     };
 }

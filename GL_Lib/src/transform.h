@@ -1,5 +1,9 @@
 ﻿#pragma once
+#include <ext/matrix_transform.hpp>
+
 #include "deps.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/quaternion.hpp"
 #ifdef _WIN32 // Directory is different in linux
 #include "glm.hpp"
 #else
@@ -8,45 +12,6 @@
 
 namespace gllib
 {
-    struct DLLExport Vector3
-    {
-        float x; // width | pitch
-        float y; // height | yaw
-        float z; // depth | roll
-
-        Vector3 operator*(float scalar)
-        {
-            return {x * scalar, y * scalar, z * scalar};
-        }
-
-        Vector3& operator+=(Vector3 vector)
-        {
-            x += vector.x;
-            y += vector.y;
-            z += vector.z;
-            return *this;
-        }
-
-        Vector3 operator/(float scalar)
-        {
-            return {x / scalar, y / scalar, z / scalar};
-        }
-
-        Vector3(float iX, float iY, float iZ)
-        {
-            x = iX;
-            y = iY;
-            z = iZ;
-        }
-
-        Vector3()
-        {
-            x = 0;
-            y = 0;
-            z = 0;
-        }
-    };
-
     struct DLLExport Quaternion
     {
         float w;
@@ -115,13 +80,13 @@ namespace gllib
 
     struct DLLExport Transform
     {
-        Vector3 position;
-        Vector3 scale;
+        glm::vec3 position;
+        glm::vec3 scale;
         Quaternion rotationQuat;
 
-        Vector3 forward;
-        Vector3 upward;
-        Vector3 right;
+        glm::vec3 forward;
+        glm::vec3 upward;
+        glm::vec3 right;
 
         Transform operator/(float i)
         {
@@ -145,6 +110,19 @@ namespace gllib
                 upward * i,
                 right * i
             };
+        }
+
+        glm::mat4 getTransformMatrix()
+        {
+            glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+            glm::mat4 scaling = glm::scale(glm::mat4(1.0f), scale);
+
+            // Convert Quaternion to glm::quat and then to a rotation matrix
+            glm::quat rotation = glm::quat(rotationQuat.w, rotationQuat.x, rotationQuat.y, rotationQuat.z);
+            glm::mat4 rotationMatrix = glm::mat4(rotation);
+
+
+            return translation * rotationMatrix * scaling;
         }
     };
 

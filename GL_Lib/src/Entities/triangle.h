@@ -10,7 +10,7 @@ namespace gllib {
 
         void updateRenderData(Color color);
     public:
-        Triangle(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
+        Triangle(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, Color color);
         Triangle(Transform transform, Color color);
         virtual ~Triangle() override;
 

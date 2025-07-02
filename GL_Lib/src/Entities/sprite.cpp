@@ -4,7 +4,7 @@
 using namespace gllib;
 using namespace std;
 
-Sprite::Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color) :
+Sprite::Sprite(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, Color color) :
     Shape(translation, rotation, scale) {
     this->color = color;
     mirrorX = false;
