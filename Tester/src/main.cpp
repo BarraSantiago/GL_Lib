@@ -15,12 +15,10 @@ private:
     gllib::Cube* cube;
     gllib::AmbientLight* ambientLight;
     gllib::PointLight* pointLight;
-    gllib::Model* model; // Add this line
+    gllib::Model* model;
     glm::vec3 modelPosition;
     float modelScale;
-    float animSpeed, nextFrame;
 
-    void moveRectangle(float speed);
     void movement(gllib::Entity* player);
 
 protected:
@@ -69,8 +67,6 @@ Game::Game()
     model = nullptr;
     modelPosition = {0.0f, 0.0f, -5.0f};
     modelScale = 5.0f;
-    animSpeed = .075f;
-    nextFrame = 0;
 }
 
 Game::~Game()
@@ -146,8 +142,6 @@ void Game::update()
     // Apply the new rotation
     cube->setRotationQuat(newRot);
     
-    moveRectangle(100);
-
     // Draw
     prepareRendering();
     drawObjects();
@@ -201,14 +195,6 @@ void Game::prepareRendering()
     gllib::Shader::setShaderProgram(shaderProgramSolidColor);
     gllib::Shader::setMat4(shaderProgramSolidColor, "projection", projection);
     gllib::Shader::setMat4(shaderProgramSolidColor, "view", view);
-}
-
-static int x = 1;
-static int y = 1;
-
-void Game::moveRectangle(float speed)
-{
-   
 }
 
 void Game::movement(gllib::Entity* player)
