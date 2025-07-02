@@ -1,7 +1,7 @@
 #include "shader.h"
 
 #include "loader.h"
-
+#include "Material.h"
 #include <iostream>
 #include <vector>
 #include <gtc/type_ptr.inl>
@@ -159,6 +159,14 @@ void Shader::setFloat(unsigned int shaderProgram, const char* name, float value)
     {
         std::cerr << "Warning: Uniform '" << name << "' not found in shader program " << shaderProgram << std::endl;
     }
+}
+
+void Shader::setMaterial(glm::uint shaderProgram, const Material material)
+{
+    setVec3(shaderProgram, "material.ambient", material.ambient.x, material.ambient.y, material.ambient.z);
+    setVec3(shaderProgram, "material.diffuse", material.diffuse.x, material.diffuse.y, material.diffuse.z);
+    setVec3(shaderProgram, "material.specular", material.specular.x, material.specular.y, material.specular.z);
+    setFloat(shaderProgram, "material.shininess", material.shininess);
 }
 
 unsigned int Shader::getCurrentShaderProgram()

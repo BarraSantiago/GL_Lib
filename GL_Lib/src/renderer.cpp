@@ -14,6 +14,7 @@ using namespace std;
 glm::mat4 Renderer::projMatrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 glm::mat4 Renderer::viewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 glm::mat4 Renderer::modelMatrix = glm::mat4(1.0f);
+
 void Renderer::setUpVertexAttributes()
 {
     // position attribute
@@ -141,12 +142,17 @@ void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material
     // Set transformation matrices
     glCall(glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "model"), 1, GL_FALSE, glm::value_ptr(trans)));
     glCall(glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix)));
-    glCall(glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projMatrix)));
+    glCall(
+        glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projMatrix)
+        ));
 
     // Set material properties
-    glCall(glUniform3fv(glGetUniformLocation(shader3DProgram, "material.ambient"), 1, glm::value_ptr(material.ambient)));
-    glCall(glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(material.diffuse)));
-    glCall(glUniform3fv(glGetUniformLocation(shader3DProgram, "material.specular"), 1, glm::value_ptr(material.specular)));
+    glCall(
+        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.ambient"), 1, glm::value_ptr(material.ambient)));
+    glCall(
+        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(material.diffuse)));
+    glCall(
+        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.specular"), 1, glm::value_ptr(material.specular)));
     glCall(glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), material.shininess));
 
     // Apply lights from your Light system
@@ -198,7 +204,10 @@ void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, st
         glUniform1i(u_Material, i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
-
+    // In drawModel3D, after binding textures:
+    bool hasTextures = !textures.empty();
+    glUniform1i(glGetUniformLocation(shader3DProgram, "material.hasTexture"), hasTextures ? 1 : 0);
+    
     // Apply lights from your Light system
     int lightIndex = 0;
     for (Light* light : Light::lights)

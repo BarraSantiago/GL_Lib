@@ -1,7 +1,10 @@
 #pragma once
-#include "deps.h"
-#include "Shader.h"
+#include <vec3.hpp>
 
+#include "deps.h"
+namespace gllib {
+    class Shader;
+}
 namespace gllib
 {
     struct DLLExport Material
@@ -20,13 +23,7 @@ namespace gllib
         {
         }
 
-        void apply(unsigned int shaderProgram) const
-        {
-            Shader::setVec3(shaderProgram, "material.ambient", ambient.x, ambient.y, ambient.z);
-            Shader::setVec3(shaderProgram, "material.diffuse", diffuse.x, diffuse.y, diffuse.z);
-            Shader::setVec3(shaderProgram, "material.specular", specular.x, specular.y, specular.z);
-            Shader::setFloat(shaderProgram, "material.shininess", shininess);
-        }
+        void apply(unsigned int shaderProgram) const;
 
         static Material emerald() { return Material(glm::vec3(0.0215f, 0.1745f, 0.0215f), glm::vec3(0.07568f, 0.61424f, 0.07568f), glm::vec3(0.633f, 0.727811f, 0.633f), 76.8f); }
         static Material jade() { return Material(glm::vec3(0.135f, 0.2225f, 0.1575f), glm::vec3(0.54f, 0.89f, 0.63f), glm::vec3(0.316228f, 0.316228f, 0.316228f), 12.8f); }
@@ -37,5 +34,6 @@ namespace gllib
         static Material gold() { return Material(glm::vec3(0.24725f, 0.1995f, 0.0745f), glm::vec3(0.75164f, 0.60648f, 0.22648f), glm::vec3(0.628281f, 0.555802f, 0.366065f), 51.2f); }
         static Material silver() { return Material(glm::vec3(0.19225f, 0.19225f, 0.19225f), glm::vec3(0.50754f, 0.50754f, 0.50754f), glm::vec3(0.508273f, 0.508273f, 0.508273f), 51.2f); }
         static Material plastic() { return Material(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.55f, 0.55f, 0.55f), glm::vec3(0.70f, 0.70f, 0.70f), 32.0f); }
+        static Material base() { return Material(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, 0.f), 0.0f); }
     };
 }

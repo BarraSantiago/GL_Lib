@@ -62,7 +62,7 @@ Game::Game()
     trs2.position = {0, 0, 0.0f};
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.scale = {5.0f, 5.0f, 5.0f};
-    player = new gllib::Cube(trs2, new gllib::Material(gllib::Material::emerald()));
+    player = new gllib::Cube(trs2, new gllib::Material(gllib::Material::gold()));
 
     gllib::Transform trs3;
     trs3.position = {window->getWidth() * .5f, window->getHeight() * .5f, -50.0f};
@@ -82,12 +82,11 @@ Game::Game()
     cubeTrs.scale = {10.0f, 10.0f, 10.0f};
     cube = new gllib::Cube(cubeTrs, new gllib::Material(gllib::Material::bronze()));
 
+    trs2.position = {-5, 0, 0.0f};
 
-    pointLight = new gllib::PointLight(trs2.position, {1.0f, 1.0f, 1.0f}, 1.0f, 0.09f, 0.012f);
-    ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.8f);
-
+    pointLight = new gllib::PointLight(trs2.position, {1.0f, 1.0f, 1.0f}, 1.0f, 0.0f, 0.0f);
+    ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.9f);
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
-
     sprite->addTexture("sus.png", true);
     sprite->setMirroredX(true);
     int textureWidth = 16;
@@ -123,7 +122,7 @@ void Game::init()
     
     // Load the model using Model class
     try {
-        model = new gllib::Model("models/kitty/FroggieKitty_11.fbx", false);
+        model = new gllib::Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
         std::cout << "Scene model loaded successfully with " 
                   << model->meshes.size() << " meshes." << std::endl;
     }
@@ -131,7 +130,7 @@ void Game::init()
         std::cout << "Failed to load scene model: " << e.what() << std::endl;
         model = nullptr;
     }
-    model->transform.scale *= 3;
+    model->transform.scale *= 10;
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -191,7 +190,8 @@ void Game::update()
 void Game::drawObjects()
 {
     gllib::Shader::setShaderProgram(shaderProgramLighting);
-
+    gllib::Shader::setMaterial(shaderProgramLighting, gllib::Material::base());
+    
     ambientLight->apply(shaderProgramLighting);
     pointLight->apply(shaderProgramLighting);
 
@@ -204,9 +204,6 @@ void Game::drawObjects()
     player->draw();
 
     gllib::Shader::setShaderProgram(shaderProgramTexture);
-    //background->draw();
-    //sprite->draw();
-    //coin->draw();
 
     gllib::Shader::setShaderProgram(shaderProgramSolidColor);
     triangle->draw();
@@ -232,6 +229,7 @@ void Game::prepareRendering()
     gllib::Shader::setShaderProgram(shaderProgramTexture);
     gllib::Shader::setMat4(shaderProgramTexture, "projection", projection);
     gllib::Shader::setMat4(shaderProgramTexture, "view", view);
+
 
     // Set up solid color shader
     gllib::Shader::setShaderProgram(shaderProgramSolidColor);

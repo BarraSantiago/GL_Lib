@@ -10,6 +10,11 @@ struct Material {
     vec3 diffuse;
     vec3 specular;
     float shininess;
+    
+    // Add texture samplers
+    sampler2D texture_diffuse1;
+    sampler2D texture_specular1;
+    bool hasTexture;
 };
 
 struct Light {
@@ -27,24 +32,26 @@ uniform vec3 ambientStrength;
 uniform float diffuseStrength = 1.0; 
 uniform float specularStrength = 1.0;
 
-
-
 void main()
 {
     float distance = length(lightPos - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    
+    // Sample textures if available, otherwise use material colors
+    vec3 diffuseColor = material.hasTexture ? texture(material.texture_diffuse1, TexCoords).rgb : material.diffuse;
+    vec3 specularColor = material.hasTexture ? texture(material.texture_specular1, TexCoords).rgb : material.specular;
     
     vec3 ambient = ambientStrength * lightColor * material.ambient;
     
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diffuseStrength * diff * lightColor * material.diffuse;
+    vec3 diffuse = diffuseStrength * diff * lightColor * diffuseColor;
 
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = specularStrength * spec * lightColor * material.specular;
+    vec3 specular = specularStrength * spec * lightColor * specularColor;
 
     diffuse *= attenuation;
     specular *= attenuation;
