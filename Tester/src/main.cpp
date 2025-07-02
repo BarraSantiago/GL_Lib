@@ -19,7 +19,7 @@ private:
     gllib::Cube* cube;
     gllib::AmbientLight* ambientLight;
     gllib::PointLight* pointLight;
-    gllib::Model* sceneModel; // Add this line
+    gllib::Model* model; // Add this line
     glm::vec3 modelPosition;
     float modelScale;
     float animSpeed, nextFrame;
@@ -96,10 +96,10 @@ Game::Game()
     coin->setCurrentFrame(7);
 
     coin->setCurrentFrame(0);
-    sceneModel = nullptr;
+    model = nullptr;
     coin->setDurationInSecs(.6);
     modelPosition = {0.0f, 0.0f, -5.0f};
-    modelScale = 1.0f;
+    modelScale = 5.0f;
     animSpeed = .075f;
     nextFrame = 0;
 }
@@ -117,22 +117,21 @@ void Game::init()
     camera->setDistance(100.0f);
     camera->setHeight(2.0f);
     camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 1000.0f);
-    camera->invertYAxis();
 
     // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
     
     // Load the model using Model class
     try {
-        sceneModel = new gllib::Model("scenev3.fbx", false);
+        model = new gllib::Model("models/kitty/FroggieKitty_11.fbx", false);
         std::cout << "Scene model loaded successfully with " 
-                  << sceneModel->meshes.size() << " meshes." << std::endl;
+                  << model->meshes.size() << " meshes." << std::endl;
     }
     catch (const std::exception& e) {
         std::cout << "Failed to load scene model: " << e.what() << std::endl;
-        sceneModel = nullptr;
+        model = nullptr;
     }
-    
+    model->transform.scale *= 3;
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -197,8 +196,8 @@ void Game::drawObjects()
     pointLight->apply(shaderProgramLighting);
 
     // Draw the loaded scene model
-    if (sceneModel != nullptr) {
-        sceneModel->draw();
+    if (model != nullptr) {
+        model->draw();
     }
 
     cube->draw();
@@ -339,7 +338,7 @@ void Game::uninit()
     delete sprite;
     delete coin;
     delete player;
-    delete sceneModel;
+    delete model;
 }
 
 int main()
