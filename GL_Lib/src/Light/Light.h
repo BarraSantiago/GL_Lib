@@ -4,6 +4,7 @@
 #include "glm.hpp"
 #include "../transform.h"
 #include "../Shader.h"
+#include "../Material.h"
 
 namespace gllib
 {

@@ -119,18 +119,22 @@ void Game::init()
 
     // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
-    
+
     // Load the model using Model class
-    try {
+    try
+    {
         model = new gllib::Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
-        std::cout << "Scene model loaded successfully with " 
-                  << model->meshes.size() << " meshes." << std::endl;
+        std::cout << "Scene model loaded successfully with "
+            << model->meshes.size() << " meshes." << std::endl;
     }
-    catch (const std::exception& e) {
+    catch (const std::exception& e)
+    {
         std::cout << "Failed to load scene model: " << e.what() << std::endl;
         model = nullptr;
     }
     model->transform.scale *= 10;
+    model->transform.position = {10.0f, 0.0f, 10.0f};
+    model->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -138,11 +142,12 @@ void Game::init()
 
 void Game::update()
 {
-    
     // Update
     movement(player);
-    camera->updateThirdPersonPosition();
-
+    if (cameraController->getCameraMode() == gllib::CameraMode::ThirdPerson)
+    {
+        camera->updateThirdPersonPosition();
+    }
     coin->update();
 
     // In your update() function, replace the current quaternion code with:
@@ -190,13 +195,13 @@ void Game::update()
 void Game::drawObjects()
 {
     gllib::Shader::setShaderProgram(shaderProgramLighting);
-    gllib::Shader::setMaterial(shaderProgramLighting, gllib::Material::base());
-    
+
     ambientLight->apply(shaderProgramLighting);
     pointLight->apply(shaderProgramLighting);
 
     // Draw the loaded scene model
-    if (model != nullptr) {
+    if (model != nullptr)
+    {
         model->draw();
     }
 

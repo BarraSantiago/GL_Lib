@@ -20,6 +20,8 @@ namespace gllib
 
         void apply(unsigned int shaderProgram) const override
         {
+            Shader::setMaterial(shaderProgram, Material::base());
+
             // Set ambient strength with color and intensity combined
             Shader::setVec3(shaderProgram, "ambientStrength", color.r * intensity, color.g * intensity,
                             color.b * intensity);
