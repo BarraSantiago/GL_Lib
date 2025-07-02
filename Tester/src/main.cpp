@@ -17,7 +17,9 @@ private:
     gllib::PointLight* pointLight;
     gllib::SpotLight* playerLight;
     gllib::Model* model;
-    glm::vec3 modelPosition;
+    gllib::Model* model1;
+    gllib::Model* model2;
+    gllib::Model* model3;
     float modelScale;
 
     void movement(gllib::Entity* player);
@@ -71,7 +73,6 @@ Game::Game()
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
 
     model = nullptr;
-    modelPosition = {0.0f, 0.0f, -5.0f};
     modelScale = 5.0f;
 }
 
@@ -96,8 +97,13 @@ void Game::init()
     try
     {
         model = new gllib::Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
-        std::cout << "Scene model loaded successfully with "
-            << model->meshes.size() << " meshes." << std::endl;
+        std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << std::endl;
+        model1 = new gllib::Model("models/pochita/pochita.fbx", false);
+        std::cout << "Scene model loaded successfully with " << model1->meshes.size() << " meshes." << std::endl;
+        model2 = new gllib::Model("models/chicken/Chicken1.fbx", false);
+        std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << std::endl;
+        model3 = new gllib::Model("models/Backpack/backpack.mtl", false);
+        std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << std::endl;
     }
     catch (const std::exception& e)
     {
@@ -107,6 +113,13 @@ void Game::init()
     model->transform.scale *= 10;
     model->transform.position = {10.0f, 0.0f, 10.0f};
     model->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
+    model1->transform = model->transform;
+    model1->transform.position.z += 10.0f;
+    model2->transform = model->transform;
+    model2->transform.position.x += 10.0f;
+    model3->transform = model->transform;
+    model3->transform.position.z -= 10.0f;
+    
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -168,6 +181,10 @@ void Game::drawObjects()
         model->draw();
     }
 
+    model1->draw();
+    model2->draw();
+    model3->draw();
+    
     cube->draw();
     player->draw();
 

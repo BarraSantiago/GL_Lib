@@ -147,12 +147,14 @@ void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material
         ));
 
     // Set material properties
-    //glCall(glUniform3fv(glGetUniformLocation(shader3DProgram, "material.ambient"), 1, glm::value_ptr(material.ambient)));
     glCall(
         glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(material.diffuse)));
     glCall(
         glUniform3fv(glGetUniformLocation(shader3DProgram, "material.specular"), 1, glm::value_ptr(material.specular)));
     glCall(glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), material.shininess));
+
+    // Explicitly set hasTexture to false for entities without textures
+    glCall(glUniform1i(glGetUniformLocation(shader3DProgram, "material.hasTexture"), 0));
 
     // Apply lights from your Light system
     int lightIndex = 0;
@@ -160,7 +162,7 @@ void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material
     {
         light->apply(shader3DProgram);
         lightIndex++;
-        if (lightIndex >= 8) break; 
+        if (lightIndex >= 8) break;
     }
 
     // Set view position (camera position)
@@ -203,20 +205,21 @@ void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, st
         glUniform1i(u_Material, i);
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
-    // In drawModel3D, after binding textures:
+
+    // Set hasTexture flag
     bool hasTextures = !textures.empty();
     glUniform1i(glGetUniformLocation(shader3DProgram, "material.hasTexture"), hasTextures ? 1 : 0);
-    
+
     // Apply lights from your Light system
     int lightIndex = 0;
     for (Light* light : Light::lights)
     {
         light->apply(shader3DProgram);
         lightIndex++;
-        if (lightIndex >= 8) break; // Limit to 8 lights
+        if (lightIndex >= 8) break;
     }
 
-    // Set view position (camera position) - using origin since no camera class
+    // Set view position (camera position)
     glUniform3f(glGetUniformLocation(shader3DProgram, "viewPos"), 0.0f, 0.0f, 3.0f);
 
     // Draw the mesh
@@ -224,7 +227,14 @@ void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, st
     glCall(glDrawElements(GL_TRIANGLES, indexQty, GL_UNSIGNED_INT, 0));
     glCall(glBindVertexArray(0));
 
-    // Reset active texture
+    // IMPORTANT: Unbind all textures that were used
+    for (unsigned int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    // Reset to texture unit 0
     glActiveTexture(GL_TEXTURE0);
     glCall(glUseProgram(0));
 }
