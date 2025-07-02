@@ -51,7 +51,8 @@ namespace gllib
         return front;
     }
 
-    glm::mat4 Camera::getProjectionMatrix() const {
+    glm::mat4 Camera::getProjectionMatrix() const
+    {
         return glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     }
 
@@ -59,7 +60,7 @@ namespace gllib
     {
         yaw = newYaw;
         // Constrain pitch
-        pitch = std::max(-89.0f, std::min(89.0f, newPitch)); 
+        pitch = std::max(-89.0f, std::min(89.0f, newPitch));
         updateCameraVectors();
     }
 
@@ -84,13 +85,13 @@ namespace gllib
     void Camera::updateThirdPersonPosition()
     {
         if (!target) return;
-        
+
         glm::vec3 targetPos = glm::vec3(target->getPosition().x, target->getPosition().y, target->getPosition().z);
-        
+
         // Calculate camera position behind target
         glm::vec3 offset = -front * distance;
         offset.y += height;
-        
+
         position = targetPos + offset;
         updateViewMatrix();
     }

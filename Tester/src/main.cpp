@@ -27,7 +27,6 @@ private:
 protected:
     void init() override;
     void drawObjects();
-    void prepareRendering();
     void update() override;
     void uninit() override;
 
@@ -154,13 +153,14 @@ void Game::update()
     cube->setRotationQuat(newRot);
 
     // Draw
-    prepareRendering();
     drawObjects();
 }
 
 
 void Game::drawObjects()
 {
+    gllib::Renderer::clear();
+
     gllib::Shader::setShaderProgram(shaderProgramLighting);
 
     ambientLight->apply(shaderProgramLighting);
@@ -185,33 +185,6 @@ void Game::drawObjects()
     gllib::Shader::setShaderProgram(shaderProgramSolidColor);
 }
 
-void Game::prepareRendering()
-{
-    gllib::Renderer::clear();
-
-    // Set up lighting shader
-    gllib::Shader::setShaderProgram(shaderProgramLighting);
-    glm::mat4 projection = camera->getProjectionMatrix();
-    glm::mat4 view = camera->getViewMatrix();
-
-    gllib::Shader::setMat4(shaderProgramLighting, "projection", projection);
-    gllib::Shader::setMat4(shaderProgramLighting, "view", view);
-    gllib::Shader::setVec3(shaderProgramLighting, "viewPos",
-                           camera->getPosition().x,
-                           camera->getPosition().y,
-                           camera->getPosition().z);
-
-    // Set up texture shader
-    gllib::Shader::setShaderProgram(shaderProgramTexture);
-    gllib::Shader::setMat4(shaderProgramTexture, "projection", projection);
-    gllib::Shader::setMat4(shaderProgramTexture, "view", view);
-
-
-    // Set up solid color shader
-    gllib::Shader::setShaderProgram(shaderProgramSolidColor);
-    gllib::Shader::setMat4(shaderProgramSolidColor, "projection", projection);
-    gllib::Shader::setMat4(shaderProgramSolidColor, "view", view);
-}
 
 void Game::movement(gllib::Entity* player)
 {
