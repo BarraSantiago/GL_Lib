@@ -24,13 +24,14 @@ namespace gllib
         {
             toggleKeyPressed = false;
         }
-
+        /*
         if (currentMode == CameraMode::FirstPerson)
         {
             float velocity = moveSpeed * LibTime::getDeltaTime();
             glm::vec3 position = camera->getPosition();
             glm::vec3 front = camera->getFront();
 
+            
             if (Input::getKeyPressed(Key_W))
                 position += front * velocity;
             if (Input::getKeyPressed(Key_S))
@@ -41,7 +42,7 @@ namespace gllib
                 position += glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f))) * velocity;
 
             camera->setPosition(position);
-        }
+        }*/
     }
 
     void CameraController::processMouseMovement(float xpos, float ypos)

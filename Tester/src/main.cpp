@@ -90,10 +90,8 @@ void Game::init()
     camera->setHeight(2.0f);
     camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 1000.0f);
 
-    // Set initial camera rotation
     camera->setRotation(0.0f, 0.0f);
 
-    // Load the model using Model class
     try
     {
         model = new gllib::Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
@@ -119,7 +117,7 @@ void Game::init()
     model2->transform.position.x += 10.0f;
     model3->transform = model->transform;
     model3->transform.position.z -= 10.0f;
-    
+
     srand(time(nullptr));
     window->setTitle("Engine");
 }
@@ -134,31 +132,25 @@ void Game::update()
         camera->updateThirdPersonPosition();
     }
 
-    // In your update() function, replace the current quaternion code with:
     float rotationSpeed = 30.0f * gllib::LibTime::getDeltaTime();
     float angleInRadians = glm::radians(rotationSpeed);
 
-    // Create a rotation quaternion for the z-axis
     gllib::Quaternion rotationZ;
     rotationZ.w = std::cos(angleInRadians / 2.0f);
     rotationZ.x = 0.0f;
     rotationZ.z = 0.0f;
     rotationZ.y = std::sin(angleInRadians / 2.0f);
 
-    // Get the current rotation
     gllib::Quaternion cubeRot = cube->getRotationQuat();
 
-    // Multiply the quaternions (the order matters here)
     gllib::Quaternion newRot;
     newRot.w = rotationZ.w * cubeRot.w - rotationZ.x * cubeRot.x - rotationZ.y * cubeRot.y - rotationZ.z * cubeRot.z;
     newRot.x = rotationZ.w * cubeRot.x + rotationZ.x * cubeRot.w + rotationZ.y * cubeRot.z - rotationZ.z * cubeRot.y;
     newRot.y = rotationZ.w * cubeRot.y - rotationZ.x * cubeRot.z + rotationZ.y * cubeRot.w + rotationZ.z * cubeRot.x;
     newRot.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.w;
 
-    // Normalize to ensure it's a pure rotation
     newRot.normalize();
 
-    // Apply the new rotation
     cube->setRotationQuat(newRot);
 
     // Draw
@@ -184,7 +176,7 @@ void Game::drawObjects()
     model1->draw();
     model2->draw();
     model3->draw();
-    
+
     cube->draw();
     player->draw();
 
@@ -226,12 +218,6 @@ void Game::movement(gllib::Entity* player)
     gllib::Transform transform2 = player->getTransform();
     transform2.position.y += 1.f;
     float speed = 80 * gllib::LibTime::getDeltaTime();
-    float gravity = 40 * gllib::LibTime::getDeltaTime();
-
-    if (!collisionManager->checkCollision(transform2))
-    {
-        //player->move({0.f, gravity, 0});
-    }
 
     if (!Input::isAnyKeyPressed())
     {
@@ -241,83 +227,82 @@ void Game::movement(gllib::Entity* player)
         return;
     }
 
+    // Get camera orientation vectors
+    glm::vec3 cameraFront = camera->getFront();
+    glm::vec3 cameraRight = glm::normalize(glm::cross(cameraFront, glm::vec3(0.0f, 1.0f, 0.0f)));
+
+    cameraFront.y = 0.0f;
+    cameraFront = glm::normalize(cameraFront);
+    cameraRight.y = 0.0f;
+    cameraRight = glm::normalize(cameraRight);
+
     gllib::Transform transform = player->getTransform();
     glm::vec3 movementDirection = {0.0f, 0.0f, 0.0f};
+    glm::vec3 moveVector = {0.0f, 0.0f, 0.0f};
     bool playerMoved = false;
-    int dir = 0;
+
     if (Input::getKeyPressed(Key_W))
     {
-        transform.position.x += 2.0f;
+        moveVector = cameraFront * speed;
+        transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
-            player->move({speed, 0.f, 0.f});
-            movementDirection = {1.0f, 0.0f, -0.5f};
+            player->move(moveVector);
+            movementDirection = cameraFront;
             playerMoved = true;
-            dir = 0;
         }
     }
 
     if (Input::getKeyPressed(Key_S))
     {
-        transform.position.x -= 2.0f;
+        moveVector = -cameraFront * speed;
+        transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
-            player->move({-speed, 0.f, 0.f});
-            movementDirection = {-1.0f, 0.0f, -0.5f}; // Moving left with forward bias
+            player->move(moveVector);
+            movementDirection = -cameraFront;
             playerMoved = true;
-            dir = 1;
         }
     }
 
     if (Input::getKeyPressed(Key_A))
     {
-        transform.position.y -= 2.0f;
+        moveVector = -cameraRight * speed;
+        transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
-            player->move({0.f, 0.f, -speed});
-            movementDirection = {0.0f, 0.0f, -1.0f}; // Moving forward
+            player->move(moveVector);
+            movementDirection = -cameraRight;
             playerMoved = true;
-            dir = 2;
         }
     }
 
     if (Input::getKeyPressed(Key_D))
     {
-        transform.position.y += 2.0f;
+        moveVector = cameraRight * speed;
+        transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
-            player->move({0.f, 0, speed});
-            movementDirection = {0.0f, 0.0f, 1.0f}; // Moving backward
+            player->move(moveVector);
+            movementDirection = cameraRight;
             playerMoved = true;
-            dir = 3;
         }
     }
 
     glm::vec3 pos = player->getTransform().position;
-
-    switch (dir)
-    {
-    default:
-    case 0: // Moving right
-        pos.x += 2.0f;
-        break;
-    case 1: // Moving left
-        pos.x -= 2.0f;
-        break;
-    case 2: // Moving forward
-        pos.y -= 2.0f;
-        break;
-    case 3: // Moving backward
-        pos.y += 2.0f;
-        break;
-    }
-
-    playerLight->setPosition(pos);
-
     if (playerMoved)
     {
+        pos += glm::normalize(movementDirection) * 2.0f;
+        playerLight->setPosition(pos);
+
         glm::vec3 spotDirection = glm::normalize(movementDirection);
-        playerLight->setDirection(spotDirection);
+        spotDirection.y = -0.5f; 
+        playerLight->setDirection(glm::normalize(spotDirection));
+    }
+    else
+    {
+        pos += cameraFront * 2.0f;
+        playerLight->setPosition(pos);
     }
 }
 

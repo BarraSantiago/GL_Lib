@@ -4,7 +4,7 @@
 #include "deps.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
-#ifdef _WIN32 // Directory is different in linux
+#ifdef _WIN32 
 #include "glm.hpp"
 #else
 #include "glm/glm.hpp"
@@ -42,7 +42,6 @@ namespace gllib
             }
             else
             {
-                // If the quaternion is too close to zero, set it to identity
                 w = 1.0f;
                 x = 0.0f;
                 y = 0.0f;
@@ -117,10 +116,8 @@ namespace gllib
             glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
             glm::mat4 scaling = glm::scale(glm::mat4(1.0f), scale);
 
-            // Convert Quaternion to glm::quat and then to a rotation matrix
             glm::quat rotation = glm::quat(rotationQuat.w, rotationQuat.x, rotationQuat.y, rotationQuat.z);
             glm::mat4 rotationMatrix = glm::mat4(rotation);
-
 
             return translation * rotationMatrix * scaling;
         }
