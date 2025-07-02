@@ -9,10 +9,6 @@ using namespace std;
 class Game : public gllib::BaseGame
 {
 private:
-    gllib::Triangle* triangle;
-    gllib::Sprite* sprite;
-    gllib::Sprite* background;
-    gllib::Animation* coin;
     gllib::Cube* player;
     gllib::Rectangle* floorCollision;
     gllib::collisionManager* collisionManager;
@@ -44,31 +40,13 @@ Game::Game()
     window->setVsyncEnabled(false);
     cout << "Game created!\n";
 
-    gllib::Transform trs;
-    trs.position = {100.0f, 100.0f, -2.0f};
-    trs.rotationQuat = {0.0f, 0.0f, 0.0f, 1.0f};
-    trs.scale = {57.74f, 50.0f, 0.0f};
-    triangle = new gllib::Triangle(trs, {0.85f, 0.2f, 0.4f, 1.0f});
+   
 
     gllib::Transform trs2;
-    trs2.position = {400.0f, 400.0f, 1.0f};
-    trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 90.0f};
-    trs2.scale = {100.0f, 100.0f, 0.0f};
-    sprite = new gllib::Sprite(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
-
-    trs2.position = {400.0f, 400.0f, 2.0f};
-    coin = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
-
     trs2.position = {0, 0, 0.0f};
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.scale = {5.0f, 5.0f, 5.0f};
     player = new gllib::Cube(trs2, new gllib::Material(gllib::Material::gold()));
-
-    gllib::Transform trs3;
-    trs3.position = {window->getWidth() * .5f, window->getHeight() * .5f, -50.0f};
-    trs3.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
-    trs3.scale = {640.0f, 480.0f, 0.0f};
-    background = new gllib::Sprite(trs3, {1.0f, 1.0f, 1.0f, 1.0f});
 
     gllib::Transform trs4;
     trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 3};
@@ -87,16 +65,8 @@ Game::Game()
     pointLight = new gllib::PointLight(trs2.position, {1.0f, 1.0f, 1.0f}, 1.0f, 0.0f, 0.0f);
     ambientLight = new gllib::AmbientLight({1.0f, 1.0f, 1.0f, 1.0f}, 0.9f);
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
-    sprite->addTexture("sus.png", true);
-    sprite->setMirroredX(true);
-    int textureWidth = 16;
-    unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
-    coin->addFrames(coinTex, textureWidth, 16, 8, 1);
-    coin->setCurrentFrame(7);
 
-    coin->setCurrentFrame(0);
     model = nullptr;
-    coin->setDurationInSecs(.6);
     modelPosition = {0.0f, 0.0f, -5.0f};
     modelScale = 5.0f;
     animSpeed = .075f;
@@ -148,7 +118,6 @@ void Game::update()
     {
         camera->updateThirdPersonPosition();
     }
-    coin->update();
 
     // In your update() function, replace the current quaternion code with:
     float rotationSpeed = 30.0f * gllib::LibTime::getDeltaTime();
@@ -176,14 +145,7 @@ void Game::update()
 
     // Apply the new rotation
     cube->setRotationQuat(newRot);
-
-    if (triangle != nullptr)
-    {
-        gllib::Quaternion rot = triangle->getRotationQuat();
-        rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
-        triangle->setRotationQuat(rot);
-    }
-
+    
     moveRectangle(100);
 
     // Draw
@@ -211,7 +173,6 @@ void Game::drawObjects()
     gllib::Shader::setShaderProgram(shaderProgramTexture);
 
     gllib::Shader::setShaderProgram(shaderProgramSolidColor);
-    triangle->draw();
 }
 
 void Game::prepareRendering()
@@ -247,34 +208,7 @@ static int y = 1;
 
 void Game::moveRectangle(float speed)
 {
-    if (sprite->getPosition().x - (sprite->getScale().x * .5) <= 0)
-    {
-        x = 1;
-        sprite->setMirroredX(true);
-    }
-    if (sprite->getPosition().x + (sprite->getScale().x * .5) >= window->getWidth())
-    {
-        x = -1;
-        sprite->setMirroredX(false);
-    }
-
-    if (sprite->getPosition().y - (sprite->getScale().y * .5) <= 0)
-    {
-        y = 1;
-        sprite->setMirroredY(true);
-    }
-    if (sprite->getPosition().y + (sprite->getScale().y * .5) >= window->getHeight())
-    {
-        y = -1;
-        sprite->setMirroredY(false);
-    }
-
-    sprite->move({
-        static_cast<float>(x * (speed * gllib::LibTime::getDeltaTime())),
-        static_cast<float>(y * (speed * gllib::LibTime::getDeltaTime())),
-        0.0f
-    });
-    //sprite->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * -60.0f) });
+   
 }
 
 void Game::movement(gllib::Entity* player)
@@ -337,9 +271,6 @@ void Game::uninit()
     cout << "External uninit!!!\n";
     delete ambientLight;
     delete cube;
-    delete triangle;
-    delete sprite;
-    delete coin;
     delete player;
     delete model;
 }
