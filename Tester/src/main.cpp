@@ -167,15 +167,11 @@ void Game::drawObjects()
     pointLight->apply(shaderProgramLighting);
     playerLight->apply(shaderProgramLighting);
 
-    // Draw the loaded scene model
-    if (model != nullptr)
-    {
-        model->draw();
-    }
-
-    model1->draw();
-    model2->draw();
-    model3->draw();
+   
+    model->draw(getCamera());
+    model1->draw(getCamera());
+    model2->draw(getCamera());
+    model3->draw(getCamera());
 
     cube->draw();
     player->draw();

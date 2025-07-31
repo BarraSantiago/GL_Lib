@@ -4,7 +4,7 @@
 #include "deps.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
-#ifdef _WIN32 
+#ifdef _WIN32
 #include "glm.hpp"
 #else
 #include "glm/glm.hpp"
@@ -87,6 +87,35 @@ namespace gllib
         glm::vec3 upward;
         glm::vec3 right;
 
+        // Hierarchy support
+        Transform* parent = nullptr;
+        std::vector<Transform*> children;
+
+        // AABB for frustum culling
+        glm::vec3 aabbMin = glm::vec3(0.0f);
+        glm::vec3 aabbMax = glm::vec3(0.0f);
+
+        void addChild(Transform* child)
+        {
+            if (child && child->parent != this)
+            {
+                if (child->parent)
+                    child->parent->removeChild(child);
+                child->parent = this;
+                children.push_back(child);
+            }
+        }
+
+        void removeChild(Transform* child)
+        {
+            auto it = std::find(children.begin(), children.end(), child);
+            if (it != children.end())
+            {
+                (*it)->parent = nullptr;
+                children.erase(it);
+            }
+        }
+
         Transform operator/(float i)
         {
             return {
@@ -113,6 +142,14 @@ namespace gllib
 
         glm::mat4 getTransformMatrix()
         {
+            glm::mat4 localMatrix = getLocalTransformMatrix();
+            if (parent)
+                return parent->getTransformMatrix() * localMatrix;
+            return localMatrix;
+        }
+
+        glm::mat4 getLocalTransformMatrix()
+        {
             glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
             glm::mat4 scaling = glm::scale(glm::mat4(1.0f), scale);
 
@@ -121,7 +158,21 @@ namespace gllib
 
             return translation * rotationMatrix * scaling;
         }
-    };
+
+        glm::vec3 getWorldAABBMin() const
+        {
+            glm::mat4 worldMatrix = const_cast<Transform*>(this)->getTransformMatrix();
+            glm::vec4 worldMin = worldMatrix * glm::vec4(aabbMin, 1.0f);
+            return glm::vec3(worldMin);
+        }
+
+        glm::vec3 getWorldAABBMax() const
+        {
+            glm::mat4 worldMatrix = const_cast<Transform*>(this)->getTransformMatrix();
+            glm::vec4 worldMax = worldMatrix * glm::vec4(aabbMax, 1.0f);
+            return glm::vec3(worldMax);
+        }
+    };;
 
     struct DLLExport ModelMatrix
     {

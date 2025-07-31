@@ -27,7 +27,10 @@ public:
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
     unsigned int VAO;
-
+    
+    glm::vec3 minAABB;
+    glm::vec3 maxAABB;
+    
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
     
 private:

@@ -836,6 +836,7 @@
     <ClInclude Include="src\Entities\shape.h" />
     <ClInclude Include="src\Entities\sprite.h" />
     <ClInclude Include="src\Entities\triangle.h" />
+    <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Importer\Mesh.h" />
     <ClInclude Include="src\Importer\Model.h" />
     <ClInclude Include="src\Importer\ModelLoader.h" />

@@ -54,8 +54,8 @@ namespace gllib {
 	public:
 		BaseGame();
 		virtual ~BaseGame();
-		
-		Camera* getCamera() { return camera; }
+
+		Camera getCamera() { return *camera; }
 		CameraController* getCameraController() { return cameraController; }
 		
 		void start();
