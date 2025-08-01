@@ -1,7 +1,10 @@
 #pragma once
+#include <list>
+
 #include "glm.hpp"
 #include "../transform.h"
 #include "../Shader.h"
+#include "../Material.h"
 
 namespace gllib
 {
@@ -11,14 +14,14 @@ namespace gllib
         Color color;
 
     public:
-        Light(const Color& color = {1.0f, 1.0f, 1.0f, 1.0f}): color(color)
-        {
-        }
+        inline  static std::list<Light*> lights;
 
-        virtual ~Light() = default;
+        Light(const Color& color = {1.0f, 1.0f, 1.0f, 1.0f});
 
-        void setColor(const Color& newColor) { color = newColor; }
-        Color getColor() const { return color; }
+        virtual ~Light();
+
+        void setColor(const Color& newColor);
+        Color getColor() const;
 
         virtual void apply(unsigned int shaderProgram) const = 0;
     };

@@ -19,7 +19,12 @@
 #include "Light/PointLight.h"
 #include "Material.h"
 #include "transform.h"
-#include "Importer/ModelImporter.h"
+#include "Light/Light.h"
+#include "Importer/ModelLoader.h"
+#include "Importer/Model.h"
+#include "myMaths.h"
+#include "Importer/Mesh.h"
+#include "Light/SpotLight.h"
 
 namespace gllib {
 
@@ -36,7 +41,7 @@ namespace gllib {
 		Input* input;
 		Camera* camera;
 		CameraController* cameraController;
-		gllib::ModelImporter* importer;
+		gllib::ModelLoader* importer;
 
 		unsigned int shaderProgramSolidColor;
 		unsigned int shaderProgramTexture;
@@ -49,8 +54,8 @@ namespace gllib {
 	public:
 		BaseGame();
 		virtual ~BaseGame();
-		
-		Camera* getCamera() { return camera; }
+
+		Camera getCamera() { return *camera; }
 		CameraController* getCameraController() { return cameraController; }
 		
 		void start();

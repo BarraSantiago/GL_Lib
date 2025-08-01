@@ -12,7 +12,7 @@ namespace gllib
         return (pi * 2.0f) / 360.0f;
     }
 
-    Quaternion Maths::Euler(Vector3 euler)
+    Quaternion Maths::Euler(glm::vec3 euler)
     {
         euler.x *= deg2Rad();
         euler.y *= deg2Rad();
@@ -33,7 +33,7 @@ namespace gllib
         return q;
     }
 
-    Vector3 Maths::Quat2Vec3(Quaternion Quat, Vector3 Vec)
+    glm::vec3 Maths::Quat2Vec3(Quaternion Quat, glm::vec3 Vec)
     {
         float x2 = Quat.x * 2.0f;
         float y2 = Quat.y * 2.0f;
@@ -48,7 +48,7 @@ namespace gllib
         float wy2 = Quat.w * y2;
         float wz2 = Quat.w * z2;
 
-        Vector3 result;
+        glm::vec3 result;
         result.x = (1.0f - (yy2 + zz2)) * Vec.x + (xy2 - wz2) * Vec.y + (xz2 + wy2) * Vec.z;
         result.y = (xy2 + wz2) * Vec.x + (1.0f - (xx2 + zz2)) * Vec.y + (yz2 - wx2) * Vec.z;
         result.z = (xz2 - wy2) * Vec.x + (yz2 + wx2) * Vec.y + (1.0f - (xx2 + yy2)) * Vec.z;

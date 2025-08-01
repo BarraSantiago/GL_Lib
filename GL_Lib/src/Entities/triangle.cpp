@@ -5,7 +5,7 @@
 using namespace gllib;
 using namespace std;
 
-Triangle::Triangle(Vector3 translation, Vector3 rotation, Vector3 scale, Color color) :
+Triangle::Triangle(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, Color color) :
     Shape(translation, rotation, scale){
     this->color = color;
     updateRenderData(this->color);

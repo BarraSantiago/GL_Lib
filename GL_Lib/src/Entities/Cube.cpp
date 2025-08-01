@@ -9,7 +9,6 @@ Cube::Cube(Transform transform, Material* material) : Entity(transform), materia
     this->material = material;
 
     float vertices[] = {
-        // Positions          // Normals           // Texture coords
         // Front face
         -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
         0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
@@ -177,26 +176,30 @@ void Cube::setMaterial(Material* newMaterial, bool takeOwnership)
 
 void Cube::draw()
 {
-    unsigned int shaderProgram = Shader::getCurrentShaderProgram();
-    Shader::setMat4(shaderProgram, "model", getModelMatrix());
-        
-    // Apply material if available
-    if (material) {
-        material->apply(shaderProgram);
-    }
-    
-    glm::mat4 model = getModelMatrix();
-    
-    int modelLoc = glGetUniformLocation(shaderProgram, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-    int objectColorLoc = glGetUniformLocation(shaderProgram, "objectColor");
-    if (objectColorLoc != -1)
+    if (material)
     {
-        glUniform3fv(objectColorLoc, 1, glm::value_ptr(color));
+        // Use the proper renderer function that handles lighting
+        Renderer::drawEntity3D(VAO, 36, *material, getModelMatrix());
     }
+    else
+    {
+        // Fallback to basic rendering without material
+        unsigned int shaderProgram = Shader::getCurrentShaderProgram();
+        Shader::setMat4(shaderProgram, "model", getModelMatrix());
 
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+        glm::mat4 model = getModelMatrix();
+
+        int modelLoc = glGetUniformLocation(shaderProgram, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        int objectColorLoc = glGetUniformLocation(shaderProgram, "objectColor");
+        if (objectColorLoc != -1)
+        {
+            glUniform3fv(objectColorLoc, 1, glm::value_ptr(color));
+        }
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
 }

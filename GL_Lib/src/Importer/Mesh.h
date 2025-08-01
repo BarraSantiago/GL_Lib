@@ -1,10 +1,10 @@
 #pragma once
-#include <string>
 #include <vector>
-#include <glm/glm.hpp>
-#include "deps.h"
 
-struct Vertex
+
+#include "Shader.h"
+
+struct DLLExport Vertex
 {
     glm::vec3 Position;
     glm::vec3 Normal;
@@ -13,7 +13,7 @@ struct Vertex
     glm::vec3 Bitangent;
 };
 
-struct Texture
+struct DLLExport Texture
 {
     unsigned int id;
     std::string type;
@@ -27,16 +27,14 @@ public:
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
     unsigned int VAO;
-
-    // Remove these lines - they don't belong in Mesh class:
-    // const Mesh& getMesh(size_t meshIndex) const;
-    // void drawMesh(size_t meshIndex) const;
-    // void drawAllMeshes() const;
-
+    
+    glm::vec3 minAABB;
+    glm::vec3 maxAABB;
+    
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-    ~Mesh();
-
+    
 private:
     unsigned int VBO, EBO;
+
     void setupMesh();
 };

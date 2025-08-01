@@ -9,7 +9,7 @@ namespace gllib {
 
 		void updateRenderData(Color color);
 	public:
-		Rectangle(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
+		Rectangle(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale, Color color);
 		Rectangle(Transform transform, Color color);
 		virtual ~Rectangle() override;
 

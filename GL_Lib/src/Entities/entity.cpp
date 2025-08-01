@@ -5,7 +5,7 @@
 
 namespace gllib
 {
-    Entity::Entity(const Vector3& translation, const Vector3& rotationEuler, const Vector3& scale)
+    Entity::Entity(const glm::vec3& translation, const glm::vec3& rotationEuler, const glm::vec3& scale)
     {
         transform.position = translation;
         transform.rotationQuat = Maths::Euler(rotationEuler);
@@ -19,12 +19,12 @@ namespace gllib
     Entity::~Entity()
     = default;
 
-    void Entity::move(const Vector3 direction)
+    void Entity::move(const glm::vec3 direction)
     {
         transform.position += direction;
     }
 
-    void Entity::rotate(const Vector3 eulerRotation)
+    void Entity::rotate(const glm::vec3 eulerRotation)
     {
         Quaternion rotationQuat;
         rotationQuat.x = eulerRotation.x;
@@ -35,22 +35,22 @@ namespace gllib
 
     void Entity::updateTransform()
     {
-        transform.forward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 0, 1));
-        transform.upward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 1, 0));
-        transform.right = Maths::Quat2Vec3(transform.rotationQuat, Vector3(1, 0, 0));
+        transform.forward = Maths::Quat2Vec3(transform.rotationQuat, glm::vec3(0, 0, 1));
+        transform.upward = Maths::Quat2Vec3(transform.rotationQuat, glm::vec3(0, 1, 0));
+        transform.right = Maths::Quat2Vec3(transform.rotationQuat, glm::vec3(1, 0, 0));
     }
 
-    Vector3 Entity::upward() const
+    glm::vec3 Entity::upward() const
     {
         return transform.upward;
     }
 
-    Vector3 Entity::forward() const
+    glm::vec3 Entity::forward() const
     {
         return transform.forward;
     }
 
-    Vector3 Entity::right() const
+    glm::vec3 Entity::right() const
     {
         return transform.right;
     }
@@ -60,19 +60,19 @@ namespace gllib
         return transform;
     }
 
-    Vector3 Entity::getPosition() const
+    glm::vec3 Entity::getPosition() const
     {
         return transform.position;
     }
 
-    Vector3 Entity::getScale() const
+    glm::vec3 Entity::getScale() const
     {
         return transform.scale;
     }
 
-    Vector3 Entity::getRotationEuler() const
+    glm::vec3 Entity::getRotationEuler() const
     {
-        return Maths::Quat2Vec3(transform.rotationQuat, Vector3(1, 1, 1));
+        return Maths::Quat2Vec3(transform.rotationQuat, glm::vec3(1, 1, 1));
     }
 
     Quaternion Entity::getRotationQuat() const
@@ -85,22 +85,23 @@ namespace gllib
         this->transform = transform;
     }
 
-    void Entity::setPosition(const Vector3& position)
+    void Entity::setPosition(const glm::vec3& position)
     {
         transform.position = position;
     }
 
-    void Entity::setScale(const Vector3& scale)
+    void Entity::setScale(const glm::vec3& scale)
     {
         transform.scale = scale;
     }
 
     void Entity::setRotationQuat(const Quaternion& rotation)
     {
-        transform.rotationQuat = rotation;
+        
+        transform.rotationQuat =  rotation;
     }
 
-    void Entity::setRotationEuler(const Vector3& rotation)
+    void Entity::setRotationEuler(const glm::vec3& rotation)
     {
         transform.rotationQuat = Maths::Euler(rotation);
     }
@@ -148,8 +149,7 @@ namespace gllib
 
         model = glm::translate(model, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
 
-        glm::quat glmQuat(transform.rotationQuat.w, transform.rotationQuat.x, 
-                  transform.rotationQuat.y, transform.rotationQuat.z);
+        glm::quat glmQuat(transform.rotationQuat.w, transform.rotationQuat.x, transform.rotationQuat.y, transform.rotationQuat.z);
         glm::mat4 rotationMatrix = glm::mat4_cast(glmQuat);
         model = model * rotationMatrix;
 

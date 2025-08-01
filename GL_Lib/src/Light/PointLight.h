@@ -7,40 +7,18 @@ namespace gllib
     class DLLExport PointLight : public Light
     {
     private:
-        Vector3 position;
-        // Attenuation factors
+        glm::vec3 position;
         float constant;
         float linear;
         float quadratic;
 
     public:
-        PointLight(const Vector3& position = {0.0f, 0.0f, 0.0f}, const Color& color = {1.0f, 1.0f, 1.0f, 1.0f},
-                   float constant = 1.0f, float linear = 0.09f, float quadratic = 0.032f)
-            : Light(color), position(position), constant(constant), linear(linear), quadratic(quadratic)
-        {
-        }
+        PointLight(const glm::vec3& position = {0.0f, 0.0f, 0.0f}, const Color& color = {1.0f, 1.0f, 1.0f, 1.0f},
+                   float constant = 1.0f, float linear = 0.09f, float quadratic = 0.032f);
 
-        void setPosition(const Vector3& newPosition) { position = newPosition; }
-        Vector3 getPosition() const { return position; }
-
-        void setAttenuation(float newConstant, float newLinear, float newQuadratic)
-        {
-            constant = newConstant;
-            linear = newLinear;
-            quadratic = newQuadratic;
-        }
-
-        void apply(unsigned int shaderProgram) const override
-        {
-            Shader::setVec3(shaderProgram, "lightPos", position.x, position.y, position.z);
-            Shader::setVec3(shaderProgram, "lightColor", color.r, color.g, color.b);
-
-            Shader::setFloat(shaderProgram, "diffuseStrength", 1.0f);
-            Shader::setFloat(shaderProgram, "specularStrength", 0.5f);
-
-            Shader::setFloat(shaderProgram, "light.constant", constant);
-            Shader::setFloat(shaderProgram, "light.linear", linear);
-            Shader::setFloat(shaderProgram, "light.quadratic", quadratic);
-        }
+        glm::vec3 getPosition() const;
+        void setPosition(const glm::vec3& newPosition);
+        void setAttenuation(float newConstant, float newLinear, float newQuadratic);
+        void apply(unsigned int shaderProgram) const override;
     };
 }
