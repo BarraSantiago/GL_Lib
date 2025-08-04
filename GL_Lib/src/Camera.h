@@ -15,7 +15,7 @@ namespace gllib {
         glm::vec3 right;
         glm::vec3 worldUp;
 
-        gllib::Entity* target = nullptr;
+        Entity* target = nullptr;
         float distance = 5.0f;
         float height = 2.0f;
         float yaw;
@@ -46,7 +46,7 @@ namespace gllib {
         
         void setPerspective(float fov, float aspectRatio, float nearPlane, float farPlane);
 
-        void setTarget(gllib::Entity* targetEntity) { target = targetEntity; }
+        void setTarget(Entity* targetEntity) { target = targetEntity; }
         void setDistance(float dist) { distance = dist; }
         void setHeight(float h) { height = h; }
         void updateThirdPersonPosition();

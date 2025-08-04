@@ -17,13 +17,12 @@ namespace gllib
         static std::string directory;
         static bool gammaCorrection;
 
-        static void loadModel(std::string const& path, std::vector<Mesh>& meshes, bool gamma = false);
-
+        static void loadModel(std::string const& path, std::vector<Mesh>& meshes, bool gamma, Transform* rootTransform);
     private:
-        static void processNode(aiNode* node, const aiScene* scene, std::vector<Mesh>& meshes, bool gamma, glm::vec3& minAABB, glm::vec3& maxAABB);
+        static void processNode(aiNode* node, const aiScene* scene, std::vector<Mesh>& meshes, bool gamma,
+                                 glm::vec3& minAABB, glm::vec3& maxAABB,
+                                 Transform* rootTransform, Transform* parentTransform);
         static Mesh processMesh(aiMesh* mesh, const aiScene* scene, std::vector<Mesh>& meshes, bool gamma = false);
-        static void processNodeHierarchy(aiNode* node, const aiScene* scene, std::vector<Mesh>& meshes, bool gamma, Transform* parentTransform);
-        static void calculateHierarchicalAABB(Transform* transform);
         
         static std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName,
                                                          bool gamma = false);

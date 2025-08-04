@@ -91,9 +91,44 @@ namespace gllib
         Transform* parent = nullptr;
         std::vector<Transform*> children;
 
-        // AABB for frustum culling
-        glm::vec3 aabbMin = glm::vec3(0.0f);
-        glm::vec3 aabbMax = glm::vec3(0.0f);
+        // Local AABB (model space)
+        glm::vec3 localAABBMin = glm::vec3(0.0f);
+        glm::vec3 localAABBMax = glm::vec3(0.0f);
+
+        // Hierarchical AABB (world space, includes children)
+        glm::vec3 hierarchicalAABBMin = glm::vec3(0.0f);
+        glm::vec3 hierarchicalAABBMax = glm::vec3(0.0f);
+
+        // Cached transform matrix
+        mutable glm::mat4 cachedWorldMatrix = glm::mat4(1.0f);
+        mutable bool worldMatrixDirty = true;
+
+        void setPosition(const glm::vec3& newPosition)
+        {
+            position = newPosition;
+            markDirty();
+        }
+
+        void setScale(const glm::vec3& newScale)
+        {
+            scale = newScale;
+            markDirty();
+        }
+
+        void setRotation(const Quaternion& newRotation)
+        {
+            rotationQuat = newRotation;
+            markDirty();
+        }
+
+        void markDirty()
+        {
+            worldMatrixDirty = true;
+            for (Transform* child : children)
+            {
+                child->markDirty();
+            }
+        }
 
         void addChild(Transform* child)
         {
@@ -103,6 +138,7 @@ namespace gllib
                     child->parent->removeChild(child);
                 child->parent = this;
                 children.push_back(child);
+                child->markDirty();
             }
         }
 
@@ -113,6 +149,7 @@ namespace gllib
             {
                 (*it)->parent = nullptr;
                 children.erase(it);
+                (*it)->markDirty();
             }
         }
 
@@ -140,15 +177,30 @@ namespace gllib
             };
         }
 
-        glm::mat4 getTransformMatrix()
+        glm::mat4 getTransformMatrix() const
+        {
+            if (worldMatrixDirty)
+            {
+                updateWorldMatrix();
+            }
+            return cachedWorldMatrix;
+        }
+
+        void updateWorldMatrix() const
         {
             glm::mat4 localMatrix = getLocalTransformMatrix();
             if (parent)
-                return parent->getTransformMatrix() * localMatrix;
-            return localMatrix;
+            {
+                cachedWorldMatrix = parent->getTransformMatrix() * localMatrix;
+            }
+            else
+            {
+                cachedWorldMatrix = localMatrix;
+            }
+            worldMatrixDirty = false;
         }
 
-        glm::mat4 getLocalTransformMatrix()
+        glm::mat4 getLocalTransformMatrix() const
         {
             glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
             glm::mat4 scaling = glm::scale(glm::mat4(1.0f), scale);
@@ -159,20 +211,104 @@ namespace gllib
             return translation * rotationMatrix * scaling;
         }
 
+        // Top-down: Update world matrices recursively
+        void updateTransformHierarchy()
+        {
+            updateWorldMatrix();
+            for (Transform* child : children)
+            {
+                child->updateTransformHierarchy();
+            }
+        }
+
+        // Bottom-up: Calculate hierarchical AABB including all children
+        void calculateHierarchicalAABB()
+        {
+            glm::mat4 worldMatrix = getTransformMatrix();
+            
+            // Reset hierarchical AABB
+            hierarchicalAABBMin = glm::vec3(FLT_MAX);
+            hierarchicalAABBMax = glm::vec3(-FLT_MAX);
+            
+            bool hasValidAABB = false;
+        
+            // Only process local AABB if it's valid (not zero-sized)
+            if (localAABBMin != localAABBMax)
+            {
+                // Transform all 8 corners of the local AABB
+                std::vector<glm::vec3> corners = {
+                    glm::vec3(localAABBMin.x, localAABBMin.y, localAABBMin.z),
+                    glm::vec3(localAABBMax.x, localAABBMin.y, localAABBMin.z),
+                    glm::vec3(localAABBMin.x, localAABBMax.y, localAABBMin.z),
+                    glm::vec3(localAABBMax.x, localAABBMax.y, localAABBMin.z),
+                    glm::vec3(localAABBMin.x, localAABBMin.y, localAABBMax.z),
+                    glm::vec3(localAABBMax.x, localAABBMin.y, localAABBMax.z),
+                    glm::vec3(localAABBMin.x, localAABBMax.y, localAABBMax.z),
+                    glm::vec3(localAABBMax.x, localAABBMax.y, localAABBMax.z)
+                };
+        
+                for (const glm::vec3& corner : corners)
+                {
+                    glm::vec4 worldCorner = worldMatrix * glm::vec4(corner, 1.0f);
+                    glm::vec3 worldPos = glm::vec3(worldCorner);
+                    
+                    if (!hasValidAABB)
+                    {
+                        hierarchicalAABBMin = worldPos;
+                        hierarchicalAABBMax = worldPos;
+                        hasValidAABB = true;
+                    }
+                    else
+                    {
+                        hierarchicalAABBMin = glm::min(hierarchicalAABBMin, worldPos);
+                        hierarchicalAABBMax = glm::max(hierarchicalAABBMax, worldPos);
+                    }
+                }
+            }
+        
+            // Recursively calculate children AABBs and include them
+            for (Transform* child : children)
+            {
+                child->calculateHierarchicalAABB();
+                
+                // Include child AABB if it's valid
+                if (child->hierarchicalAABBMin.x <= child->hierarchicalAABBMax.x &&
+                    child->hierarchicalAABBMin.y <= child->hierarchicalAABBMax.y &&
+                    child->hierarchicalAABBMin.z <= child->hierarchicalAABBMax.z)
+                {
+                    if (!hasValidAABB)
+                    {
+                        hierarchicalAABBMin = child->hierarchicalAABBMin;
+                        hierarchicalAABBMax = child->hierarchicalAABBMax;
+                        hasValidAABB = true;
+                    }
+                    else
+                    {
+                        hierarchicalAABBMin = glm::min(hierarchicalAABBMin, child->hierarchicalAABBMin);
+                        hierarchicalAABBMax = glm::max(hierarchicalAABBMax, child->hierarchicalAABBMax);
+                    }
+                }
+            }
+        
+            // If no valid AABB was found, set a minimal one at world position
+            if (!hasValidAABB)
+            {
+                glm::vec3 worldPos = glm::vec3(worldMatrix[3]);
+                hierarchicalAABBMin = worldPos - glm::vec3(0.1f);
+                hierarchicalAABBMax = worldPos + glm::vec3(0.1f);
+            }
+        }
+
         glm::vec3 getWorldAABBMin() const
         {
-            glm::mat4 worldMatrix = const_cast<Transform*>(this)->getTransformMatrix();
-            glm::vec4 worldMin = worldMatrix * glm::vec4(aabbMin, 1.0f);
-            return glm::vec3(worldMin);
+            return hierarchicalAABBMin;
         }
 
         glm::vec3 getWorldAABBMax() const
         {
-            glm::mat4 worldMatrix = const_cast<Transform*>(this)->getTransformMatrix();
-            glm::vec4 worldMax = worldMatrix * glm::vec4(aabbMax, 1.0f);
-            return glm::vec3(worldMax);
+            return hierarchicalAABBMax;
         }
-    };;
+    };;;
 
     struct DLLExport ModelMatrix
     {

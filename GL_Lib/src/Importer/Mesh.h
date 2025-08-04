@@ -3,6 +3,7 @@
 
 
 #include "Shader.h"
+#include "transform.h"
 
 struct DLLExport Vertex
 {
@@ -27,14 +28,14 @@ public:
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
     unsigned int VAO;
-    
+    unsigned int VBO, EBO;
     glm::vec3 minAABB;
     glm::vec3 maxAABB;
+    gllib::Transform* associatedTransform = nullptr;
     
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
     
 private:
-    unsigned int VBO, EBO;
 
     void setupMesh();
 };
