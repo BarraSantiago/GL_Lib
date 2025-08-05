@@ -4,7 +4,7 @@
 #include <gtc/quaternion.hpp>
 
 #include "Entities/entity.h"
-#include "renderer.h"
+#include "Rendering/renderer.h"
 
 namespace gllib {
     class DLLExport Camera {

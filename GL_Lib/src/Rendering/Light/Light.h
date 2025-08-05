@@ -2,9 +2,9 @@
 #include <list>
 
 #include "glm.hpp"
-#include "../transform.h"
+#include "Math/transform.h"
 #include "../Shader.h"
-#include "../Material.h"
+#include "Material.h"
 
 namespace gllib
 {

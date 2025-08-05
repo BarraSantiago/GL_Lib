@@ -2,29 +2,23 @@
 
 #include "core.h"
 #include "Input.h"
-#include "window.h"
-#include "renderer.h"
 #include "lib_time.h"
-#include "loader.h"
 
 #include "Entities/triangle.h"
 #include "Entities/rectangle.h"
 #include "Entities/sprite.h"
 #include "Entities/animation.h"
-#include "shader.h"
-#include "Camera.h"
-#include "CameraController.h"
 #include "Entities/Cube.h"
-#include "Light/AmbientLight.h"
-#include "Light/PointLight.h"
-#include "Material.h"
-#include "transform.h"
-#include "Light/Light.h"
 #include "Importer/ModelLoader.h"
 #include "Importer/Model.h"
-#include "myMaths.h"
 #include "Importer/Mesh.h"
-#include "Light/SpotLight.h"
+#include "Rendering/Camera/Camera.h"
+#include "Rendering/Camera/CameraController.h"
+#include "Window/window.h"
+#include <Rendering/Light/AmbientLight.h>
+#include <Rendering/Light/PointLight.h>
+#include "Math/collisionManager.h"
+#include "Rendering/Light/SpotLight.h"
 
 namespace gllib {
 

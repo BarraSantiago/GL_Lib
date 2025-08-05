@@ -1,5 +1,6 @@
 #include "PointLight.h"
 
+
 namespace gllib
 {
     void PointLight::setPosition(const glm::vec3& newPosition)

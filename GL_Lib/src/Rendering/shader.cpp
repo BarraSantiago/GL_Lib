@@ -1,7 +1,7 @@
 #include "shader.h"
 
-#include "loader.h"
-#include "Material.h"
+#include "Importer/loader.h"
+#include "Light/Material.h"
 #include <iostream>
 #include <vector>
 #include <gtc/type_ptr.inl>

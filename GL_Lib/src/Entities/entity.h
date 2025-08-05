@@ -1,10 +1,9 @@
 ﻿#pragma once
-#include "../transform.h"
-#include "../deps.h"
-#include "../renderer.h"
-#include "../Material.h"
-#include "../myMaths.h"
-#include "../renderer.h"
+#include "../Core/deps.h"
+#include <fwd.hpp>
+#include <vec3.hpp>
+#include "../Math/transform.h"
+#include "../Math/myMaths.h"
 
 namespace gllib
 {

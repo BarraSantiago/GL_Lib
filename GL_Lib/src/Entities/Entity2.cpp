@@ -1,5 +1,7 @@
 #include "Entity2.h"
 
+#include "transform.h"
+
 namespace gllib
 {
     Entity2::Entity2()

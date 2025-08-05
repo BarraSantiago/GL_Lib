@@ -1,9 +1,8 @@
 #pragma once
 
-#include "deps.h"
+#include "Core/deps.h"
 #include "renderer.h"
-#include "transform.h"
-#include "transform.h"
+#include "Math/transform.h"
 
 namespace gllib
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include <vec3.hpp>
 
-#include "deps.h"
+#include "Core/deps.h"
 namespace gllib {
     class Shader;
 }

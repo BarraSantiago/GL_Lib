@@ -1,6 +1,6 @@
 #pragma once
 #include "Entity2.h"
-#include "Material.h"
+#include "Rendering/Light/Material.h"
 
 namespace gllib
 {

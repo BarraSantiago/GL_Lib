@@ -1,7 +1,7 @@
 #pragma once
 #include <fwd.hpp>
 
-#include "deps.h"
+#include "Core/deps.h"
 #include "glm.hpp"
 #include <gtc/matrix_transform.hpp>
 #include <iostream>

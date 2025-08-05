@@ -1,6 +1,7 @@
 ﻿#pragma once
+#include "deps.h"
+#include <glfw-3.4.bin.WIN32/include/GLFW/glfw3.h>
 
-#include "window.h"
 
 enum Keys
 {

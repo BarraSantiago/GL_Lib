@@ -1,8 +1,10 @@
-#include "base_game.h"
+#include "Core/base_game.h"
 
 #include <iostream>
 
-#include "collisionManager.h"
+#include "Math/transform.h"
+#include "Rendering/renderer.h"
+
 
 using namespace std;
 using namespace gllib;

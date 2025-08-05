@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <map>
 #include <string>
+#include <vec3.hpp>
 
 #include "sprite.h"
 

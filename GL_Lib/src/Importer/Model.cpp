@@ -1,4 +1,7 @@
 #include "Model.h"
+
+#include <iostream>
+
 #include "Camera.h"
 #include "Frustum.h"
 #include "Renderer.h"

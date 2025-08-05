@@ -1,5 +1,5 @@
 #pragma once
-#include "deps.h"
+#include "Core/deps.h"
 
 #include <iostream>
 

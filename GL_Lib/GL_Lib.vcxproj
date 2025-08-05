@@ -19,11 +19,314 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\base_game.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\CameraController.cpp" />
-    <ClCompile Include="src\collisionManager.cpp" />
-    <ClCompile Include="src\core.cpp" />
+    <ClCompile Include="src\Core\base_game.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Core\core.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Core\Input.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Core\lib_time.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
     <ClCompile Include="src\Entities\animation.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -573,21 +876,96 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\glad\src\glad.c" />
+    <ClCompile Include="src\Importer\loader.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
     <ClCompile Include="src\Importer\Mesh.cpp" />
     <ClCompile Include="src\Importer\Model.cpp" />
     <ClCompile Include="src\Importer\ModelLoader.cpp" />
-    <ClCompile Include="src\Input.cpp" />
-    <ClCompile Include="src\lib_time.cpp" />
-    <ClCompile Include="src\Light\AmbientLight.cpp">
+    <ClCompile Include="src\Math\collisionManager.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
       <SupportJustMyCode>true</SupportJustMyCode>
       <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</AssemblerListingLocation>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
       <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</BrowseInformationFile>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
       <CompileAs>Default</CompileAs>
       <ConformanceMode>true</ConformanceMode>
       <DiagnosticsFormat>Column</DiagnosticsFormat>
@@ -608,40 +986,40 @@
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ModuleOutputFile>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ObjectFileName>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
       <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessKeepComments>false</PreprocessKeepComments>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
       <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
       <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</SourceDependenciesFile>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <SpectreMitigation>false</SpectreMitigation>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
       <TranslateIncludes>false</TranslateIncludes>
       <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
       <TreatWarningAsError>false</TreatWarningAsError>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <UseFullPaths>true</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</XMLDocumentationFileName>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <IntelJCCErratum>false</IntelJCCErratum>
       <BuildStlModules>false</BuildStlModules>
@@ -649,23 +1027,22 @@
       <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
       <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <EnablePREfast>false</EnablePREfast>
-      <OmitFramePointers>false</OmitFramePointers>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN32\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="src\Light\Light.cpp">
+    <ClCompile Include="src\Math\myMaths.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
       <SupportJustMyCode>true</SupportJustMyCode>
       <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</AssemblerListingLocation>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
       <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</BrowseInformationFile>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
       <CompileAs>Default</CompileAs>
       <ConformanceMode>true</ConformanceMode>
       <DiagnosticsFormat>Column</DiagnosticsFormat>
@@ -686,40 +1063,40 @@
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ModuleOutputFile>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ObjectFileName>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
       <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessKeepComments>false</PreprocessKeepComments>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
       <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
       <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</SourceDependenciesFile>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <SpectreMitigation>false</SpectreMitigation>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
       <TranslateIncludes>false</TranslateIncludes>
       <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
       <TreatWarningAsError>false</TreatWarningAsError>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <UseFullPaths>true</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</XMLDocumentationFileName>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <IntelJCCErratum>false</IntelJCCErratum>
       <BuildStlModules>false</BuildStlModules>
@@ -727,23 +1104,22 @@
       <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
       <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <EnablePREfast>false</EnablePREfast>
-      <OmitFramePointers>false</OmitFramePointers>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN32\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="src\Light\PointLight.cpp">
+    <ClCompile Include="src\Rendering\Camera\Camera.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
       <SupportJustMyCode>true</SupportJustMyCode>
       <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</AssemblerListingLocation>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
       <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</BrowseInformationFile>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
       <CompileAs>Default</CompileAs>
       <ConformanceMode>true</ConformanceMode>
       <DiagnosticsFormat>Column</DiagnosticsFormat>
@@ -764,40 +1140,40 @@
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ModuleOutputFile>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
       <OmitDefaultLibName>false</OmitDefaultLibName>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</ObjectFileName>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
       <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
       <PreprocessToFile>false</PreprocessToFile>
       <PreprocessKeepComments>false</PreprocessKeepComments>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
       <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
       <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</SourceDependenciesFile>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <SpectreMitigation>false</SpectreMitigation>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
       <TranslateIncludes>false</TranslateIncludes>
       <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
       <TreatWarningAsError>false</TreatWarningAsError>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <UseFullPaths>true</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\Win32_Debug\</XMLDocumentationFileName>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <IntelJCCErratum>false</IntelJCCErratum>
       <BuildStlModules>false</BuildStlModules>
@@ -805,28 +1181,408 @@
       <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
       <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <EnablePREfast>false</EnablePREfast>
-      <OmitFramePointers>false</OmitFramePointers>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN32\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="src\Light\SpotLight.cpp" />
-    <ClCompile Include="src\loader.cpp" />
-    <ClCompile Include="src\Material.cpp" />
-    <ClCompile Include="src\myMaths.cpp" />
-    <ClCompile Include="src\renderer.cpp" />
-    <ClCompile Include="src\shader.cpp" />
-    <ClCompile Include="src\window.cpp" />
+    <ClCompile Include="src\Rendering\Camera\CameraController.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Light\AmbientLight.cpp" />
+    <ClCompile Include="src\Rendering\Light\Light.cpp" />
+    <ClCompile Include="src\Rendering\Light\Material.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Light\PointLight.cpp" />
+    <ClCompile Include="src\Rendering\Light\SpotLight.cpp" />
+    <ClCompile Include="src\Rendering\renderer.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\shader.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="src\Window\window.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableVectorLength>NotSet</EnableVectorLength>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\GL_Lib.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\obj\x64_Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;F:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\base_game.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\CameraController.h" />
-    <ClInclude Include="src\collisionManager.h" />
-    <ClInclude Include="src\core.h" />
-    <ClInclude Include="src\deps.h" />
+    <ClInclude Include="src\Core\base_game.h" />
+    <ClInclude Include="src\Core\core.h" />
+    <ClInclude Include="src\Core\deps.h" />
+    <ClInclude Include="src\Core\Input.h" />
+    <ClInclude Include="src\Core\lib_time.h" />
     <ClInclude Include="src\Entities\animation.h" />
     <ClInclude Include="src\Entities\Cube.h" />
     <ClInclude Include="src\Entities\entity.h" />
@@ -836,24 +1592,25 @@
     <ClInclude Include="src\Entities\shape.h" />
     <ClInclude Include="src\Entities\sprite.h" />
     <ClInclude Include="src\Entities\triangle.h" />
-    <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\Importer\loader.h" />
     <ClInclude Include="src\Importer\Mesh.h" />
     <ClInclude Include="src\Importer\Model.h" />
     <ClInclude Include="src\Importer\ModelLoader.h" />
-    <ClInclude Include="src\Input.h" />
-    <ClInclude Include="src\lib_time.h" />
-    <ClInclude Include="src\Light\AmbientLight.h" />
-    <ClInclude Include="src\Light\Light.h" />
-    <ClInclude Include="src\Light\PointLight.h" />
-    <ClInclude Include="src\Light\SpotLight.h" />
-    <ClInclude Include="src\loader.h" />
-    <ClInclude Include="src\Material.h" />
-    <ClInclude Include="src\myMaths.h" />
-    <ClInclude Include="src\renderer.h" />
-    <ClInclude Include="src\shader.h" />
-    <ClInclude Include="src\stb_image.h" />
-    <ClInclude Include="src\transform.h" />
-    <ClInclude Include="src\window.h" />
+    <ClInclude Include="src\Importer\stb_image.h" />
+    <ClInclude Include="src\Math\collisionManager.h" />
+    <ClInclude Include="src\Math\myMaths.h" />
+    <ClInclude Include="src\Math\transform.h" />
+    <ClInclude Include="src\Rendering\Camera\Camera.h" />
+    <ClInclude Include="src\Rendering\Camera\CameraController.h" />
+    <ClInclude Include="src\Rendering\Frustum.h" />
+    <ClInclude Include="src\Rendering\Light\AmbientLight.h" />
+    <ClInclude Include="src\Rendering\Light\Light.h" />
+    <ClInclude Include="src\Rendering\Light\Material.h" />
+    <ClInclude Include="src\Rendering\Light\PointLight.h" />
+    <ClInclude Include="src\Rendering\Light\SpotLight.h" />
+    <ClInclude Include="src\Rendering\renderer.h" />
+    <ClInclude Include="src\Rendering\shader.h" />
+    <ClInclude Include="src\Window\window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -918,6 +1675,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Platform)_$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src;</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
@@ -963,7 +1721,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLLIB_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib;$(ProjectDir)src;$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src\Core;$(ProjectDir)src\Importer;$(ProjectDir)src\Rendering;$(ProjectDir)src\Rendering\Camera;$(ProjectDir)src\Rendering\Light;$(ProjectDir)src\Window;$(ProjectDir)src\Math;$(SolutionDir)lib;$(ProjectDir)src;$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/std:c++17</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <BuildStlModules>false</BuildStlModules>

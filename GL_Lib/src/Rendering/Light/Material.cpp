@@ -1,5 +1,5 @@
 #include "Material.h"
-#include "Shader.h"
+#include "Rendering/Shader.h"
 
 void gllib::Material::apply(unsigned int shaderProgram) const
 {

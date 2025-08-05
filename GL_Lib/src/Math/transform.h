@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <ext/matrix_transform.hpp>
 
-#include "deps.h"
+#include "Core/deps.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "gtx/quaternion.hpp"
 #ifdef _WIN32

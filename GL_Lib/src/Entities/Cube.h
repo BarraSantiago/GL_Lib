@@ -1,5 +1,6 @@
 #pragma once
 #include "entity.h"
+#include "../Rendering/Light/Material.h"
 
 namespace gllib {
     class DLLExport Cube : public Entity {

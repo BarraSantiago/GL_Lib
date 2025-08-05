@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entity.h"
-
+#include "../Rendering/renderer.h"
 namespace gllib {
 
     class DLLExport Shape : public Entity {

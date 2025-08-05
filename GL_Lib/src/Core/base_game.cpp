@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-#include "Camera.h"
-#include "CameraController.h"
 #include "Input.h"
+#include "Rendering/renderer.h"
+#include "Rendering/Shader.h"
 
 using namespace gllib;
 using namespace std;

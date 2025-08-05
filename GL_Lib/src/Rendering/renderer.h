@@ -1,6 +1,6 @@
 #pragma once
-#include "deps.h"
-#include "Material.h"
+#include "Core/deps.h"
+#include "Rendering/Light/Material.h"
 #include "Entities/Entity2.h"
 #include "Importer/Mesh.h"
 

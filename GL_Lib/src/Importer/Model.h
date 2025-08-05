@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 
-#include "Camera.h"
-#include "Frustum.h"
+#include "Rendering/Camera/Camera.h"
+#include "Rendering/Frustum.h"
 #include "Mesh.h"
 #include "ModelLoader.h"
 #include "Entities/Entity3D.h"

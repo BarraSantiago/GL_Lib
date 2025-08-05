@@ -1,5 +1,9 @@
 #include "Cube.h"
 
+#include "../Rendering/renderer.h"
+#include "../Rendering/shader.h"
+#include <gtc/type_ptr.hpp>
+
 
 using namespace gllib;
 

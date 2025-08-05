@@ -1,7 +1,7 @@
 #pragma once
 #include "Camera.h"
-#include "input.h"
-#include "lib_time.h"
+#include "Core/Input.h"
+#include "Core/lib_time.h"
 
 namespace gllib
 {
