@@ -144,7 +144,7 @@ namespace gllib
 
         void removeChild(Transform* child)
         {
-            auto it = std::find(children.begin(), children.end(), child);
+            std::vector<Transform*>::iterator it = std::find(children.begin(), children.end(), child);
             if (it != children.end())
             {
                 (*it)->parent = nullptr;
@@ -240,8 +240,7 @@ namespace gllib
         
                 for (const glm::vec3& corner : corners)
                 {
-                    glm::vec4 worldCorner = cachedWorldMatrix * glm::vec4(corner, 1.0f);
-                    glm::vec3 worldPos = glm::vec3(worldCorner);
+                    glm::vec3 worldPos = glm::vec3(cachedWorldMatrix * glm::vec4(corner, 1.0f));
                     
                     if (!hasValidAABB)
                     {

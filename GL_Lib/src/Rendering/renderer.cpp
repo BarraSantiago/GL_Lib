@@ -190,9 +190,7 @@ void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, st
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }
 
-    // Set hasTexture flag
-    bool hasTextures = !textures.empty();
-    glUniform1i(glGetUniformLocation(shader3DProgram, "material.hasTexture"), hasTextures ? 1 : 0);
+    glUniform1i(glGetUniformLocation(shader3DProgram, "material.hasTexture"), !textures.empty() ? 1 : 0);
 
     // Apply lights from your Light system
     int lightIndex = 0;

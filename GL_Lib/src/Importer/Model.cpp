@@ -26,9 +26,9 @@ namespace gllib
 
         bool hasValidGeometry = false;
 
-        for (const auto& mesh : meshes)
+        for (const Mesh& mesh : meshes)
         {
-            // Check if mesh has valid vertices (non-zero AABB)
+            // Check if mesh has valid vertices (no zero AABB)
             if (mesh.minAABB != mesh.maxAABB)
             {
                 if (!hasValidGeometry)

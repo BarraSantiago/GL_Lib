@@ -8,7 +8,8 @@
 
 using namespace std;
 using namespace gllib;
-
+// Para el final de diciembre, incluir un modelo de entre planos que muestre que cuando cruza el plano, se deja de dibujar
+// Tambien incluir controles para ambas partes del modelo
 class Game : public BaseGame
 {
 private:
@@ -124,7 +125,7 @@ void Game::init()
     model1->transform.scale *= 10;
     model1->transform.position = {10.0f, 0.0f, 10.0f};
     model1->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
-    model2->transform.scale *= 10;
+    model2->transform.scale *= 1;
     model2->transform.position = {10.0f, 0.0f, 10.0f};
     model2->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
     model3->transform.scale *= 10;
@@ -174,6 +175,9 @@ void Game::update()
 
     cube->setRotationQuat(newRot);
 
+    glm::vec3 up = {0.0f, 5.0f * LibTime::getDeltaTime(), 0.0f};
+    model2->transform.children[1]->setPosition(model2->transform.children[1]->position + up);
+    model2->transform.setPosition(model2->transform.position - up);
     // Draw
     drawObjects();
 }
@@ -190,10 +194,10 @@ void Game::drawObjects()
     playerLight->apply(shaderProgramLighting);
 
 
-    model->draw(getCamera());
-    model1->draw(getCamera());
+    //model->draw(getCamera());
+    //model1->draw(getCamera());
     model2->draw(getCamera());
-    model3->draw(getCamera());
+    //model3->draw(getCamera());
 
     cube->draw();
     player->draw();

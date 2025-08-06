@@ -72,8 +72,7 @@ namespace gllib
         currentTransform->setPosition(translation);
         currentTransform->setScale(scale);
     
-        // Convert glm::quat to custom Quaternion
-        gllib::Quaternion customQuat;
+        Quaternion customQuat;
         customQuat.w = rotation.w;
         customQuat.x = rotation.x;
         customQuat.y = rotation.y;
