@@ -211,6 +211,85 @@ namespace gllib
             return translation * rotationMatrix * scaling;
         }
 
+        // Add this method to the Transform struct
+        void updateTRSAndAABB()
+        {
+            // Update world matrix first
+            updateWorldMatrix();
+            
+            // Reset hierarchical AABB
+            hierarchicalAABBMin = glm::vec3(FLT_MAX);
+            hierarchicalAABBMax = glm::vec3(-FLT_MAX);
+            
+            bool hasValidAABB = false;
+        
+            // Only process local AABB if it's valid (not zero-sized)
+            if (localAABBMin != localAABBMax)
+            {
+                // Transform all 8 corners of the local AABB
+                std::vector<glm::vec3> corners = {
+                    glm::vec3(localAABBMin.x, localAABBMin.y, localAABBMin.z),
+                    glm::vec3(localAABBMax.x, localAABBMin.y, localAABBMin.z),
+                    glm::vec3(localAABBMin.x, localAABBMax.y, localAABBMin.z),
+                    glm::vec3(localAABBMax.x, localAABBMax.y, localAABBMin.z),
+                    glm::vec3(localAABBMin.x, localAABBMin.y, localAABBMax.z),
+                    glm::vec3(localAABBMax.x, localAABBMin.y, localAABBMax.z),
+                    glm::vec3(localAABBMin.x, localAABBMax.y, localAABBMax.z),
+                    glm::vec3(localAABBMax.x, localAABBMax.y, localAABBMax.z)
+                };
+        
+                for (const glm::vec3& corner : corners)
+                {
+                    glm::vec4 worldCorner = cachedWorldMatrix * glm::vec4(corner, 1.0f);
+                    glm::vec3 worldPos = glm::vec3(worldCorner);
+                    
+                    if (!hasValidAABB)
+                    {
+                        hierarchicalAABBMin = worldPos;
+                        hierarchicalAABBMax = worldPos;
+                        hasValidAABB = true;
+                    }
+                    else
+                    {
+                        hierarchicalAABBMin = glm::min(hierarchicalAABBMin, worldPos);
+                        hierarchicalAABBMax = glm::max(hierarchicalAABBMax, worldPos);
+                    }
+                }
+            }
+        
+            // Recursively update children and include their AABBs
+            for (Transform* child : children)
+            {
+                child->updateTRSAndAABB();
+                
+                // Include child AABB if it's valid
+                if (child->hierarchicalAABBMin.x <= child->hierarchicalAABBMax.x &&
+                    child->hierarchicalAABBMin.y <= child->hierarchicalAABBMax.y &&
+                    child->hierarchicalAABBMin.z <= child->hierarchicalAABBMax.z)
+                {
+                    if (!hasValidAABB)
+                    {
+                        hierarchicalAABBMin = child->hierarchicalAABBMin;
+                        hierarchicalAABBMax = child->hierarchicalAABBMax;
+                        hasValidAABB = true;
+                    }
+                    else
+                    {
+                        hierarchicalAABBMin = glm::min(hierarchicalAABBMin, child->hierarchicalAABBMin);
+                        hierarchicalAABBMax = glm::max(hierarchicalAABBMax, child->hierarchicalAABBMax);
+                    }
+                }
+            }
+        
+            // If no valid AABB was found, set a minimal one at world position
+            if (!hasValidAABB)
+            {
+                glm::vec3 worldPos = glm::vec3(cachedWorldMatrix[3]);
+                hierarchicalAABBMin = worldPos - glm::vec3(0.1f);
+                hierarchicalAABBMax = worldPos + glm::vec3(0.1f);
+            }
+        }
+        
         // Top-down: Update world matrices recursively
         void updateTransformHierarchy()
         {

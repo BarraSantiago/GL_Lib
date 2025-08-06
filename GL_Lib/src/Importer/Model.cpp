@@ -77,19 +77,16 @@ namespace gllib
 
     void Model::draw(const Camera& camera)
     {
-        // First, update transform hierarchy (top-down)
-        transform.updateTransformHierarchy();
-
-        // Then, calculate hierarchical AABBs (bottom-up)
-        transform.calculateHierarchicalAABB();
-
+        // Single recursive function to update transforms and calculate AABBs
+        transform.updateTRSAndAABB();
+    
         // Set up frustum culling
         Frustum frustum;
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
         glm::mat4 viewProjection = projection * view;
         frustum.extractFromMatrix(viewProjection);
-
+    
         // Render with hierarchical culling
         drawHierarchical(frustum);
     }
