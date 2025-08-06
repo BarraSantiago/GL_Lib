@@ -8,6 +8,7 @@
 
 using namespace std;
 using namespace gllib;
+
 class Game : public BaseGame
 {
 private:
@@ -26,13 +27,13 @@ private:
     bool hierarchyTestMode = false;
     float testTimer = 0.0f;
     bool mouseLocked = true;
-    
+
     void movement(Entity* player);
     void setupModelHierarchy();
     void testHierarchyTransformations();
     void handleTestInputs();
     void printHierarchyInfo();
-    
+    void AnimateModel(Transform* transform, float timeOffset);
 protected:
     void init() override;
     void drawObjects();
@@ -60,7 +61,7 @@ Game::Game()
     playerPos.z -= 2.0f;
     glm::vec3 spotDirection = {0.0f, 0.0f, -1.0f};
     playerLight = new SpotLight(playerPos, spotDirection, {1.0f, 1.0f, 0.8f, 1.0f},
-                                       5.0f, 55.0f, 1.0f, 0.0045f, 0.00075f);
+                                5.0f, 55.0f, 1.0f, 0.0045f, 0.00075f);
 
     Transform trs4;
     trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 3};
@@ -116,7 +117,7 @@ void Game::init()
         std::cout << "Failed to load scene model: " << e.what() << std::endl;
         model = nullptr;
     }
-    
+
     model->transform.scale *= 10;
     model->transform.position = {10.0f, 0.0f, 10.0f};
     model->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
@@ -145,7 +146,7 @@ void Game::update()
     {
         testHierarchyTransformations();
     }
-    
+
     movement(player);
     if (cameraController->getCameraMode() == CameraMode::ThirdPerson)
     {
@@ -188,7 +189,7 @@ void Game::drawObjects()
     pointLight->apply(shaderProgramLighting);
     playerLight->apply(shaderProgramLighting);
 
-   
+
     model->draw(getCamera());
     model1->draw(getCamera());
     model2->draw(getCamera());
@@ -228,101 +229,68 @@ void Game::testHierarchyTransformations()
         return;
 
     testTimer += gllib::LibTime::getDeltaTime();
+    
+    // Apply animation to each model with different timing offsets
+    AnimateModel(&model->transform, 0.0f);
+    if (model1) AnimateModel(&model1->transform, 0.5f);
+    if (model2) AnimateModel(&model2->transform, 1.0f);
+    if (model3) AnimateModel(&model3->transform, 1.5f);
+}
 
-    // Function to separate and scale all child transforms
-    auto separateAndScaleChildren = [this](Transform* transform, float timeOffset) {
-        if (!transform) return;
+void Game::AnimateModel(Transform* transform, float timeOffset)
+{
+    if (!transform) return;
 
-        // Animate the root transform with rotation
-        float rotSpeed = 20.0f * gllib::LibTime::getDeltaTime();
-        float angleRad = glm::radians(rotSpeed);
-
-        gllib::Quaternion rotY;
-        rotY.w = std::cos(angleRad / 2.0f);
-        rotY.x = 0.0f;
-        rotY.y = std::sin(angleRad / 2.0f);
-        rotY.z = 0.0f;
-
-        gllib::Quaternion currentRot = transform->rotationQuat;
-        gllib::Quaternion newRot;
-        newRot.w = rotY.w * currentRot.w - rotY.x * currentRot.x - rotY.y * currentRot.y - rotY.z * currentRot.z;
-        newRot.x = rotY.w * currentRot.x + rotY.x * currentRot.w + rotY.y * currentRot.z - rotY.z * currentRot.y;
-        newRot.y = rotY.w * currentRot.y - rotY.x * currentRot.z + rotY.y * currentRot.w + rotY.z * currentRot.x;
-        newRot.z = rotY.w * currentRot.z + rotY.x * currentRot.y - rotY.y * currentRot.x + rotY.z * currentRot.w;
-        newRot.normalize();
-        transform->setRotation(newRot);
-
-        // Recursively separate and scale all children
-        std::function<void(Transform*, float, int)> processChildren = [&](Transform* parent, float separation, int depth) {
-            for (size_t i = 0; i < parent->children.size(); ++i)
-            {
-                Transform* child = parent->children[i];
-                if (!child) continue;
-
-                // Calculate separation distance based on time and child index
-                float separationDistance = separation + (5.0f * std::sin((testTimer + timeOffset + i) * 1.5f));
-                
-                // Separate children in different directions based on their index
-                float angle = (2.0f * 3.1405f * i) / parent->children.size(); // Distribute evenly in circle
-                float xOffset = separationDistance * std::cos(angle);
-                float zOffset = separationDistance * std::sin(angle);
-                float yOffset = depth * 3.0f; // Stack children vertically by depth
-
-                // Set child position with separation
-                child->setPosition({xOffset, yOffset, zOffset});
-
-                // Increase child size significantly
-                float sizeMultiplier = 2.0f + (0.5f * std::sin((testTimer + timeOffset + i) * 2.0f));
-                child->setScale({sizeMultiplier, sizeMultiplier, sizeMultiplier});
-
-                // Rotate each child independently
-                float childRotSpeed = 60.0f * gllib::LibTime::getDeltaTime();
-                float childAngleRad = glm::radians(childRotSpeed * (i + 1)); // Different speed per child
-
-                gllib::Quaternion childRotZ;
-                childRotZ.w = std::cos(childAngleRad / 2.0f);
-                childRotZ.x = std::sin(childAngleRad / 2.0f) * (i % 2 == 0 ? 1.0f : 0.0f);
-                childRotZ.y = std::sin(childAngleRad / 2.0f) * (i % 3 == 0 ? 1.0f : 0.0f);
-                childRotZ.z = std::sin(childAngleRad / 2.0f) * (i % 2 == 1 ? 1.0f : 0.0f);
-                childRotZ.normalize();
-
-                gllib::Quaternion currentChildRot = child->rotationQuat;
-                gllib::Quaternion newChildRot;
-                newChildRot.w = childRotZ.w * currentChildRot.w - childRotZ.x * currentChildRot.x - childRotZ.y * currentChildRot.y - childRotZ.z * currentChildRot.z;
-                newChildRot.x = childRotZ.w * currentChildRot.x + childRotZ.x * currentChildRot.w + childRotZ.y * currentChildRot.z - childRotZ.z * currentChildRot.y;
-                newChildRot.y = childRotZ.w * currentChildRot.y - childRotZ.x * currentChildRot.z + childRotZ.y * currentChildRot.w + childRotZ.z * currentChildRot.x;
-                newChildRot.z = childRotZ.w * currentChildRot.z + childRotZ.x * currentChildRot.y - childRotZ.y * currentChildRot.x + childRotZ.z * currentChildRot.w;
-                newChildRot.normalize();
-                child->setRotation(newChildRot);
-
-                // Recursively process grandchildren with increased separation
-                if (!child->children.empty())
-                {
-                    processChildren(child, separationDistance + 10.0f, depth + 1);
-                }
-            }
-        };
-
-        // Start processing children with initial separation distance
-        if (!transform->children.empty())
+    // Function to recursively animate all children
+    std::function<void(Transform*, int)> animateChildren = [&](Transform* parent, int depth)
+    {
+        for (size_t i = 0; i < parent->children.size(); ++i)
         {
-            processChildren(transform, 15.0f, 0);
+            Transform* child = parent->children[i];
+            if (!child) continue;
+
+            float adjustedTime = testTimer + timeOffset + (i * 0.2f);
+
+            // Rotate each child around Y axis
+            float rotationSpeed = 45.0f + (depth * 15.0f);
+            float rotationAngle = rotationSpeed * adjustedTime;
+
+            gllib::Quaternion rotation;
+            rotation.w = std::cos(glm::radians(rotationAngle) / 2.0f);
+            rotation.x = 0.0f;
+            rotation.y = std::sin(glm::radians(rotationAngle) / 2.0f);
+            rotation.z = 0.0f;
+            rotation.normalize();
+            child->setRotation(rotation);
+
+            float scaleVariation = 0.3f * std::sin(adjustedTime * 2.0f);
+            float scale = 1.0f + scaleVariation;
+            child->setScale({scale, scale, scale});
+
+            if (!child->children.empty())
+            {
+                animateChildren(transform, 0);
+            }
         }
     };
 
-    // Apply separation and scaling to each model's hierarchy
-    separateAndScaleChildren(&model->transform, 0.0f);
-    separateAndScaleChildren(&model1->transform, 1.0f);
-    separateAndScaleChildren(&model2->transform, 2.0f);
-    separateAndScaleChildren(&model3->transform, 3.0f);
+    if (!transform->children.empty())
+    {
+        animateChildren(transform, 0);
+    }
+
 }
 
 void Game::handleTestInputs()
 {
+    static bool hKeyWasPressed = false;
+    static bool mKeyWasPressed = false;
+    static bool rKeyWasPressed = false;
+    static bool iKeyWasPressed = false;
+
     // Toggle hierarchy test mode
     if (Input::getKeyPressed(Key_H))
     {
-        static bool hKeyWasPressed = false;
         if (!hKeyWasPressed)
         {
             hierarchyTestMode = !hierarchyTestMode;
@@ -334,6 +302,27 @@ void Game::handleTestInputs()
             else
             {
                 testTimer = 0.0f;
+                // Reset models to original positions when disabling
+                if (model)
+                {
+                    model->transform.setPosition({10.0f, 0.0f, 10.0f});
+                    model->transform.setScale({10.0f, 10.0f, 10.0f});
+                }
+                if (model1)
+                {
+                    model1->transform.setPosition({10.0f, 0.0f, 10.0f});
+                    model1->transform.setScale({10.0f, 10.0f, 10.0f});
+                }
+                if (model2)
+                {
+                    model2->transform.setPosition({10.0f, 0.0f, 10.0f});
+                    model2->transform.setScale({10.0f, 10.0f, 10.0f});
+                }
+                if (model3)
+                {
+                    model3->transform.setPosition({10.0f, 0.0f, 10.0f});
+                    model3->transform.setScale({10.0f, 10.0f, 10.0f});
+                }
                 std::cout << "Hierarchy test mode DISABLED" << std::endl;
             }
             hKeyWasPressed = true;
@@ -341,40 +330,27 @@ void Game::handleTestInputs()
     }
     else
     {
-        static bool hKeyWasPressed = false;
         hKeyWasPressed = false;
     }
 
     // Toggle mouse lock
     if (Input::getKeyPressed(Key_M))
     {
-        static bool mKeyWasPressed = false;
         if (!mKeyWasPressed)
         {
             mouseLocked = !mouseLocked;
-            if (mouseLocked)
-            {
-                //window->lockCursor();
-                std::cout << "Mouse LOCKED" << std::endl;
-            }
-            else
-            {
-                //window->unlockCursor();
-                std::cout << "Mouse UNLOCKED" << std::endl;
-            }
+            std::cout << (mouseLocked ? "Mouse LOCKED" : "Mouse UNLOCKED") << std::endl;
             mKeyWasPressed = true;
         }
     }
     else
     {
-        static bool mKeyWasPressed = false;
         mKeyWasPressed = false;
     }
 
     // Reset hierarchy test
     if (Input::getKeyPressed(Key_R))
     {
-        static bool rKeyWasPressed = false;
         if (!rKeyWasPressed)
         {
             if (hierarchyTestMode)
@@ -388,14 +364,12 @@ void Game::handleTestInputs()
     }
     else
     {
-        static bool rKeyWasPressed = false;
         rKeyWasPressed = false;
     }
 
     // Print hierarchy info
     if (Input::getKeyPressed(Key_I))
     {
-        static bool iKeyWasPressed = false;
         if (!iKeyWasPressed)
         {
             printHierarchyInfo();
@@ -404,7 +378,6 @@ void Game::handleTestInputs()
     }
     else
     {
-        static bool iKeyWasPressed = false;
         iKeyWasPressed = false;
     }
 }
@@ -419,10 +392,13 @@ void Game::printHierarchyInfo()
 
     std::cout << "\n=== HIERARCHY INFO ===" << std::endl;
 
-    auto printModelInfo = [](const std::string& name, Model* modelPtr) {
+    auto printModelInfo = [](const std::string& name, Model* modelPtr)
+    {
         std::cout << name << ":" << std::endl;
-        std::cout << "  Local Pos: (" << modelPtr->transform.position.x << ", " << modelPtr->transform.position.y << ", " << modelPtr->transform.position.z << ")" << std::endl;
-        std::cout << "  Local Scale: (" << modelPtr->transform.scale.x << ", " << modelPtr->transform.scale.y << ", " << modelPtr->transform.scale.z << ")" << std::endl;
+        std::cout << "  Local Pos: (" << modelPtr->transform.position.x << ", " << modelPtr->transform.position.y <<
+            ", " << modelPtr->transform.position.z << ")" << std::endl;
+        std::cout << "  Local Scale: (" << modelPtr->transform.scale.x << ", " << modelPtr->transform.scale.y << ", " <<
+            modelPtr->transform.scale.z << ")" << std::endl;
         std::cout << "  Children: " << modelPtr->transform.children.size() << std::endl;
         std::cout << "  Parent: " << (modelPtr->transform.parent ? "Yes" : "No") << std::endl;
 
@@ -430,8 +406,10 @@ void Game::printHierarchyInfo()
         glm::vec3 worldPos = glm::vec3(worldMatrix[3]);
         std::cout << "  World Pos: (" << worldPos.x << ", " << worldPos.y << ", " << worldPos.z << ")" << std::endl;
 
-        std::cout << "  AABB Min: (" << modelPtr->transform.getWorldAABBMin().x << ", " << modelPtr->transform.getWorldAABBMin().y << ", " << modelPtr->transform.getWorldAABBMin().z << ")" << std::endl;
-        std::cout << "  AABB Max: (" << modelPtr->transform.getWorldAABBMax().x << ", " << modelPtr->transform.getWorldAABBMax().y << ", " << modelPtr->transform.getWorldAABBMax().z << ")" << std::endl;
+        std::cout << "  AABB Min: (" << modelPtr->transform.getWorldAABBMin().x << ", " << modelPtr->transform.
+            getWorldAABBMin().y << ", " << modelPtr->transform.getWorldAABBMin().z << ")" << std::endl;
+        std::cout << "  AABB Max: (" << modelPtr->transform.getWorldAABBMax().x << ", " << modelPtr->transform.
+            getWorldAABBMax().y << ", " << modelPtr->transform.getWorldAABBMax().z << ")" << std::endl;
     };
 
     printModelInfo("Model (root)", model);
@@ -441,6 +419,7 @@ void Game::printHierarchyInfo()
 
     std::cout << "=====================\n" << std::endl;
 }
+
 void Game::movement(Entity* player)
 {
     Transform transform2 = player->getTransform();
@@ -524,7 +503,7 @@ void Game::movement(Entity* player)
         playerLight->setPosition(pos);
 
         glm::vec3 spotDirection = glm::normalize(movementDirection);
-        spotDirection.y = -0.5f; 
+        spotDirection.y = -0.5f;
         playerLight->setDirection(glm::normalize(spotDirection));
     }
     else

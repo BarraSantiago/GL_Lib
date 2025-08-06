@@ -98,6 +98,7 @@ namespace gllib
         glm::vec3 aabbMax = transform.getWorldAABBMax();
         if (!frustum.isAABBInside(aabbMin, aabbMax))
         {
+            std::cout << "Transform AABB not in frustum, skipping draw." << std::endl;
             return;
         }
     
