@@ -9,17 +9,17 @@ namespace gllib {
 
     struct DLLExport BSPPlane {
         glm::vec3 normal {0,0,1};
-        float     distance = 0.0f; // plane: n·x + d = 0
+        float distance = 0.0f;
 
-        inline float distanceToPoint(const glm::vec3& p) const {
+        float distanceToPoint(const glm::vec3& p) const {
             return glm::dot(normal, p) + distance;
         }
-        inline bool isPointInFront(const glm::vec3& p) const {
+
+        bool isPointInFront(const glm::vec3& p) const {
             return distanceToPoint(p) >= 0.0f;
         }
     };
 
-    // Forward decls
     class Model;
     class Camera;
 
@@ -29,7 +29,6 @@ namespace gllib {
         std::unique_ptr<BSPNode> frontChild;
         std::unique_ptr<BSPNode> backChild;
 
-        // (Kept only for completeness; rendering no longer depends on node membership.)
         std::vector<Model*> models;
 
         BSPNode() = default;
@@ -37,16 +36,9 @@ namespace gllib {
 
         bool isLeaf() const { return !frontChild && !backChild; }
 
-        // No-op placement (kept for API compatibility)
         void addModel(Model* model);
 
-        // Not used for visibility any more; kept for optional debug/ traversal
-        void collectVisibleModels(const glm::vec3& cameraPos,
-                                  const Frustum&   frustum,
-                                  std::vector<Model*>& out);
-
-        // Optional lightweight debug hook (safe to remove if unused)
-        void render(const Camera& camera, const Frustum& frustum);
+        void collectVisibleModels(const glm::vec3& cameraPos,const Frustum&   frustum,std::vector<Model*>& out);
     };
 
-} // namespace gllib
+}

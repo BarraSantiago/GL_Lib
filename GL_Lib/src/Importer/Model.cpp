@@ -8,48 +8,12 @@
 #include <unordered_map>
 
 #include "BSP/BSPNode.h"
-namespace {
-    // Returns true iff ALL 8 corners of this AABB are on the opposite side of the plane than the camera.
-    inline bool aabbCompletelyOnOppositeSide(
-        const glm::vec3& wMin, const glm::vec3& wMax,
-        const gllib::BSPPlane* plane, bool cameraInFront)
-    {
-        if (!plane) return false;
 
-        const glm::vec3 corners[8] = {
-            {wMin.x, wMin.y, wMin.z}, {wMax.x, wMin.y, wMin.z},
-            {wMin.x, wMax.y, wMin.z}, {wMax.x, wMax.y, wMin.z},
-            {wMin.x, wMin.y, wMax.z}, {wMax.x, wMin.y, wMax.z},
-            {wMin.x, wMax.y, wMax.z}, {wMax.x, wMax.y, wMax.z}
-        };
+namespace
+{
 
-        for (int i = 0; i < 8; ++i)
-        {
-            if (plane->isPointInFront(corners[i]) == cameraInFront)
-                return false;
-        }
-        return true;
-    }
-
-    // True iff SOME node (this transform's own AABB or any descendant) lies on the camera side or straddles.
-    bool subtreeHasAnyOnCameraSide(const gllib::Transform* t, const gllib::BSPPlane* plane, bool cameraInFront)
-    {
-        if (!plane) return true;
-
-        const glm::vec3 ownMin = t->getWorldAABBMin();
-        const glm::vec3 ownMax = t->getWorldAABBMax();
-
-        if (!aabbCompletelyOnOppositeSide(ownMin, ownMax, plane, cameraInFront))
-            return true;
-
-        for (const gllib::Transform* c : t->children)
-        {
-            if (subtreeHasAnyOnCameraSide(c, plane, cameraInFront))
-                return true;
-        }
-        return false;
-    }
 }
+
 namespace gllib
 {
     std::unordered_map<Transform*, Model*> Model::transformToModelMap;
@@ -159,8 +123,7 @@ namespace gllib
         {
             if (mesh.associatedTransform == &transform)
             {
-                Renderer::drawModel3D(mesh.VAO, mesh.indices.size(),
-                                      transform.getTransformMatrix(), mesh.textures);
+                Renderer::drawModel3D(mesh.VAO, mesh.indices.size(),transform.getTransformMatrix(), mesh.textures);
             }
         }
 
@@ -191,7 +154,6 @@ namespace gllib
             }
         }
 
-        // Recursively draw grandchildren
         for (Transform* grandchild : childTransform->children)
         {
             drawChildTransform(grandchild, frustum);
@@ -218,232 +180,42 @@ namespace gllib
         return (it != transformToModelMap.end()) ? it->second : nullptr;
     }
 
-
-    void Model::drawHierarchicalWithBSP(const Frustum& frustum,
-                                    const BSPPlane* bspPlane,
-                                    bool cameraInFront)
+    void Model::drawFrustumAndBSP(const Frustum& frustum, const BSPPlane* bspPlane, const glm::vec3& cameraPos)
     {
-        // If there is no plane, nothing to do here (but keep signature for compatibility)
         if (!bspPlane)
         {
             drawHierarchical(frustum);
             return;
         }
 
-        // Strict hierarchical BSP reject for this subtree
-        if (!subtreeHasAnyOnCameraSide(&transform, bspPlane, cameraInFront))
+        const bool cameraInFront = bspPlane->isPointInFront(cameraPos);
+        
+        drawNodeWithBSP(&transform, frustum, bspPlane, cameraInFront);
+    }
+
+    void Model::drawNodeWithBSP(Transform* t, const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront)
+    {
+        if (!subtreeHasAnyOnCameraSide(t, bspPlane, cameraInFront))
             return;
 
-        // No parent-level frustum cut here; rely on per-mesh frustum tests to avoid
-        // dropping visible children due to an off-screen parent.
-
-        // Draw meshes bound to the root transform
         for (Mesh& mesh : meshes)
         {
-            if (mesh.associatedTransform != &transform) continue;
-
-            const glm::mat4 worldM = transform.getTransformMatrix();
-            const glm::vec3 mn = mesh.minAABB, mx = mesh.maxAABB;
-
-            const glm::vec3 corners[8] = {
-                {mn.x, mn.y, mn.z}, {mx.x, mn.y, mn.z},
-                {mn.x, mx.y, mn.z}, {mx.x, mx.y, mn.z},
-                {mn.x, mn.y, mx.z}, {mx.x, mn.y, mx.z},
-                {mn.x, mx.y, mx.z}, {mx.x, mx.y, mx.z}
-            };
-
-            glm::vec3 wMin( FLT_MAX), wMax(-FLT_MAX);
-            for (int i = 0; i < 8; ++i)
-            {
-                const glm::vec3 wc = glm::vec3(worldM * glm::vec4(corners[i], 1.0f));
-                wMin = glm::min(wMin, wc);
-                wMax = glm::max(wMax, wc);
-            }
-
-            if (!frustum.isAABBInside(wMin, wMax))
-                continue;
-
-            if (aabbCompletelyOnOppositeSide(wMin, wMax, bspPlane, cameraInFront))
-                continue;
-
-            Renderer::drawModel3D(mesh.VAO, mesh.indices.size(), worldM, mesh.textures);
-        }
-
-        // Descend to children (skip whole branch if fully opposite)
-        for (Transform* child : transform.children)
-        {
-            if (!subtreeHasAnyOnCameraSide(child, bspPlane, cameraInFront))
-                continue;
-
-            drawChildTransformWithBSP(child, frustum, bspPlane, cameraInFront);
-        }
-    }
-
-    void Model::drawWithFrustumAndBSP(const Frustum& frustum,
-                                  const BSPPlane* bspPlane,
-                                  const glm::vec3& cameraPos)
-{
-    // Keep transforms & AABBs up-to-date
-    transform.updateTRSAndAABB();
-
-    // If there is no plane, fall back to normal hierarchical draw
-    if (!bspPlane)
-    {
-        drawHierarchical(frustum);
-        return;
-    }
-
-    const bool cameraInFront = bspPlane->isPointInFront(cameraPos);
-
-    // --- helpers ---
-    auto aabbFullyOpposite = [&](const glm::vec3& wMin, const glm::vec3& wMax) -> bool
-    {
-        const glm::vec3 corners[8] = {
-            {wMin.x, wMin.y, wMin.z}, {wMax.x, wMin.y, wMin.z},
-            {wMin.x, wMax.y, wMin.z}, {wMax.x, wMax.y, wMin.z},
-            {wMin.x, wMin.y, wMax.z}, {wMax.x, wMin.y, wMax.z},
-            {wMin.x, wMax.y, wMax.z}, {wMax.x, wMax.y, wMax.z}
-        };
-        // If ANY corner is on the same side as the camera, the box is not fully opposite
-        for (int i = 0; i < 8; ++i)
-            if (bspPlane->isPointInFront(corners[i]) == cameraInFront)
-                return false;
-        return true;
-    };
-
-    // True iff THIS transform or ANY of its descendants have their OWN AABB
-    // NOT fully opposite the camera side (i.e., some part of the subtree is on/straddling the camera side)
-    std::function<bool(Transform*)> subtreeHasAnyOnCameraSide = [&](Transform* t) -> bool
-    {
-        const glm::vec3 ownMin = t->getWorldAABBMin();
-        const glm::vec3 ownMax = t->getWorldAABBMax();
-        if (!aabbFullyOpposite(ownMin, ownMax))
-            return true;
-
-        for (Transform* c : t->children)
-            if (subtreeHasAnyOnCameraSide(c))
-                return true;
-
-        return false; // whole subtree is fully opposite → invisible for BSP
-    };
-
-    // --- recursive draw ---
-    std::function<void(Transform*)> drawNode = [&](Transform* node)
-    {
-        // If entire node subtree is on the opposite side, skip it
-        if (!subtreeHasAnyOnCameraSide(node))
-            return;
-
-        // Draw meshes bound to this transform (frustum-culled; BSP decided by subtree predicate)
-        for (Mesh& mesh : meshes)
-        {
-            if (mesh.associatedTransform != node)
-                continue;
-
-            // Build mesh world AABB for frustum test
-            const glm::mat4 worldM = node->getTransformMatrix();
-            const glm::vec3 mn = mesh.minAABB, mx = mesh.maxAABB;
-            const glm::vec3 corners[8] = {
-                {mn.x, mn.y, mn.z}, {mx.x, mn.y, mn.z},
-                {mn.x, mx.y, mn.z}, {mx.x, mx.y, mn.z},
-                {mn.x, mn.y, mx.z}, {mx.x, mn.y, mx.z},
-                {mn.x, mx.y, mx.z}, {mx.x, mx.y, mx.z}
-            };
-
-            glm::vec3 wMin( std::numeric_limits<float>::max());
-            glm::vec3 wMax(-std::numeric_limits<float>::max());
-            for (int i = 0; i < 8; ++i)
-            {
-                const glm::vec3 wc = glm::vec3(worldM * glm::vec4(corners[i], 1.0f));
-                wMin = glm::min(wMin, wc);
-                wMax = glm::max(wMax, wc);
-            }
-
-            // Frustum only — BSP already handled by the subtree predicate
-            if (!frustum.isAABBInside(wMin, wMax))
-                continue;
-
-            Renderer::drawModel3D(mesh.VAO, mesh.indices.size(), worldM, mesh.textures);
-        }
-
-        // Recurse
-        for (Transform* c : node->children)
-            drawNode(c);
-    };
-
-    drawNode(&transform);
-}
-
-    void Model::drawWithFrustumAndBSPPerMesh(const Frustum& frustum,
-                                         const BSPPlane* bspPlane,
-                                         const glm::vec3& cameraPos)
-{
-    // Keep transforms & AABBs up-to-date
-    transform.updateTRSAndAABB();
-
-    // No plane → regular hierarchical
-    if (!bspPlane)
-    {
-        drawHierarchical(frustum);
-        return;
-    }
-
-    const bool cameraInFront = bspPlane->isPointInFront(cameraPos);
-
-    // --- helpers ---
-    auto aabbFullyOpposite = [&](const glm::vec3& wMin, const glm::vec3& wMax) -> bool
-    {
-        const glm::vec3 corners[8] = {
-            {wMin.x, wMin.y, wMin.z}, {wMax.x, wMin.y, wMin.z},
-            {wMin.x, wMax.y, wMin.z}, {wMax.x, wMax.y, wMin.z},
-            {wMin.x, wMin.y, wMax.z}, {wMax.x, wMin.y, wMax.z},
-            {wMin.x, wMax.y, wMax.z}, {wMax.x, wMax.y, wMax.z}
-        };
-        for (int i = 0; i < 8; ++i)
-            if (bspPlane->isPointInFront(corners[i]) == cameraInFront)
-                return false;
-        return true;
-    };
-
-    std::function<bool(Transform*)> subtreeHasAnyOnCameraSide = [&](Transform* t) -> bool
-    {
-        const glm::vec3 ownMin = t->getWorldAABBMin();
-        const glm::vec3 ownMax = t->getWorldAABBMax();
-        if (!aabbFullyOpposite(ownMin, ownMax))
-            return true;
-
-        for (Transform* c : t->children)
-            if (subtreeHasAnyOnCameraSide(c))
-                return true;
-
-        return false;
-    };
-
-    // --- recursive draw ---
-    std::function<void(Transform*)> drawNode = [&](Transform* t)
-    {
-        if (!subtreeHasAnyOnCameraSide(t))
-            return; // fully opposite subtree → skip
-
-        // Draw meshes bound to this transform (frustum only)
-        for (Mesh& mesh : meshes)
-        {
-            if (mesh.associatedTransform != t)
-                continue;
+            if (mesh.associatedTransform != t) continue;
 
             const glm::mat4 worldM = t->getTransformMatrix();
-
-            // Mesh world AABB for frustum test
-            const glm::vec3 mn = mesh.minAABB, mx = mesh.maxAABB;
+            
+            const glm::vec3 min = mesh.minAABB, max = mesh.maxAABB;
+            
             const glm::vec3 corners[8] = {
-                {mn.x, mn.y, mn.z}, {mx.x, mn.y, mn.z},
-                {mn.x, mx.y, mn.z}, {mx.x, mx.y, mn.z},
-                {mn.x, mn.y, mx.z}, {mx.x, mn.y, mx.z},
-                {mn.x, mx.y, mx.z}, {mx.x, mx.y, mx.z}
+                {min.x, min.y, min.z}, {max.x, min.y, min.z},
+                {min.x, max.y, min.z}, {max.x, max.y, min.z},
+                {min.x, min.y, max.z}, {max.x, min.y, max.z},
+                {min.x, max.y, max.z}, {max.x, max.y, max.z}
             };
 
-            glm::vec3 wMin( std::numeric_limits<float>::max());
+            glm::vec3 wMin(std::numeric_limits<float>::max());
             glm::vec3 wMax(-std::numeric_limits<float>::max());
+            
             for (int i = 0; i < 8; ++i)
             {
                 const glm::vec3 wc = glm::vec3(worldM * glm::vec4(corners[i], 1.0f));
@@ -451,73 +223,16 @@ namespace gllib
                 wMax = glm::max(wMax, wc);
             }
 
-            if (!frustum.isAABBInside(wMin, wMax))
-                continue;
+            if (!frustum.isAABBInside(wMin, wMax)) continue;
 
             Renderer::drawModel3D(mesh.VAO, mesh.indices.size(), worldM, mesh.textures);
         }
 
         for (Transform* c : t->children)
-            drawNode(c);
-    };
-
-    drawNode(&transform);
-}
-
-
-    void Model::drawChildTransformWithBSP(Transform* childTransform,
-                                      const Frustum& frustum,
-                                      const BSPPlane* bspPlane,
-                                      bool cameraInFront)
-    {
-        if (!childTransform) return;
-
-        // Strict hierarchical BSP reject for this child subtree
-        if (!subtreeHasAnyOnCameraSide(childTransform, bspPlane, cameraInFront))
-            return;
-
-        // Draw meshes attached to this child
-        for (Mesh& mesh : meshes)
         {
-            if (mesh.associatedTransform != childTransform) continue;
-
-            const glm::mat4 worldM = childTransform->getTransformMatrix();
-            const glm::vec3 mn = mesh.minAABB, mx = mesh.maxAABB;
-
-            const glm::vec3 corners[8] = {
-                {mn.x, mn.y, mn.z}, {mx.x, mn.y, mn.z},
-                {mn.x, mx.y, mn.z}, {mx.x, mx.y, mn.z},
-                {mn.x, mn.y, mx.z}, {mx.x, mn.y, mx.z},
-                {mn.x, mx.y, mx.z}, {mx.x, mx.y, mx.z}
-            };
-
-            glm::vec3 wMin( FLT_MAX), wMax(-FLT_MAX);
-            for (int i = 0; i < 8; ++i)
-            {
-                const glm::vec3 wc = glm::vec3(worldM * glm::vec4(corners[i], 1.0f));
-                wMin = glm::min(wMin, wc);
-                wMax = glm::max(wMax, wc);
-            }
-
-            if (!frustum.isAABBInside(wMin, wMax))
-                continue;
-
-            if (aabbCompletelyOnOppositeSide(wMin, wMax, bspPlane, cameraInFront))
-                continue;
-
-            Renderer::drawModel3D(mesh.VAO, mesh.indices.size(), worldM, mesh.textures);
-        }
-
-        // Recurse to grandchildren
-        for (Transform* gc : childTransform->children)
-        {
-            if (!subtreeHasAnyOnCameraSide(gc, bspPlane, cameraInFront))
-                continue;
-
-            drawChildTransformWithBSP(gc, frustum, bspPlane, cameraInFront);
+            drawNodeWithBSP(c, frustum, bspPlane, cameraInFront);
         }
     }
-
 
     void Model::initializeAABBVisualization()
     {
@@ -537,7 +252,6 @@ namespace gllib
         glm::vec3 min = transform.getWorldAABBMin();
         glm::vec3 max = transform.getWorldAABBMax();
 
-        // Define 12 edges of AABB as line segments
         std::vector<float> vertices = {
             // Bottom face edges
             min.x, min.y, min.z, max.x, min.y, min.z,
@@ -565,7 +279,6 @@ namespace gllib
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-        // Draw with current shader (should be solid color shader)
         GLint currentProgram;
         glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
 
@@ -665,4 +378,42 @@ namespace gllib
         glDrawArrays(GL_LINES, 0, 24);
         glBindVertexArray(0);
     }
+    
+    bool aabbCompletelyOnOppositeSide(const glm::vec3& wMin, const glm::vec3& wMax,const BSPPlane* plane, bool cameraInFront)
+    {
+        if (!plane) return false;
+
+        const glm::vec3 corners[8] = {
+            {wMin.x, wMin.y, wMin.z}, {wMax.x, wMin.y, wMin.z},
+            {wMin.x, wMax.y, wMin.z}, {wMax.x, wMax.y, wMin.z},
+            {wMin.x, wMin.y, wMax.z}, {wMax.x, wMin.y, wMax.z},
+            {wMin.x, wMax.y, wMax.z}, {wMax.x, wMax.y, wMax.z}
+        };
+
+        for (int i = 0; i < 8; ++i)
+        {
+            if (plane->isPointInFront(corners[i]) == cameraInFront)
+                return false;
+        }
+        return true;
+    }
+
+    bool Model::subtreeHasAnyOnCameraSide(const Transform* t, const BSPPlane* plane, bool cameraInFront)
+    {
+        if (!plane) return true;
+
+        const glm::vec3 ownMin = t->getWorldAABBMin();
+        const glm::vec3 ownMax = t->getWorldAABBMax();
+
+        if (!aabbCompletelyOnOppositeSide(ownMin, ownMax, plane, cameraInFront))
+            return true;
+
+        for (const Transform* c : t->children)
+        {
+            if (subtreeHasAnyOnCameraSide(c, plane, cameraInFront))
+                return true;
+        }
+        return false;
+    }
+    
 }
