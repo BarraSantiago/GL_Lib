@@ -19,7 +19,7 @@ namespace gllib
         void drawTransformAABB(Transform* t, const glm::mat4& view, const glm::mat4& projection);
         void drawHierarchicalWithBSP(const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront);
         void drawChildTransformWithBSP(Transform* childTransform, const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront);
-
+        
         std::vector<Transform*> allTransforms;
         static std::unordered_map<Transform*, Model*> transformToModelMap;
 
@@ -38,6 +38,8 @@ namespace gllib
         void drawAABBDebug(const glm::mat4& view, const glm::mat4& projection);
         void drawAllAABBsDebug(const glm::mat4& view, const glm::mat4& projection);
         void drawWithFrustum(const Frustum& frustum);
+        void drawWithFrustumAndBSPPerMesh(const Frustum& frustum, const BSPPlane* bspPlane, const glm::vec3& cameraPos);
+        void drawWithFrustumAndBSP(const Frustum& frustum, const BSPPlane* bspPlane, const glm::vec3& cameraPos);
         static void registerModel(Transform* transform, Model* model);
         static void unregisterModel(Transform* transform);
         static Model* getModelFromTransform(Transform* transform);

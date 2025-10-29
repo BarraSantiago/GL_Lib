@@ -85,7 +85,7 @@ void BSPSystem::render(const Camera& camera) {
         if (hasActivePlane_ && aabbFullyOpposite(hMin, hMax, activePlane_, cameraInFront)) continue;
 
         // Draw normally with frustum-only (BSP culling already decided above)
-        model->drawWithFrustum(frustum);
+        model->drawWithFrustumAndBSPPerMesh(frustum, hasActivePlane_ ? &activePlane_ : nullptr, camera.getPosition());
     }
 }
 
