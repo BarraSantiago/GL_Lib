@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;$(SolutionDir)lib;$(SolutionDir)lib\Assimp;%(AdditionalIncludeDirectories)/std:c++17</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN32\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;$(SolutionDir)lib;$(SolutionDir)lib\Assimp;%(AdditionalIncludeDirectories)/std:c++17</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,9 +126,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;$(SolutionDir)lib;$(SolutionDir)lib\Assimp;%(AdditionalIncludeDirectories)/std:c++17</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/std:c++17</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;$(SolutionDir)lib;$(SolutionDir)lib\Assimp;%(AdditionalIncludeDirectories)/std:c++17</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,7 +145,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\src;$(SolutionDir)GL_Lib\src\glad\include;$(SolutionDir)lib\glm;$(SolutionDir)lib;$(SolutionDir)lib\Assimp;%(AdditionalIncludeDirectories)/std:c++17</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

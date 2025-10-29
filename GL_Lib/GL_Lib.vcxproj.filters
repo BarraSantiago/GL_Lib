@@ -13,115 +13,72 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\loader.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\glad\src\glad.c">
       <Filter>Source Files\deps</Filter>
     </ClCompile>
-    <ClCompile Include="src\core.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\lib_time.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\shape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\triangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\myMaths.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\base_game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\collisionManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="src\Core\base_game.cpp" />
+    <ClCompile Include="src\Core\core.cpp" />
+    <ClCompile Include="src\Core\Input.cpp" />
+    <ClCompile Include="src\Core\lib_time.cpp" />
+    <ClCompile Include="src\Entities\animation.cpp" />
+    <ClCompile Include="src\Entities\Cube.cpp" />
+    <ClCompile Include="src\Entities\entity.cpp" />
+    <ClCompile Include="src\Entities\Entity2.cpp" />
+    <ClCompile Include="src\Entities\Entity3D.cpp" />
+    <ClCompile Include="src\Entities\rectangle.cpp" />
+    <ClCompile Include="src\Entities\shape.cpp" />
+    <ClCompile Include="src\Entities\sprite.cpp" />
+    <ClCompile Include="src\Entities\triangle.cpp" />
+    <ClCompile Include="src\Importer\loader.cpp" />
+    <ClCompile Include="src\Importer\Mesh.cpp" />
+    <ClCompile Include="src\Importer\Model.cpp" />
+    <ClCompile Include="src\Importer\ModelLoader.cpp" />
+    <ClCompile Include="src\Math\collisionManager.cpp" />
+    <ClCompile Include="src\Math\myMaths.cpp" />
+    <ClCompile Include="src\Rendering\Camera\Camera.cpp" />
+    <ClCompile Include="src\Rendering\Camera\CameraController.cpp" />
+    <ClCompile Include="src\Rendering\Light\AmbientLight.cpp" />
+    <ClCompile Include="src\Rendering\Light\Light.cpp" />
+    <ClCompile Include="src\Rendering\Light\Material.cpp" />
+    <ClCompile Include="src\Rendering\Light\PointLight.cpp" />
+    <ClCompile Include="src\Rendering\Light\SpotLight.cpp" />
+    <ClCompile Include="src\Rendering\renderer.cpp" />
+    <ClCompile Include="src\Rendering\shader.cpp" />
+    <ClCompile Include="src\Window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\renderer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\window.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\stb_image.h">
-      <Filter>Source Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="src\deps.h">
-      <Filter>Source Files\deps</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\lib_time.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shape.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\triangle.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\transform.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\myMaths.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\base_game.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rectangle.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Input.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\sprite.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\animation.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\collisionManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Core\base_game.h" />
+    <ClInclude Include="src\Core\core.h" />
+    <ClInclude Include="src\Core\deps.h" />
+    <ClInclude Include="src\Core\Input.h" />
+    <ClInclude Include="src\Core\lib_time.h" />
+    <ClInclude Include="src\Entities\animation.h" />
+    <ClInclude Include="src\Entities\Cube.h" />
+    <ClInclude Include="src\Entities\entity.h" />
+    <ClInclude Include="src\Entities\Entity2.h" />
+    <ClInclude Include="src\Entities\Entity3D.h" />
+    <ClInclude Include="src\Entities\rectangle.h" />
+    <ClInclude Include="src\Entities\shape.h" />
+    <ClInclude Include="src\Entities\sprite.h" />
+    <ClInclude Include="src\Entities\triangle.h" />
+    <ClInclude Include="src\Importer\loader.h" />
+    <ClInclude Include="src\Importer\Mesh.h" />
+    <ClInclude Include="src\Importer\Model.h" />
+    <ClInclude Include="src\Importer\ModelLoader.h" />
+    <ClInclude Include="src\Importer\stb_image.h" />
+    <ClInclude Include="src\Math\collisionManager.h" />
+    <ClInclude Include="src\Math\myMaths.h" />
+    <ClInclude Include="src\Math\transform.h" />
+    <ClInclude Include="src\Rendering\Camera\Camera.h" />
+    <ClInclude Include="src\Rendering\Camera\CameraController.h" />
+    <ClInclude Include="src\Rendering\Frustum.h" />
+    <ClInclude Include="src\Rendering\Light\AmbientLight.h" />
+    <ClInclude Include="src\Rendering\Light\Light.h" />
+    <ClInclude Include="src\Rendering\Light\Material.h" />
+    <ClInclude Include="src\Rendering\Light\PointLight.h" />
+    <ClInclude Include="src\Rendering\Light\SpotLight.h" />
+    <ClInclude Include="src\Rendering\renderer.h" />
+    <ClInclude Include="src\Rendering\shader.h" />
+    <ClInclude Include="src\Window\window.h" />
   </ItemGroup>
 </Project>
