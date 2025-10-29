@@ -16,6 +16,7 @@ namespace gllib
     private:
         void drawHierarchical(const Frustum& frustum);
         void drawChildTransform(Transform* childTransform, const Frustum& frustum);
+        void drawTransformAABB(Transform* t, const glm::mat4& view, const glm::mat4& projection);
         void drawHierarchicalWithBSP(const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront);
         void drawChildTransformWithBSP(Transform* childTransform, const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront);
 
@@ -35,8 +36,8 @@ namespace gllib
         void draw(const Camera& camera);
         void draw() override;
         void drawAABBDebug(const glm::mat4& view, const glm::mat4& projection);
+        void drawAllAABBsDebug(const glm::mat4& view, const glm::mat4& projection);
         void drawWithFrustum(const Frustum& frustum);
-        void drawWithFrustumAndBSP(const Frustum& frustum, const BSPPlane* bspPlane, const glm::vec3& cameraPos);
         static void registerModel(Transform* transform, Model* model);
         static void unregisterModel(Transform* transform);
         static Model* getModelFromTransform(Transform* transform);

@@ -1,62 +1,52 @@
 #pragma once
-#include "deps.h"
-#include "glm.hpp"
-#include <vec3.hpp>
-#include <vector>
 #include <memory>
-
+#include <vector>
+#include "glm/glm.hpp"
+#include "deps.h"
 #include "Rendering/Frustum.h"
-#include "Importer/Model.h"
 
-namespace gllib
-{
+namespace gllib {
 
-    struct DLLExport BSPPlane
-    {
-        glm::vec3 normal;
-        float distance;
-        
-        float distanceToPoint(const glm::vec3& point) const
-        {
-            return glm::dot(normal, point) + distance;
+    struct DLLExport BSPPlane {
+        glm::vec3 normal {0,0,1};
+        float     distance = 0.0f; // plane: n·x + d = 0
+
+        inline float distanceToPoint(const glm::vec3& p) const {
+            return glm::dot(normal, p) + distance;
         }
-        
-        bool isPointInFront(const glm::vec3& point) const
-        {
-            return distanceToPoint(point) >= 0.0f;
+        inline bool isPointInFront(const glm::vec3& p) const {
+            return distanceToPoint(p) >= 0.0f;
         }
     };
 
-    class DLLExport BSPPlaneVisualizer
-    {
-    private:
-        unsigned int VAO, VBO;
-        std::vector<float> vertices;
-        
-    public:
-        BSPPlaneVisualizer(const BSPPlane& plane, float size = 50.0f);
-        ~BSPPlaneVisualizer();
-        void draw(const glm::mat4& view, const glm::mat4& projection);
-    };
+    // Forward decls
+    class Model;
+    class Camera;
 
-    class DLLExport BSPNode
-    {
+    class DLLExport BSPNode {
     public:
-        BSPPlane plane;
+        BSPPlane plane{};
         std::unique_ptr<BSPNode> frontChild;
         std::unique_ptr<BSPNode> backChild;
-        std::vector<Model*> models;
-        
-        BSPNode() = default;
-        BSPNode(const BSPPlane& splitPlane) : plane(splitPlane) {}
 
-        void collectVisibleModels(const glm::vec3& cameraPos, const Frustum& frustum,std::vector<Model*>& visibleModels);
+        // (Kept only for completeness; rendering no longer depends on node membership.)
+        std::vector<Model*> models;
+
+        BSPNode() = default;
+        explicit BSPNode(const BSPPlane& p) : plane(p) {}
+
         bool isLeaf() const { return !frontChild && !backChild; }
-        
+
+        // No-op placement (kept for API compatibility)
         void addModel(Model* model);
+
+        // Not used for visibility any more; kept for optional debug/ traversal
+        void collectVisibleModels(const glm::vec3& cameraPos,
+                                  const Frustum&   frustum,
+                                  std::vector<Model*>& out);
+
+        // Optional lightweight debug hook (safe to remove if unused)
         void render(const Camera& camera, const Frustum& frustum);
-        
-    private:
-        void renderNode(const glm::vec3& cameraPos, const Frustum& frustum);
     };
-}
+
+} // namespace gllib

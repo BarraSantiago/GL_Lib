@@ -1,115 +1,107 @@
 #include "BSPSystem.h"
-#include "Camera.h"
-#include "Frustum.h"
 #include <algorithm>
+#include "Importer/Model.h"
+#include "Rendering/Frustum.h"
+#include "Rendering/Camera/Camera.h"
 
-namespace gllib
+namespace gllib {
+
+BSPSystem::BSPSystem() {
+    root_ = std::make_unique<BSPNode>();
+}
+
+void BSPSystem::addModel(Model* model) {
+    if (!model) return;
+    if (std::find(models_.begin(), models_.end(), model) == models_.end())
+        models_.push_back(model);
+}
+
+void BSPSystem::removeModel(Model* model) {
+    if (!model) return;
+    auto it = std::remove(models_.begin(), models_.end(), model);
+    models_.erase(it, models_.end());
+}
+
+void BSPSystem::buildBSP(const std::vector<BSPPlane>& planes) {
+    // Use the first plane as the active culling plane (simple and explicit per your spec).
+    if (!planes.empty()) {
+        activePlane_     = planes.front();
+        hasActivePlane_  = true;
+    } else {
+        hasActivePlane_  = false;
+    }
+
+    // Keep a minimal node tree for tooling; not required for culling.
+    root_ = std::make_unique<BSPNode>(hasActivePlane_ ? activePlane_ : BSPPlane{});
+    root_->models.clear();
+    for (Model* m : models_) root_->addModel(m);
+}
+
+bool BSPSystem::aabbFullyOpposite(const glm::vec3& wMin,
+                                  const glm::vec3& wMax,
+                                  const BSPPlane&  plane,
+                                  bool             cameraInFront)
 {
-    BSPSystem::BSPSystem()
-    {
-        rootNode = std::make_unique<BSPNode>();
+    const glm::vec3 corners[8] = {
+        {wMin.x, wMin.y, wMin.z}, {wMax.x, wMin.y, wMin.z},
+        {wMin.x, wMax.y, wMin.z}, {wMax.x, wMax.y, wMin.z},
+        {wMin.x, wMin.y, wMax.z}, {wMax.x, wMin.y, wMax.z},
+        {wMin.x, wMax.y, wMax.z}, {wMax.x, wMax.y, wMax.z}
+    };
+    // If ANY corner is on the same side as the camera, it is NOT fully opposite.
+    for (int i = 0; i < 8; ++i) {
+        const bool cornerInFront = plane.isPointInFront(corners[i]);
+        if (cornerInFront == cameraInFront) return false;
+    }
+    return true;
+}
+
+void BSPSystem::render(const Camera& camera) {
+    // 1) Build frustum from camera
+    Frustum frustum(camera.getProjectionMatrix() * camera.getViewMatrix());
+
+    // 2) Determine the side the camera is on (if a plane is active)
+    bool cameraInFront = true;
+    if (hasActivePlane_) {
+        // Use camera world position; if your camera stores it elsewhere, adapt here
+        const glm::vec3 camPos = camera.getPosition();
+        cameraInFront = activePlane_.isPointInFront(camPos);
     }
 
-    void BSPSystem::addModel(Model* model)
-    {
-        if (model && std::find(allModels.begin(), allModels.end(), model) == allModels.end())
-        {
-            allModels.push_back(model);
-            if (rootNode)
-                rootNode->addModel(model);
-        }
-    }
+    // 3) Per-model strict culling against the ACTIVE plane using the model's HIERARCHICAL AABB
+    for (Model* model : models_) {
+        if (!model) continue;
 
-    void BSPSystem::removeModel(Model* model)
-    {
-        std::vector<Model*>::iterator it = std::find(allModels.begin(), allModels.end(), model);
-        if (it != allModels.end())
-        {
-            allModels.erase(it);
-        }
-    }
+        // Keep transforms and hierarchical AABBs fresh
+        model->transform.updateTRSAndAABB();
 
-    void BSPSystem::buildBSP(const std::vector<BSPPlane>& separatingPlanes)
-    {
-        if (separatingPlanes.empty())
-        {
-            rootNode = std::make_unique<BSPNode>();
-            planeVisualizer.reset();
-            for (Model* model : allModels)
-            {
-                rootNode->addModel(model);
-            }
-            return;
-        }
+        const glm::vec3 hMin = model->transform.getWorldAABBMin();
+        const glm::vec3 hMax = model->transform.getWorldAABBMax();
 
-        rootNode = std::make_unique<BSPNode>(separatingPlanes[0]);
-        buildBSPRecursive(rootNode.get(), separatingPlanes, 0);
+        // Frustum reject first
+        if (!frustum.isAABBInside(hMin, hMax)) continue;
 
-        // Create visualizer for the first plane
-        planeVisualizer = std::make_unique<BSPPlaneVisualizer>(separatingPlanes[0], 50.0f);
+        // Strict BSP reject: if the hierarchical AABB is fully on the opposite side → skip
+        if (hasActivePlane_ && aabbFullyOpposite(hMin, hMax, activePlane_, cameraInFront)) continue;
 
-        for (Model* model : allModels)
-        {
-            rootNode->addModel(model);
-        }
-    }
-
-    void BSPSystem::renderDebug(const Camera& camera, bool drawAABB)
-    {
-        if (planeVisualizer)
-        {
-            glDisable(GL_DEPTH_TEST);
-            planeVisualizer->draw(camera.getViewMatrix(), camera.getProjectionMatrix());
-            glEnable(GL_DEPTH_TEST);
-        }
-        
-        if (drawAABB)
-        {
-            for (Model* model : allModels)
-            {
-                model->drawAABBDebug(camera.getViewMatrix(), camera.getProjectionMatrix());
-            }
-        }
-    }
-
-    void BSPSystem::buildBSPRecursive(BSPNode* node, const std::vector<BSPPlane>& planes, int planeIndex)
-    {
-        if (planeIndex >= planes.size() - 1)
-            return;
-
-        int nextPlaneIndex = planeIndex + 1;
-        node->frontChild = std::make_unique<BSPNode>(planes[nextPlaneIndex]);
-        node->backChild = std::make_unique<BSPNode>(planes[nextPlaneIndex]);
-
-        buildBSPRecursive(node->frontChild.get(), planes, nextPlaneIndex);
-        buildBSPRecursive(node->backChild.get(), planes, nextPlaneIndex);
-    }
-
-    void BSPSystem::render(const Camera& camera)
-    {
-        if (!rootNode)
-            return;
-
-        Frustum frustum;
-        glm::mat4 view = camera.getViewMatrix();
-        glm::mat4 projection = camera.getProjectionMatrix();
-        glm::mat4 viewProjection = projection * view;
-        frustum.extractFromMatrix(viewProjection);
-
-        std::vector<Model*> visibleModels;
-        rootNode->collectVisibleModels(camera.getPosition(), frustum, visibleModels);
-
-        const BSPPlane* activePlane = rootNode->isLeaf() ? nullptr : &rootNode->plane;
-
-        for (Model* model : visibleModels)
-        {
-            model->drawWithFrustumAndBSP(frustum, activePlane, camera.getPosition());
-        }
-    }
-
-    void BSPSystem::clear()
-    {
-        allModels.clear();
-        rootNode = std::make_unique<BSPNode>();
+        // Draw normally with frustum-only (BSP culling already decided above)
+        model->drawWithFrustum(frustum);
     }
 }
+
+void BSPSystem::renderDebug(const Camera& camera, bool drawAABB) {
+    if (drawAABB) {
+        for (Model* m : models_) {
+            if (!m) continue;
+            m->drawAllAABBsDebug(camera.getViewMatrix(), camera.getProjectionMatrix());
+        }
+    }
+}
+
+void BSPSystem::clear() {
+    models_.clear();
+    root_ = std::make_unique<BSPNode>();
+    hasActivePlane_ = false;
+}
+
+} // namespace gllib

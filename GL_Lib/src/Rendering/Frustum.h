@@ -83,4 +83,10 @@ public:
         }
         return true;
     }
+
+    Frustum() = default;
+    explicit Frustum(glm::mat<4, 4, float> mat)
+    {
+        extractFromMatrix(mat);
+    }
 };
