@@ -7,6 +7,8 @@
 #include "Renderer.h"
 #include <unordered_map>
 
+#include "BSP/BSPNode.h"
+
 namespace gllib
 {
     std::unordered_map<Transform*, Model*> Model::transformToModelMap;
@@ -60,8 +62,13 @@ namespace gllib
     Model::~Model()
     {
         unregisterModel(&transform);
-
-        // Clean up dynamically created child transforms
+        
+        if (aabbInitialized)
+        {
+            glDeleteBuffers(1, &aabbVBO);
+            glDeleteVertexArrays(1, &aabbVAO);
+        }
+        
         std::function<void(Transform*)> cleanupChildren = [&](Transform* t)
         {
             for (Transform* child : t->children)
@@ -71,7 +78,7 @@ namespace gllib
             }
             t->children.clear();
         };
-
+        
         cleanupChildren(&transform);
     }
 
@@ -103,7 +110,7 @@ namespace gllib
         glm::vec3 aabbMax = transform.getWorldAABBMax();
         if (!frustum.isAABBInside(aabbMin, aabbMax))
         {
-            return; // Early exit - no need to check children
+            return;
         }
     
         // Draw meshes associated with this transform
@@ -130,7 +137,7 @@ namespace gllib
         glm::vec3 aabbMax = childTransform->getWorldAABBMax();
         if (!frustum.isAABBInside(aabbMin, aabbMax))
         {
-            return; // Early exit - no need to check grandchildren
+            return;
         }
     
         // Draw meshes associated with this child transform
@@ -168,5 +175,187 @@ namespace gllib
     {
         std::unordered_map<Transform*, Model*>::iterator it = transformToModelMap.find(transform);
         return (it != transformToModelMap.end()) ? it->second : nullptr;
+    }
+    
+    void Model::drawWithFrustumAndBSP(const Frustum& frustum, const BSPPlane* bspPlane, const glm::vec3& cameraPos)
+    {
+        transform.updateTRSAndAABB();
+        
+        if (bspPlane)
+        {
+            // Check if entire model AABB is on opposite side of plane from camera
+            glm::vec3 modelMin = transform.getWorldAABBMin();
+            glm::vec3 modelMax = transform.getWorldAABBMax();
+            glm::vec3 modelCenter = (modelMin + modelMax) * 0.5f;
+            
+            bool cameraInFront = bspPlane->isPointInFront(cameraPos);
+            bool modelInFront = bspPlane->isPointInFront(modelCenter);
+            
+            // If model is entirely on opposite side, don't render at all
+            if (cameraInFront != modelInFront)
+            {
+                // Check all 8 corners of AABB to confirm entire model is on wrong side
+                glm::vec3 corners[8] = {
+                    glm::vec3(modelMin.x, modelMin.y, modelMin.z),
+                    glm::vec3(modelMax.x, modelMin.y, modelMin.z),
+                    glm::vec3(modelMin.x, modelMax.y, modelMin.z),
+                    glm::vec3(modelMax.x, modelMax.y, modelMin.z),
+                    glm::vec3(modelMin.x, modelMin.y, modelMax.z),
+                    glm::vec3(modelMax.x, modelMin.y, modelMax.z),
+                    glm::vec3(modelMin.x, modelMax.y, modelMax.z),
+                    glm::vec3(modelMax.x, modelMax.y, modelMax.z)
+                };
+                
+                bool allOnWrongSide = true;
+                for (int i = 0; i < 8; i++)
+                {
+                    if (bspPlane->isPointInFront(corners[i]) == cameraInFront)
+                    {
+                        allOnWrongSide = false;
+                        break;
+                    }
+                }
+                
+                if (allOnWrongSide)
+                    return;
+            }
+            
+            drawHierarchicalWithBSP(frustum, bspPlane, cameraInFront);
+        }
+        else
+        {
+            drawHierarchical(frustum);
+        }
+    }
+    
+    void Model::drawHierarchicalWithBSP(const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront)
+    {
+        glm::vec3 aabbMin = transform.getWorldAABBMin();
+        glm::vec3 aabbMax = transform.getWorldAABBMax();
+        if (!frustum.isAABBInside(aabbMin, aabbMax))
+        {
+            return;
+        }
+    
+        // Check if mesh is on same side as camera
+        glm::vec3 meshCenter = (aabbMin + aabbMax) * 0.5f;
+        bool meshInFront = bspPlane->isPointInFront(meshCenter);
+        
+        if (meshInFront == cameraInFront)
+        {
+            for (Mesh& mesh : meshes)
+            {
+                if (mesh.associatedTransform == &transform)
+                {
+                    Renderer::drawModel3D(mesh.VAO, mesh.indices.size(),
+                                          transform.getTransformMatrix(), mesh.textures);
+                }
+            }
+        }
+    
+        for (Transform* child : transform.children)
+        {
+            drawChildTransformWithBSP(child, frustum, bspPlane, cameraInFront);
+        }
+    }
+    
+    void Model::drawChildTransformWithBSP(Transform* childTransform, const Frustum& frustum, 
+                                          const BSPPlane* bspPlane, bool cameraInFront)
+    {
+        glm::vec3 aabbMin = childTransform->getWorldAABBMin();
+        glm::vec3 aabbMax = childTransform->getWorldAABBMax();
+        if (!frustum.isAABBInside(aabbMin, aabbMax))
+        {
+            return;
+        }
+    
+        // Check if child mesh is on same side as camera
+        glm::vec3 meshCenter = (aabbMin + aabbMax) * 0.5f;
+        bool meshInFront = bspPlane->isPointInFront(meshCenter);
+        
+        if (meshInFront == cameraInFront)
+        {
+            for (Mesh& mesh : meshes)
+            {
+                if (mesh.associatedTransform == childTransform)
+                {
+                    Renderer::drawModel3D(mesh.VAO, mesh.indices.size(),
+                                          childTransform->getTransformMatrix(), mesh.textures);
+                }
+            }
+        }
+    
+        for (Transform* grandchild : childTransform->children)
+        {
+            drawChildTransformWithBSP(grandchild, frustum, bspPlane, cameraInFront);
+        }
+    }
+
+    void Model::initializeAABBVisualization()
+    {
+        if (aabbInitialized)
+            return;
+        
+        glGenVertexArrays(1, &aabbVAO);
+        glGenBuffers(1, &aabbVBO);
+        aabbInitialized = true;
+    }
+    
+    void Model::drawAABBDebug(const glm::mat4& view, const glm::mat4& projection)
+    {
+        if (!aabbInitialized)
+            initializeAABBVisualization();
+        
+        glm::vec3 min = transform.getWorldAABBMin();
+        glm::vec3 max = transform.getWorldAABBMax();
+        
+        // Define 12 edges of AABB as line segments
+        std::vector<float> vertices = {
+            // Bottom face edges
+            min.x, min.y, min.z,  max.x, min.y, min.z,
+            max.x, min.y, min.z,  max.x, min.y, max.z,
+            max.x, min.y, max.z,  min.x, min.y, max.z,
+            min.x, min.y, max.z,  min.x, min.y, min.z,
+            
+            // Top face edges
+            min.x, max.y, min.z,  max.x, max.y, min.z,
+            max.x, max.y, min.z,  max.x, max.y, max.z,
+            max.x, max.y, max.z,  min.x, max.y, max.z,
+            min.x, max.y, max.z,  min.x, max.y, min.z,
+            
+            // Vertical edges
+            min.x, min.y, min.z,  min.x, max.y, min.z,
+            max.x, min.y, min.z,  max.x, max.y, min.z,
+            max.x, min.y, max.z,  max.x, max.y, max.z,
+            min.x, min.y, max.z,  min.x, max.y, max.z
+        };
+        
+        glBindVertexArray(aabbVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, aabbVBO);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
+        
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        
+        // Draw with current shader (should be solid color shader)
+        GLint currentProgram;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+        
+        glm::mat4 mvp = projection * view;
+        GLint mvpLoc = glGetUniformLocation(currentProgram, "u_MVP");
+        if (mvpLoc != -1)
+        {
+            glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
+        }
+        
+        GLint colorLoc = glGetUniformLocation(currentProgram, "u_Color");
+        if (colorLoc != -1)
+        {
+            glm::vec4 color(0.0f, 1.0f, 0.0f, 1.0f); // Green color
+            glUniform4fv(colorLoc, 1, glm::value_ptr(color));
+        }
+        
+        glDrawArrays(GL_LINES, 0, 24);
+        glBindVertexArray(0);
     }
 }

@@ -34,6 +34,7 @@ namespace gllib
         if (separatingPlanes.empty())
         {
             rootNode = std::make_unique<BSPNode>();
+            planeVisualizer.reset();
             for (Model* model : allModels)
             {
                 rootNode->addModel(model);
@@ -44,9 +45,30 @@ namespace gllib
         rootNode = std::make_unique<BSPNode>(separatingPlanes[0]);
         buildBSPRecursive(rootNode.get(), separatingPlanes, 0);
 
+        // Create visualizer for the first plane
+        planeVisualizer = std::make_unique<BSPPlaneVisualizer>(separatingPlanes[0], 50.0f);
+
         for (Model* model : allModels)
         {
             rootNode->addModel(model);
+        }
+    }
+
+    void BSPSystem::renderDebug(const Camera& camera, bool drawAABB)
+    {
+        if (planeVisualizer)
+        {
+            glDisable(GL_DEPTH_TEST);
+            planeVisualizer->draw(camera.getViewMatrix(), camera.getProjectionMatrix());
+            glEnable(GL_DEPTH_TEST);
+        }
+        
+        if (drawAABB)
+        {
+            for (Model* model : allModels)
+            {
+                model->drawAABBDebug(camera.getViewMatrix(), camera.getProjectionMatrix());
+            }
         }
     }
 
@@ -68,21 +90,20 @@ namespace gllib
         if (!rootNode)
             return;
 
-        // Set up frustum culling
         Frustum frustum;
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
         glm::mat4 viewProjection = projection * view;
         frustum.extractFromMatrix(viewProjection);
 
-        // Collect visible models in BSP order
         std::vector<Model*> visibleModels;
         rootNode->collectVisibleModels(camera.getPosition(), frustum, visibleModels);
 
-        // Render each model (they will do their own detailed frustum culling)
+        const BSPPlane* activePlane = rootNode->isLeaf() ? nullptr : &rootNode->plane;
+
         for (Model* model : visibleModels)
         {
-            model->drawWithFrustum(frustum);
+            model->drawWithFrustumAndBSP(frustum, activePlane, camera.getPosition());
         }
     }
 

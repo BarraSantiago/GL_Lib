@@ -48,6 +48,7 @@ public:
     Game();
     ~Game() override;
 };
+bool showAABB = true;
 
 Game::Game()
 {
@@ -119,14 +120,12 @@ void Game::init()
     {
         model = new Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
         std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << std::endl;
-        model1 = new Model("models/pochita/pochita.fbx", false);
+        model1 = new Model("models/wall.fbx", false);
         std::cout << "Scene model loaded successfully with " << model1->meshes.size() << " meshes." << std::endl;
         model2 = new Model("models/chicken/Chicken1.fbx", false);
         std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << std::endl;
         model3 = new Model("models/Backpack/backpack.mtl", false);
         std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << std::endl;
-        bspSystem.buildBSP(separatingPlanes);
-        bspSystem.addModel(model2);
     }
     catch (const std::exception& e)
     {
@@ -134,21 +133,47 @@ void Game::init()
         model = nullptr;
     }
 
+    // Position the wall at the center (it will be our partition plane)
+    model1->transform.scale *= .000005;
+    model1->transform.position = {0.0f, 0.0f, 0.0f};
+    model1->transform.rotationQuat = {0.0f, 90.0f, 0.0f, 0.0f};
+
+    // Create BSP plane based on wall's orientation
+    // Wall faces along X axis (normal pointing in X direction)
+    BSPPlane wallPlane;
+    wallPlane.normal = glm::vec3(1.0f, 0.0f, 0.0f); // Wall divides left/right
+    wallPlane.distance = 0.0f; // Wall is at origin
+    
+    separatingPlanes.clear();
+    separatingPlanes.push_back(wallPlane);
+    
+    bspSystem.buildBSP(separatingPlanes);
+    
+    // Position chicken on the left side of the wall
+    model2->transform.scale *= 1;
+    model2->transform.position = {-20.0f, 0.0f, 0.0f};
+    model2->transform.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
+    
+    // Add models to BSP system
+    bspSystem.addModel(model1); // The wall
+    bspSystem.addModel(model2); // The chicken (will be culled based on BSP)
+    
+    // Position other models
     model->transform.scale *= 10;
     model->transform.position = {10.0f, 0.0f, 10.0f};
     model->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
-    model1->transform.scale *= 10;
-    model1->transform.position = {10.0f, 0.0f, 10.0f};
-    model1->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
-    model2->transform.scale *= 1;
-    model2->transform.position = {10.0f, 0.0f, 10.0f};
-    model2->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
+    
     model3->transform.scale *= 10;
     model3->transform.position = {10.0f, 0.0f, 10.0f};
     model3->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
 
     srand(time(nullptr));
-    window->setTitle("Engine");
+    window->setTitle("Engine - BSP Test (IJKL to move chicken)");
+    
+    std::cout << "=== BSP SETUP ===" << std::endl;
+    std::cout << "Wall (partition) at X=0" << std::endl;
+    std::cout << "Chicken starts at X=" << model2->transform.position.x << std::endl;
+    std::cout << "Use IJKL keys to move chicken across the wall" << std::endl;
 }
 
 
@@ -157,7 +182,6 @@ void Game::update()
     // Update
     handleTestInputs();
 
-    // Run hierarchy tests if enabled
     if (hierarchyTestMode)
     {
         testHierarchyTransformations();
@@ -179,18 +203,18 @@ void Game::update()
     rotationZ.y = std::sin(angleInRadians / 2.0f);
 
     Quaternion cubeRot = cube->getRotationQuat();
-
     Quaternion newRot;
     newRot.w = rotationZ.w * cubeRot.w - rotationZ.x * cubeRot.x - rotationZ.y * cubeRot.y - rotationZ.z * cubeRot.z;
     newRot.x = rotationZ.w * cubeRot.x + rotationZ.x * cubeRot.w + rotationZ.y * cubeRot.z - rotationZ.z * cubeRot.y;
     newRot.y = rotationZ.w * cubeRot.y - rotationZ.x * cubeRot.z + rotationZ.y * cubeRot.w + rotationZ.z * cubeRot.x;
     newRot.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.w;
-
     newRot.normalize();
-
     cube->setRotationQuat(newRot);
 
+    // Chicken movement with BSP feedback
     const float speed = 25;
+    static float lastReportedX = model2->transform.position.x;
+    
     if (Input::getKeyPressed(Key_I))
     {
         glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
@@ -211,7 +235,16 @@ void Game::update()
         glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
         model2->transform.setPosition(model2->transform.position - right);
     }
-    // Draw
+    
+    // Report when chicken crosses the wall plane
+    float currentX = model2->transform.position.x;
+    if ((lastReportedX < 0.0f && currentX >= 0.0f) || (lastReportedX >= 0.0f && currentX < 0.0f))
+    {
+        std::cout << "Chicken crossed wall! Now at X=" << currentX 
+                  << " (Camera at X=" << camera->getPosition().x << ")" << std::endl;
+        lastReportedX = currentX;
+    }
+
     drawObjects();
 }
 
@@ -225,18 +258,16 @@ void Game::drawObjects()
     pointLight->apply(shaderProgramLighting);
     playerLight->apply(shaderProgramLighting);
 
-
-    //model->draw(getCamera());
-    //model1->draw(getCamera());
-    //model2->draw(getCamera());
-    //model3->draw(getCamera());
     bspSystem.render(*camera);
+    
+    Shader::setShaderProgram(shaderProgramSolidColor);
+    bspSystem.renderDebug(*camera, showAABB);
 
+    Shader::setShaderProgram(shaderProgramLighting);
     cube->draw();
     player->draw();
 
     Shader::setShaderProgram(shaderProgramTexture);
-
     Shader::setShaderProgram(shaderProgramSolidColor);
 }
 
@@ -417,6 +448,23 @@ void Game::handleTestInputs()
     {
         iKeyWasPressed = false;
     }
+    static bool bKeyWasPressed = false;
+    
+    // Toggle AABB visualization
+    if (Input::getKeyPressed(Key_B))
+    {
+        if (!bKeyWasPressed)
+        {
+            showAABB = !showAABB;
+            std::cout << (showAABB ? "AABB visualization ENABLED" : "AABB visualization DISABLED") << std::endl;
+            bKeyWasPressed = true;
+        }
+    }
+    else
+    {
+        bKeyWasPressed = false;
+    }
+    
 }
 
 void Game::printHierarchyInfo()

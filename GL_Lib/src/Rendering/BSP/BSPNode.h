@@ -27,6 +27,18 @@ namespace gllib
         }
     };
 
+    class DLLExport BSPPlaneVisualizer
+    {
+    private:
+        unsigned int VAO, VBO;
+        std::vector<float> vertices;
+        
+    public:
+        BSPPlaneVisualizer(const BSPPlane& plane, float size = 50.0f);
+        ~BSPPlaneVisualizer();
+        void draw(const glm::mat4& view, const glm::mat4& projection);
+    };
+
     class DLLExport BSPNode
     {
     public:
