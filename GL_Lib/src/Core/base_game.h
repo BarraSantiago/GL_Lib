@@ -19,6 +19,7 @@
 #include <Rendering/Light/PointLight.h>
 #include "Math/collisionManager.h"
 #include "Rendering/Light/SpotLight.h"
+#include "Rendering/BSP/BSPSystem.h"
 
 namespace gllib {
 

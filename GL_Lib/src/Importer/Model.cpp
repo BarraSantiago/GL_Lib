@@ -77,20 +77,25 @@ namespace gllib
 
     void Model::draw(const Camera& camera)
     {
-        // Single recursive function to update transforms and calculate AABBs
-        transform.updateTRSAndAABB();
-    
         // Set up frustum culling
         Frustum frustum;
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
         glm::mat4 viewProjection = projection * view;
         frustum.extractFromMatrix(viewProjection);
+        
+        drawWithFrustum(frustum);
+    }
     
-        // Render with hierarchical culling
+    void Model::drawWithFrustum(const Frustum& frustum)
+    {
+        // Update transforms and calculate AABBs
+        transform.updateTRSAndAABB();
+        
+        // Detailed frustum culling and hierarchical rendering
         drawHierarchical(frustum);
     }
-
+    
     void Model::drawHierarchical(const Frustum& frustum)
     {
         // Check if this transform's AABB is in frustum
@@ -98,8 +103,7 @@ namespace gllib
         glm::vec3 aabbMax = transform.getWorldAABBMax();
         if (!frustum.isAABBInside(aabbMin, aabbMax))
         {
-            std::cout << "Transform AABB not in frustum, skipping draw." << std::endl;
-            return;
+            return; // Early exit - no need to check children
         }
     
         // Draw meshes associated with this transform
@@ -126,11 +130,11 @@ namespace gllib
         glm::vec3 aabbMax = childTransform->getWorldAABBMax();
         if (!frustum.isAABBInside(aabbMin, aabbMax))
         {
-            return;
+            return; // Early exit - no need to check grandchildren
         }
     
         // Draw meshes associated with this child transform
-        for (Mesh& mesh : meshes) 
+        for (Mesh& mesh : meshes)
         {
             if (mesh.associatedTransform == childTransform)
             {

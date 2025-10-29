@@ -25,7 +25,8 @@ namespace gllib
 
         void draw(const Camera& camera);
         void draw() override;
-
+        void drawWithFrustum(const Frustum& frustum);
+        
         static void registerModel(Transform* transform, Model* model);
         static void unregisterModel(Transform* transform);
         static Model* getModelFromTransform(Transform* transform);

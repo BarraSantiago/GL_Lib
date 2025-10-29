@@ -13,6 +13,9 @@ using namespace gllib;
 class Game : public BaseGame
 {
 private:
+    std::vector<BSPPlane> separatingPlanes;
+
+    BSPSystem bspSystem;
     Cube* player;
     Rectangle* floorCollision;
     collisionManager* collisionManager;
@@ -84,6 +87,16 @@ Game::Game()
 
     model = nullptr;
     modelScale = 5.0f;
+
+    BSPPlane leftRightPlane;
+    leftRightPlane.normal = glm::vec3(1.0f, 0.0f, 0.0f);
+    leftRightPlane.distance = 0.0f;
+    separatingPlanes.push_back(leftRightPlane);
+    BSPPlane frontBackPlane;
+    frontBackPlane.normal = glm::vec3(0.0f, 0.0f, 1.0f);
+    frontBackPlane.distance = 0.0f;
+    separatingPlanes.push_back(frontBackPlane);
+
 }
 
 Game::~Game()
@@ -112,6 +125,8 @@ void Game::init()
         std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << std::endl;
         model3 = new Model("models/Backpack/backpack.mtl", false);
         std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << std::endl;
+        bspSystem.buildBSP(separatingPlanes);
+        bspSystem.addModel(model2);
     }
     catch (const std::exception& e)
     {
@@ -175,9 +190,27 @@ void Game::update()
 
     cube->setRotationQuat(newRot);
 
-    glm::vec3 up = {0.0f, 5.0f * LibTime::getDeltaTime(), 0.0f};
-    model2->transform.children[1]->setPosition(model2->transform.children[1]->position + up);
-    model2->transform.setPosition(model2->transform.position - up);
+    const float speed = 25;
+    if (Input::getKeyPressed(Key_I))
+    {
+        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
+        model2->transform.setPosition(model2->transform.position + forward);
+    }
+    if (Input::getKeyPressed(Key_K))
+    {
+        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
+        model2->transform.setPosition(model2->transform.position - forward);
+    }
+    if (Input::getKeyPressed(Key_J))
+    {
+        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
+        model2->transform.setPosition(model2->transform.position + right);
+    }
+    if (Input::getKeyPressed(Key_L))
+    {
+        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
+        model2->transform.setPosition(model2->transform.position - right);
+    }
     // Draw
     drawObjects();
 }
@@ -186,7 +219,6 @@ void Game::update()
 void Game::drawObjects()
 {
     Renderer::clear();
-
     Shader::setShaderProgram(shaderProgramLighting);
 
     ambientLight->apply(shaderProgramLighting);
@@ -196,8 +228,9 @@ void Game::drawObjects()
 
     //model->draw(getCamera());
     //model1->draw(getCamera());
-    model2->draw(getCamera());
+    //model2->draw(getCamera());
     //model3->draw(getCamera());
+    bspSystem.render(*camera);
 
     cube->draw();
     player->draw();

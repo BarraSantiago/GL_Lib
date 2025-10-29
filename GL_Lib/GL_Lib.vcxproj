@@ -1110,6 +1110,8 @@
       <AdditionalOptions>/std:c++17</AdditionalOptions>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\Rendering\BSP\BSPNode.cpp" />
+    <ClCompile Include="src\Rendering\BSP\BSPSystem.cpp" />
     <ClCompile Include="src\Rendering\Camera\Camera.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1600,6 +1602,8 @@
     <ClInclude Include="src\Math\collisionManager.h" />
     <ClInclude Include="src\Math\myMaths.h" />
     <ClInclude Include="src\Math\transform.h" />
+    <ClInclude Include="src\Rendering\BSP\BSPNode.h" />
+    <ClInclude Include="src\Rendering\BSP\BSPSystem.h" />
     <ClInclude Include="src\Rendering\Camera\Camera.h" />
     <ClInclude Include="src\Rendering\Camera\CameraController.h" />
     <ClInclude Include="src\Rendering\Frustum.h" />
