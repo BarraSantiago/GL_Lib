@@ -14,14 +14,13 @@ namespace gllib
     void BSPSystem::addModel(Model* model)
     {
         if (!model) return;
-        if (std::find(models_.begin(), models_.end(), model) == models_.end())
-            models_.push_back(model);
+        models_.push_back(model);
     }
 
     void BSPSystem::removeModel(Model* model)
     {
         if (!model) return;
-        auto it = std::remove(models_.begin(), models_.end(), model);
+        std::vector<Model*>::iterator it = std::remove(models_.begin(), models_.end(), model);
         models_.erase(it, models_.end());
     }
 

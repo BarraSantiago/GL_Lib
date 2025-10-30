@@ -14,8 +14,8 @@ namespace gllib {
         if (isLeaf()) {
             for (Model* m : models) {
                 if (!m) continue;
-                const auto mn = m->transform.getWorldAABBMin();
-                const auto mx = m->transform.getWorldAABBMax();
+                const glm::vec3 mn = m->transform.getWorldAABBMin();
+                const glm::vec3 mx = m->transform.getWorldAABBMax();
                 if (frustum.isAABBInside(mn, mx)) out.push_back(m);
             }
             return;

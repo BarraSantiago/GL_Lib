@@ -9,11 +9,6 @@
 
 #include "BSP/BSPNode.h"
 
-namespace
-{
-
-}
-
 namespace gllib
 {
     std::unordered_map<Transform*, Model*> Model::transformToModelMap;

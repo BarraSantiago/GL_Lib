@@ -17,7 +17,7 @@ namespace gllib
         void drawHierarchical(const Frustum& frustum);
         void drawChildTransform(Transform* childTransform, const Frustum& frustum);
         void drawTransformAABB(Transform* t, const glm::mat4& view, const glm::mat4& projection);
-        bool subtreeHasAnyOnCameraSide(const gllib::Transform* t, const gllib::BSPPlane* plane, bool cameraInFront);
+        bool subtreeHasAnyOnCameraSide(const Transform* t, const BSPPlane* plane, bool cameraInFront);
         void drawNodeWithBSP(Transform* t, const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront);
         
         std::vector<Transform*> allTransforms;

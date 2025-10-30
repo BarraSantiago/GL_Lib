@@ -25,7 +25,7 @@ namespace gllib {
 
     class DLLExport BSPNode {
     public:
-        BSPPlane plane{};
+        BSPPlane plane;
         std::unique_ptr<BSPNode> frontChild;
         std::unique_ptr<BSPNode> backChild;
 

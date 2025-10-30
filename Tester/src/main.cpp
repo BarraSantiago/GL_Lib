@@ -36,8 +36,6 @@ private:
     void setupModelHierarchy();
     void testHierarchyTransformations();
     void handleTestInputs();
-    void printHierarchyInfo();
-    void AnimateModel(Transform* transform, float timeOffset);
 protected:
     void init() override;
     void drawObjects();
@@ -88,16 +86,6 @@ Game::Game()
 
     model = nullptr;
     modelScale = 5.0f;
-
-    BSPPlane leftRightPlane;
-    leftRightPlane.normal = glm::vec3(1.0f, 0.0f, 0.0f);
-    leftRightPlane.distance = 0.0f;
-    separatingPlanes.push_back(leftRightPlane);
-    BSPPlane frontBackPlane;
-    frontBackPlane.normal = glm::vec3(0.0f, 0.0f, 1.0f);
-    frontBackPlane.distance = 0.0f;
-    separatingPlanes.push_back(frontBackPlane);
-
 }
 
 Game::~Game()
@@ -122,7 +110,7 @@ void Game::init()
         std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << std::endl;
         model1 = new Model("models/wall.fbx", false);
         std::cout << "Scene model loaded successfully with " << model1->meshes.size() << " meshes." << std::endl;
-        model2 = new Model("models/chicken/Chicken1.fbx", false);
+        model2 = new Model("models/tank_1.fbx", false);
         std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << std::endl;
         model3 = new Model("models/Backpack/backpack.mtl", false);
         std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << std::endl;
@@ -133,32 +121,31 @@ void Game::init()
         model = nullptr;
     }
 
-    // Position the wall at the center (it will be our partition plane)
-    model1->transform.scale *= .000005;
+    model1->transform.scale *= .1;
     model1->transform.position = {0.0f, 0.0f, 0.0f};
-    model1->transform.rotationQuat = {0.0f, 90.0f, 0.0f, 0.0f};
-
-    // Create BSP plane based on wall's orientation
-    // Wall faces along X axis (normal pointing in X direction)
+    glm::vec3 rotationEuler = {0.0f, 0.0f, 90.0f};
+    model1->transform.setRotation(rotationEuler);
+    
     BSPPlane wallPlane;
-    wallPlane.normal = glm::vec3(1.0f, 0.0f, 0.0f); // Wall divides left/right
-    wallPlane.distance = 0.0f; // Wall is at origin
+    wallPlane.normal = glm::vec3(1.0f, 0.0f, 0.0f);
+    wallPlane.distance = 0.0f;
     
     separatingPlanes.clear();
     separatingPlanes.push_back(wallPlane);
     
     bspSystem.buildBSP(separatingPlanes);
     
-    // Position chicken on the left side of the wall
-    model2->transform.scale *= 1;
+    model2->transform.scale *= .5;
     model2->transform.position = {-20.0f, 0.0f, 0.0f};
-    model2->transform.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     
-    // Add models to BSP system
-    bspSystem.addModel(model1); // The wall
-    bspSystem.addModel(model2); // The chicken (will be culled based on BSP)
+    rotationEuler = {270.0f, 0.0f, 0.0f};
     
-    // Position other models
+    model2->transform.setRotation(rotationEuler);
+    model2->setMaterial(new Material(Material::emerald()));
+    
+    bspSystem.addModel(model1); 
+    bspSystem.addModel(model2); 
+    
     model->transform.scale *= 10;
     model->transform.position = {10.0f, 0.0f, 10.0f};
     model->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
@@ -172,7 +159,7 @@ void Game::init()
     
     std::cout << "=== BSP SETUP ===" << std::endl;
     std::cout << "Wall (partition) at X=0" << std::endl;
-    std::cout << "Chicken starts at X=" << model2->transform.position.x << std::endl;
+    std::cout << "Tank starts at X=" << model2->transform.position.x << std::endl;
     std::cout << "Use IJKL keys to move chicken across the wall" << std::endl;
 }
 
@@ -210,40 +197,6 @@ void Game::update()
     newRot.z = rotationZ.w * cubeRot.z + rotationZ.x * cubeRot.y - rotationZ.y * cubeRot.x + rotationZ.z * cubeRot.w;
     newRot.normalize();
     cube->setRotationQuat(newRot);
-
-    // Chicken movement with BSP feedback
-    const float speed = 25;
-    static float lastReportedX = model2->transform.position.x;
-    
-    if (Input::getKeyPressed(Key_I))
-    {
-        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
-        model2->transform.setPosition(model2->transform.position + forward);
-    }
-    if (Input::getKeyPressed(Key_K))
-    {
-        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
-        model2->transform.setPosition(model2->transform.position - forward);
-    }
-    if (Input::getKeyPressed(Key_J))
-    {
-        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
-        model2->transform.setPosition(model2->transform.position + right);
-    }
-    if (Input::getKeyPressed(Key_L))
-    {
-        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
-        model2->transform.setPosition(model2->transform.position - right);
-    }
-    
-    // Report when chicken crosses the wall plane
-    float currentX = model2->transform.position.x;
-    if ((lastReportedX < 0.0f && currentX >= 0.0f) || (lastReportedX >= 0.0f && currentX < 0.0f))
-    {
-        std::cout << "Chicken crossed wall! Now at X=" << currentX 
-                  << " (Camera at X=" << camera->getPosition().x << ")" << std::endl;
-        lastReportedX = currentX;
-    }
 
     drawObjects();
 }
@@ -297,157 +250,12 @@ void Game::testHierarchyTransformations()
         return;
 
     testTimer += gllib::LibTime::getDeltaTime();
-    
-    // Apply animation to each model with different timing offsets
-    AnimateModel(&model->transform, 0.0f);
-    if (model1) AnimateModel(&model1->transform, 0.5f);
-    if (model2) AnimateModel(&model2->transform, 1.0f);
-    if (model3) AnimateModel(&model3->transform, 1.5f);
 }
 
-void Game::AnimateModel(Transform* transform, float timeOffset)
-{
-    if (!transform) return;
 
-    // Function to recursively animate all children
-    std::function<void(Transform*, int)> animateChildren = [&](Transform* parent, int depth)
-    {
-        for (size_t i = 0; i < parent->children.size(); ++i)
-        {
-            Transform* child = parent->children[i];
-            if (!child) continue;
-
-            float adjustedTime = testTimer + timeOffset + (i * 0.2f);
-
-            // Rotate each child around Y axis
-            float rotationSpeed = 45.0f + (depth * 15.0f);
-            float rotationAngle = rotationSpeed * adjustedTime;
-
-            gllib::Quaternion rotation;
-            rotation.w = std::cos(glm::radians(rotationAngle) / 2.0f);
-            rotation.x = 0.0f;
-            rotation.y = std::sin(glm::radians(rotationAngle) / 2.0f);
-            rotation.z = 0.0f;
-            rotation.normalize();
-            child->setRotation(rotation);
-
-            float scaleVariation = 0.3f * std::sin(adjustedTime * 2.0f);
-            float scale = 1.0f + scaleVariation;
-            child->setScale({scale, scale, scale});
-
-            if (!child->children.empty())
-            {
-                animateChildren(transform, 0);
-            }
-        }
-    };
-
-    if (!transform->children.empty())
-    {
-        animateChildren(transform, 0);
-    }
-
-}
 
 void Game::handleTestInputs()
 {
-    static bool hKeyWasPressed = false;
-    static bool mKeyWasPressed = false;
-    static bool rKeyWasPressed = false;
-    static bool iKeyWasPressed = false;
-
-    // Toggle hierarchy test mode
-    if (Input::getKeyPressed(Key_H))
-    {
-        if (!hKeyWasPressed)
-        {
-            hierarchyTestMode = !hierarchyTestMode;
-            if (hierarchyTestMode)
-            {
-                setupModelHierarchy();
-                std::cout << "Hierarchy test mode ENABLED" << std::endl;
-            }
-            else
-            {
-                testTimer = 0.0f;
-                // Reset models to original positions when disabling
-                if (model)
-                {
-                    model->transform.setPosition({10.0f, 0.0f, 10.0f});
-                    model->transform.setScale({10.0f, 10.0f, 10.0f});
-                }
-                if (model1)
-                {
-                    model1->transform.setPosition({10.0f, 0.0f, 10.0f});
-                    model1->transform.setScale({10.0f, 10.0f, 10.0f});
-                }
-                if (model2)
-                {
-                    model2->transform.setPosition({10.0f, 0.0f, 10.0f});
-                    model2->transform.setScale({10.0f, 10.0f, 10.0f});
-                }
-                if (model3)
-                {
-                    model3->transform.setPosition({10.0f, 0.0f, 10.0f});
-                    model3->transform.setScale({10.0f, 10.0f, 10.0f});
-                }
-                std::cout << "Hierarchy test mode DISABLED" << std::endl;
-            }
-            hKeyWasPressed = true;
-        }
-    }
-    else
-    {
-        hKeyWasPressed = false;
-    }
-
-    // Toggle mouse lock
-    if (Input::getKeyPressed(Key_M))
-    {
-        if (!mKeyWasPressed)
-        {
-            mouseLocked = !mouseLocked;
-            std::cout << (mouseLocked ? "Mouse LOCKED" : "Mouse UNLOCKED") << std::endl;
-            mKeyWasPressed = true;
-        }
-    }
-    else
-    {
-        mKeyWasPressed = false;
-    }
-
-    // Reset hierarchy test
-    if (Input::getKeyPressed(Key_R))
-    {
-        if (!rKeyWasPressed)
-        {
-            if (hierarchyTestMode)
-            {
-                testTimer = 0.0f;
-                setupModelHierarchy(); // Reset to initial state
-                std::cout << "Hierarchy test RESET" << std::endl;
-            }
-            rKeyWasPressed = true;
-        }
-    }
-    else
-    {
-        rKeyWasPressed = false;
-    }
-
-    // Print hierarchy info
-    if (Input::getKeyPressed(Key_I))
-    {
-        if (!iKeyWasPressed)
-        {
-            printHierarchyInfo();
-            iKeyWasPressed = true;
-        }
-    }
-    else
-    {
-        iKeyWasPressed = false;
-    }
     static bool bKeyWasPressed = false;
     
     // Toggle AABB visualization
@@ -464,45 +272,77 @@ void Game::handleTestInputs()
     {
         bKeyWasPressed = false;
     }
+
+    const float speed = 25;
+    static float lastReportedX = model2->transform.position.x;
     
-}
-
-void Game::printHierarchyInfo()
-{
-    if (!model || !model1 || !model2 || !model3)
+    if (Input::getKeyPressed(Key_I))
     {
-        std::cout << "Models not loaded!" << std::endl;
-        return;
+        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
+        model2->transform.setPosition(model2->transform.position + forward);
     }
-
-    std::cout << "\n=== HIERARCHY INFO ===" << std::endl;
-
-    auto printModelInfo = [](const std::string& name, Model* modelPtr)
+    if (Input::getKeyPressed(Key_K))
     {
-        std::cout << name << ":" << std::endl;
-        std::cout << "  Local Pos: (" << modelPtr->transform.position.x << ", " << modelPtr->transform.position.y <<
-            ", " << modelPtr->transform.position.z << ")" << std::endl;
-        std::cout << "  Local Scale: (" << modelPtr->transform.scale.x << ", " << modelPtr->transform.scale.y << ", " <<
-            modelPtr->transform.scale.z << ")" << std::endl;
-        std::cout << "  Children: " << modelPtr->transform.children.size() << std::endl;
-        std::cout << "  Parent: " << (modelPtr->transform.parent ? "Yes" : "No") << std::endl;
+        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
+        model2->transform.setPosition(model2->transform.position - forward);
+    }
+    if (Input::getKeyPressed(Key_J))
+    {
+        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
+        model2->transform.setPosition(model2->transform.position + right);
+    }
+    if (Input::getKeyPressed(Key_L))
+    {
+        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
+        model2->transform.setPosition(model2->transform.position - right);
+    }
+    const float rotationSpeed = 90.0f;
+    if (Input::getKeyPressed(Key_U))
+    {
+        float angleInRadians = glm::radians(rotationSpeed * LibTime::getDeltaTime());
+        Quaternion rotationY;
+        rotationY.w = std::cos(angleInRadians / 2.0f);
+        rotationY.x = 0.0f;
+        rotationY.y = std::sin(angleInRadians / 2.0f);
+        rotationY.z = 0.0f;
 
-        glm::mat4 worldMatrix = modelPtr->transform.getTransformMatrix();
-        glm::vec3 worldPos = glm::vec3(worldMatrix[3]);
-        std::cout << "  World Pos: (" << worldPos.x << ", " << worldPos.y << ", " << worldPos.z << ")" << std::endl;
+        Quaternion currentRot = model2->transform.rotationQuat;
+        Quaternion newRot;
+        newRot.w = rotationY.w * currentRot.w - rotationY.x * currentRot.x - rotationY.y * currentRot.y - rotationY.z * currentRot.z;
+        newRot.x = rotationY.w * currentRot.x + rotationY.x * currentRot.w + rotationY.y * currentRot.z - rotationY.z * currentRot.y;
+        newRot.y = rotationY.w * currentRot.y - rotationY.x * currentRot.z + rotationY.y * currentRot.w + rotationY.z * currentRot.x;
+        newRot.z = rotationY.w * currentRot.z + rotationY.x * currentRot.y - rotationY.y * currentRot.x + rotationY.z * currentRot.w;
+        newRot.normalize();
+        model2->transform.rotationQuat = newRot;
+    }
+    
+    if (Input::getKeyPressed(Key_O))
+    {
+        float angleInRadians = glm::radians(-rotationSpeed * LibTime::getDeltaTime());
+        Quaternion rotationY;
+        rotationY.w = std::cos(angleInRadians / 2.0f);
+        rotationY.x = 0.0f;
+        rotationY.y = std::sin(angleInRadians / 2.0f);
+        rotationY.z = 0.0f;
 
-        std::cout << "  AABB Min: (" << modelPtr->transform.getWorldAABBMin().x << ", " << modelPtr->transform.
-            getWorldAABBMin().y << ", " << modelPtr->transform.getWorldAABBMin().z << ")" << std::endl;
-        std::cout << "  AABB Max: (" << modelPtr->transform.getWorldAABBMax().x << ", " << modelPtr->transform.
-            getWorldAABBMax().y << ", " << modelPtr->transform.getWorldAABBMax().z << ")" << std::endl;
-    };
-
-    printModelInfo("Model (root)", model);
-    printModelInfo("Model1 (child of Model)", model1);
-    printModelInfo("Model2 (child of Model1)", model2);
-    printModelInfo("Model3 (child of Model2)", model3);
-
-    std::cout << "=====================\n" << std::endl;
+        Quaternion currentRot = model2->transform.rotationQuat;
+        Quaternion newRot;
+        newRot.w = rotationY.w * currentRot.w - rotationY.x * currentRot.x - rotationY.y * currentRot.y - rotationY.z * currentRot.z;
+        newRot.x = rotationY.w * currentRot.x + rotationY.x * currentRot.w + rotationY.y * currentRot.z - rotationY.z * currentRot.y;
+        newRot.y = rotationY.w * currentRot.y - rotationY.x * currentRot.z + rotationY.y * currentRot.w + rotationY.z * currentRot.x;
+        newRot.z = rotationY.w * currentRot.z + rotationY.x * currentRot.y - rotationY.y * currentRot.x + rotationY.z * currentRot.w;
+        newRot.normalize();
+        model2->transform.rotationQuat = newRot;
+    }
+    
+    float currentX = model2->transform.position.x;
+    if ((lastReportedX < 0.0f && currentX >= 0.0f) || (lastReportedX >= 0.0f && currentX < 0.0f))
+    {
+        std::cout << "Chicken crossed wall! Now at X=" << currentX 
+                  << " (Camera at X=" << camera->getPosition().x << ")" << std::endl;
+        lastReportedX = currentX;
+    }
+    
 }
 
 void Game::movement(Entity* player)
