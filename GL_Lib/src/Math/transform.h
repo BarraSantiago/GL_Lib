@@ -132,6 +132,13 @@ namespace gllib
             markDirty();
         }
 
+        glm::vec3 getRotationEuler() const
+        {
+            glm::quat quat = glm::quat(rotationQuat.w, rotationQuat.x, rotationQuat.y, rotationQuat.z);
+            glm::vec3 eulerRadians = glm::eulerAngles(quat);
+            return glm::degrees(eulerRadians);
+        }
+
         void markDirty()
         {
             worldMatrixDirty = true;

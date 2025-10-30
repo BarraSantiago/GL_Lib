@@ -145,7 +145,7 @@ namespace gllib
             if (mesh.associatedTransform == childTransform)
             {
                 Renderer::drawModel3D(mesh.VAO, mesh.indices.size(),
-                                      childTransform->getTransformMatrix(), mesh.textures);
+                                      childTransform->getTransformMatrix(), mesh.textures, material);
             }
         }
 
@@ -155,6 +155,21 @@ namespace gllib
         }
     }
 
+    void Model::setMaterialForTransform(Transform* transform, Material* material)
+    {
+        transformMaterials[transform] = material;
+    }
+    
+    Material* Model::getMaterialForTransform(Transform* transform)
+    {
+        auto it = transformMaterials.find(transform);
+        if (it != transformMaterials.end())
+        {
+            return it->second;
+        }
+        return material; // Fallback to model's default material
+    }
+    
     void Model::draw()
     {
     }
@@ -193,6 +208,7 @@ namespace gllib
         if (!subtreeHasAnyOnCameraSide(t, bspPlane, cameraInFront))
             return;
 
+        Material* transformMaterial = getMaterialForTransform(t);
         for (Mesh& mesh : meshes)
         {
             if (mesh.associatedTransform != t) continue;
@@ -220,7 +236,7 @@ namespace gllib
 
             if (!frustum.isAABBInside(wMin, wMax)) continue;
 
-            Renderer::drawModel3D(mesh.VAO, mesh.indices.size(), worldM, mesh.textures);
+            Renderer::drawModel3D(mesh.VAO, mesh.indices.size(), worldM, mesh.textures, transformMaterial);
         }
 
         for (Transform* c : t->children)

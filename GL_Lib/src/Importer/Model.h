@@ -28,7 +28,11 @@ namespace gllib
         bool aabbInitialized = false;
         void initializeAABBVisualization();
 
+        std::unordered_map<Transform*, Material*> transformMaterials;
+        
     public:
+        void setMaterialForTransform(Transform* transform, Material* material);
+        Material* getMaterialForTransform(Transform* transform);
         std::vector<Mesh> meshes;
         Model(std::string const& path, bool gamma);
         ~Model();

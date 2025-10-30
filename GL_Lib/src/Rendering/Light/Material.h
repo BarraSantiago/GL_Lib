@@ -2,11 +2,9 @@
 #include <vec3.hpp>
 
 #include "Core/deps.h"
-namespace gllib {
-    class Shader;
-}
 namespace gllib
 {
+    class Shader;
     struct DLLExport Material
     {
         glm::vec3 ambient;

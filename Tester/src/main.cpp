@@ -142,6 +142,21 @@ void Game::init()
     
     model2->transform.setRotation(rotationEuler);
     model2->setMaterial(new Material(Material::emerald()));
+
+    if (model2->transform.children.size() > 0)
+    {
+        model2->setMaterialForTransform(model2->transform.children[0], new Material(Material::gold()));
+    }
+    if (model2->transform.children.size() > 1)
+    {
+        model2->setMaterialForTransform(model2->transform.children[1], new Material(Material::ruby()));
+    }
+    if (model2->transform.children.size() > 2)
+    {
+        model2->setMaterialForTransform(model2->transform.children[2], new Material(Material::bronze()));
+        model2->setMaterialForTransform(model2->transform.children[2]->children[0], new Material(Material::ruby()));
+        model2->setMaterialForTransform(model2->transform.children[2]->children[1], new Material(Material::ruby()));
+    }
     
     bspSystem.addModel(model1); 
     bspSystem.addModel(model2); 
@@ -299,42 +314,30 @@ void Game::handleTestInputs()
     const float rotationSpeed = 90.0f;
     if (Input::getKeyPressed(Key_U))
     {
-        float angleInRadians = glm::radians(rotationSpeed * LibTime::getDeltaTime());
-        Quaternion rotationY;
-        rotationY.w = std::cos(angleInRadians / 2.0f);
-        rotationY.x = 0.0f;
-        rotationY.y = std::sin(angleInRadians / 2.0f);
-        rotationY.z = 0.0f;
-
-        Quaternion currentRot = model2->transform.rotationQuat;
-        Quaternion newRot;
-        newRot.w = rotationY.w * currentRot.w - rotationY.x * currentRot.x - rotationY.y * currentRot.y - rotationY.z * currentRot.z;
-        newRot.x = rotationY.w * currentRot.x + rotationY.x * currentRot.w + rotationY.y * currentRot.z - rotationY.z * currentRot.y;
-        newRot.y = rotationY.w * currentRot.y - rotationY.x * currentRot.z + rotationY.y * currentRot.w + rotationY.z * currentRot.x;
-        newRot.z = rotationY.w * currentRot.z + rotationY.x * currentRot.y - rotationY.y * currentRot.x + rotationY.z * currentRot.w;
-        newRot.normalize();
-        model2->transform.rotationQuat = newRot;
+        glm::vec3 left = model2->transform.children[2]->getRotationEuler();
+        left.z += -rotationSpeed * LibTime::getDeltaTime();
+        model2->transform.children[2]->setRotation(left);
     }
     
     if (Input::getKeyPressed(Key_O))
     {
-        float angleInRadians = glm::radians(-rotationSpeed * LibTime::getDeltaTime());
-        Quaternion rotationY;
-        rotationY.w = std::cos(angleInRadians / 2.0f);
-        rotationY.x = 0.0f;
-        rotationY.y = std::sin(angleInRadians / 2.0f);
-        rotationY.z = 0.0f;
-
-        Quaternion currentRot = model2->transform.rotationQuat;
-        Quaternion newRot;
-        newRot.w = rotationY.w * currentRot.w - rotationY.x * currentRot.x - rotationY.y * currentRot.y - rotationY.z * currentRot.z;
-        newRot.x = rotationY.w * currentRot.x + rotationY.x * currentRot.w + rotationY.y * currentRot.z - rotationY.z * currentRot.y;
-        newRot.y = rotationY.w * currentRot.y - rotationY.x * currentRot.z + rotationY.y * currentRot.w + rotationY.z * currentRot.x;
-        newRot.z = rotationY.w * currentRot.z + rotationY.x * currentRot.y - rotationY.y * currentRot.x + rotationY.z * currentRot.w;
-        newRot.normalize();
-        model2->transform.rotationQuat = newRot;
+        glm::vec3 right = model2->transform.children[2]->getRotationEuler();
+        right.z += rotationSpeed * LibTime::getDeltaTime();
+        model2->transform.children[2]->setRotation(right);
     }
-    
+
+    if (Input::getKeyPressed(Key_P))
+    {
+        glm::vec3 up = model2->transform.children[2]->getRotationEuler();
+        up.x += rotationSpeed * LibTime::getDeltaTime();
+        model2->transform.children[2]->setRotation(up);
+    }
+    if (Input::getKeyPressed(Key_Y))
+    {
+        glm::vec3 up = model2->transform.children[2]->getRotationEuler();
+        up.x -= rotationSpeed * LibTime::getDeltaTime();
+        model2->transform.children[2]->setRotation(up);
+    }
     float currentX = model2->transform.position.x;
     if ((lastReportedX < 0.0f && currentX >= 0.0f) || (lastReportedX >= 0.0f && currentX < 0.0f))
     {

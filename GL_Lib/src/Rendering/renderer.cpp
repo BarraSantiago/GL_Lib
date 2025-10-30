@@ -162,7 +162,7 @@ void Renderer::drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material
     glUseProgram(0);
 }
 
-void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, std::vector<Texture>& textures)
+void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, std::vector<Texture>& textures, Material* material)
 {
     glUseProgram(shader3DProgram);
     glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "model"), 1, GL_FALSE, glm::value_ptr(trans));
@@ -170,8 +170,22 @@ void Renderer::drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, st
     glUniformMatrix4fv(glGetUniformLocation(shader3DProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projMatrix));
 
     // Set material properties
-    glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), 32.0f);
-
+    if (material)
+    {
+        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(material->diffuse));
+        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.specular"), 1, glm::value_ptr(material->specular));
+        glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), material->shininess);
+    }
+    else
+    {
+        // Default white/gray material
+        glm::vec3 defaultDiffuse(0.8f, 0.8f, 0.8f);
+        glm::vec3 defaultSpecular(0.5f, 0.5f, 0.5f);
+        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.diffuse"), 1, glm::value_ptr(defaultDiffuse));
+        glUniform3fv(glGetUniformLocation(shader3DProgram, "material.specular"), 1, glm::value_ptr(defaultSpecular));
+        glUniform1f(glGetUniformLocation(shader3DProgram, "material.shininess"), 32.0f);
+    }
+    
     // Bind textures
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;

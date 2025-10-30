@@ -62,7 +62,7 @@ namespace gllib
         static void drawElements(RenderData rData, GLsizei indexSize);
         static void drawTexture(RenderData rData, GLsizei indexSize, unsigned int textureID);
         static void drawEntity3D(unsigned& VAO, unsigned indexQty, Material& material, glm::mat4 trans);
-        static void drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, std::vector<Texture>& textures);
+        static void drawModel3D(unsigned& VAO, unsigned indexQty, glm::mat4 trans, std::vector<Texture>& textures, Material* material = nullptr);
 
         static void bindTexture(unsigned int textureID);
         static void getTextureSize(unsigned int textureID, int* width, int* height);
