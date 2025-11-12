@@ -1,5 +1,7 @@
 #include "Entity3D.h"
 
+#include "BSP/BSPSystem.h"
+
 namespace gllib
 {
     Entity3D::Entity3D() : Entity2()
@@ -172,5 +174,29 @@ namespace gllib
     void Entity3D::setMaterial(Material* material)
     {
         this->material = material;
+    }
+
+    void Entity3D::makeBSPPlane(BSPSystem* bspSystem)
+    {
+        if (!bspSystem) return;
+        
+        BSPPlane plane = createBSPPlane();
+        bspSystem->addPlane(plane);
+    }
+
+    BSPPlane Entity3D::createBSPPlane() const
+    {
+        BSPPlane plane;
+        
+        // Transform the local +Z normal by the rotation
+        glm::vec3 localNormal(0.0f, 0.0f, 1.0f);
+        glm::mat3 rotationMatrix = glm::toMat3(transform.rotationQuat);
+        plane.normal = glm::normalize(rotationMatrix * localNormal);
+        
+        // Distance from origin to plane along normal
+        glm::vec3 pointOnPlane = transform.position;
+        plane.distance = -glm::dot(plane.normal, pointOnPlane);
+        
+        return plane;
     }
 }

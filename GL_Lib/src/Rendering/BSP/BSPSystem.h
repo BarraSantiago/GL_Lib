@@ -1,31 +1,37 @@
 #pragma once
-#include <memory>
 #include <vector>
+#include <memory>
 #include "BSPNode.h"
 
 namespace gllib
 {
-    class Camera;
     class Model;
+    class Camera;
 
     class DLLExport BSPSystem
     {
+    private:
+        std::vector<Model*> models_;
+        std::unique_ptr<BSPNode> root_;
+        std::vector<BSPPlane> planes_;
+        BSPPlane activePlane_;
+        bool hasActivePlane_;
+
+        bool aabbFullyOpposite(const glm::vec3& wMin, const glm::vec3& wMax, const BSPPlane& plane, bool cameraInFront);
+
     public:
         BSPSystem();
-        ~BSPSystem() = default;
 
         void addModel(Model* model);
         void removeModel(Model* model);
-        void buildBSP(const std::vector<BSPPlane>& planes);
-        void render(const Camera& camera);
-        void renderDebug(const Camera& camera, bool drawAABB = true);
-        void clear();
+        void addPlane(const BSPPlane& plane);
+        void clearPlanes();
+        const std::vector<BSPPlane>& getPlanes() const { return planes_; }
 
-    private:
-        static bool aabbFullyOpposite(const glm::vec3& wMin, const glm::vec3& wMax, const BSPPlane& plane, bool cameraInFront);
-        std::unique_ptr<BSPNode> root_;
-        std::vector<Model*> models_;
-        bool hasActivePlane_ = false;
-        BSPPlane activePlane_{};
+        void buildBSP(const std::vector<BSPPlane>& planes);
+        void buildBSP(); // Build with current planes
+        void render(const Camera& camera);
+        void renderDebug(const Camera& camera, bool drawAABB);
+        void clear();
     };
 }

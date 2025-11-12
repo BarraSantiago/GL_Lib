@@ -23,6 +23,7 @@ namespace gllib
         std::vector<Transform*> allTransforms;
         static std::unordered_map<Transform*, Model*> transformToModelMap;
 
+        bool isPlaneModel_ = false;
         unsigned int aabbVAO = 0;
         unsigned int aabbVBO = 0;
         bool aabbInitialized = false;
@@ -36,7 +37,9 @@ namespace gllib
         std::vector<Mesh> meshes;
         Model(std::string const& path, bool gamma);
         ~Model();
-
+        
+        static bool isPlaneModel(const std::string& path);
+        bool isFromPlanesFolder() const { return isPlaneModel_; }
         void draw(const Camera& camera);
         void draw() override;
         void drawAABBDebug(const glm::mat4& view, const glm::mat4& projection);

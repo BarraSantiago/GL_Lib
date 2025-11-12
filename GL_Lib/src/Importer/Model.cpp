@@ -15,6 +15,8 @@ namespace gllib
 
     Model::Model(std::string const& path, bool gamma)
     {
+        isPlaneModel_ = isPlaneModel(path);
+
         // Initialize transform first
         transform.position = glm::vec3(0.0f);
         transform.scale = glm::vec3(1.0f);
@@ -426,5 +428,14 @@ namespace gllib
         }
         return false;
     }
+
+    bool Model::isPlaneModel(const std::string& path)
+    {
+        // Check if path contains "/planes/" or "\planes\"
+        size_t pos = path.find("/planes/");
+        if (pos == std::string::npos)
+            pos = path.find("\\planes\\");
     
+        return pos != std::string::npos;
+    }
 }

@@ -107,33 +107,32 @@ void Game::init()
     try
     {
         model = new Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
-        std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << std::endl;
+        std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << '\n';
         model1 = new Model("models/wall.fbx", false);
-        std::cout << "Scene model loaded successfully with " << model1->meshes.size() << " meshes." << std::endl;
+        std::cout << "Scene model loaded successfully with " << model1->meshes.size() << " meshes." << '\n';
         model2 = new Model("models/tank_1.fbx", false);
-        std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << std::endl;
+        std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << '\n';
         model3 = new Model("models/Backpack/backpack.mtl", false);
-        std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << std::endl;
+        std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << '\n';
     }
     catch (const std::exception& e)
     {
-        std::cout << "Failed to load scene model: " << e.what() << std::endl;
+        std::cout << "Failed to load scene model: " << e.what() << '\n';
         model = nullptr;
     }
 
+    model1 = new Model("models/wall.fbx", false);
     model1->transform.scale *= .1;
     model1->transform.position = {0.0f, 0.0f, 0.0f};
     glm::vec3 rotationEuler = {0.0f, 0.0f, 90.0f};
     model1->transform.setRotation(rotationEuler);
+
+    // Convert wall entity to BSP plane
+    model1->makeBSPPlane(&bspSystem);
+
+    // PLANOS NO HARDCODEADOS
+    bspSystem.buildBSP();
     
-    BSPPlane wallPlane;
-    wallPlane.normal = glm::vec3(1.0f, 0.0f, 0.0f);
-    wallPlane.distance = 0.0f;
-    
-    separatingPlanes.clear();
-    separatingPlanes.push_back(wallPlane);
-    
-    bspSystem.buildBSP(separatingPlanes);
     
     model2->transform.scale *= .5;
     model2->transform.position = {-20.0f, 0.0f, 0.0f};
@@ -172,10 +171,10 @@ void Game::init()
     srand(time(nullptr));
     window->setTitle("Engine - BSP Test (IJKL to move chicken)");
     
-    std::cout << "=== BSP SETUP ===" << std::endl;
-    std::cout << "Wall (partition) at X=0" << std::endl;
-    std::cout << "Tank starts at X=" << model2->transform.position.x << std::endl;
-    std::cout << "Use IJKL keys to move chicken across the wall" << std::endl;
+    std::cout << "=== BSP SETUP ===" << '\n';
+    std::cout << "Wall (partition) at X=0" << '\n';
+    std::cout << "Tank starts at X=" << model2->transform.position.x << '\n';
+    std::cout << "Use IJKL keys to move chicken across the wall" << '\n';
 }
 
 
@@ -244,11 +243,11 @@ void Game::setupModelHierarchy()
     if (!model || !model1 || !model2 || !model3)
         return;
 
-    std::cout << "=== CHECKING LOADED HIERARCHY ===" << std::endl;
-    std::cout << "Model has " << model->transform.children.size() << " loaded children" << std::endl;
-    std::cout << "Model1 has " << model1->transform.children.size() << " loaded children" << std::endl;
-    std::cout << "Model2 has " << model2->transform.children.size() << " loaded children" << std::endl;
-    std::cout << "Model3 has " << model3->transform.children.size() << " loaded children" << std::endl;
+    std::cout << "=== CHECKING LOADED HIERARCHY ===" << '\n';
+    std::cout << "Model has " << model->transform.children.size() << " loaded children" << '\n';
+    std::cout << "Model1 has " << model1->transform.children.size() << " loaded children" << '\n';
+    std::cout << "Model2 has " << model2->transform.children.size() << " loaded children" << '\n';
+    std::cout << "Model3 has " << model3->transform.children.size() << " loaded children" << '\n';
 
     // Position the models in the scene
     model->transform.setPosition({0.0f, 0.0f, 0.0f});
@@ -256,7 +255,7 @@ void Game::setupModelHierarchy()
     model2->transform.setPosition({-30.0f, 0.0f, 0.0f});
     model3->transform.setPosition({0.0f, 0.0f, 30.0f});
 
-    std::cout << "Hierarchy test will use the loaded node structure from the model files." << std::endl;
+    std::cout << "Hierarchy test will use the loaded node structure from the model files." << '\n';
 }
 
 void Game::testHierarchyTransformations()
@@ -279,7 +278,7 @@ void Game::handleTestInputs()
         if (!bKeyWasPressed)
         {
             showAABB = !showAABB;
-            std::cout << (showAABB ? "AABB visualization ENABLED" : "AABB visualization DISABLED") << std::endl;
+            std::cout << (showAABB ? "AABB visualization ENABLED" : "AABB visualization DISABLED") << '\n';
             bKeyWasPressed = true;
         }
     }
@@ -342,7 +341,7 @@ void Game::handleTestInputs()
     if ((lastReportedX < 0.0f && currentX >= 0.0f) || (lastReportedX >= 0.0f && currentX < 0.0f))
     {
         std::cout << "Chicken crossed wall! Now at X=" << currentX 
-                  << " (Camera at X=" << camera->getPosition().x << ")" << std::endl;
+                  << " (Camera at X=" << camera->getPosition().x << ")" << '\n';
         lastReportedX = currentX;
     }
     

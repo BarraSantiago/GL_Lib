@@ -97,6 +97,21 @@ namespace gllib
         }
     }
 
+    void BSPSystem::addPlane(const BSPPlane& plane)
+    {
+        planes_.push_back(plane);
+    }
+
+    void BSPSystem::clearPlanes()
+    {
+        planes_.clear();
+    }
+
+    void BSPSystem::buildBSP()
+    {
+        buildBSP(planes_);
+    }
+    
     void BSPSystem::clear()
     {
         models_.clear();
