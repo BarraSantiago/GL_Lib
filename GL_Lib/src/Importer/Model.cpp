@@ -437,9 +437,15 @@ namespace gllib
     bool Model::isPlaneModel(const std::string& path)
     {
         // Check if path contains "/planes/" or "\planes\"
-        size_t pos = path.find("/planes/");
+        std::string lowerPath = path;
+        for (int i = 0; i < path.length(); ++i)
+        {
+            lowerPath[i] = static_cast<char>(std::tolower(path[i]));
+        }
+        
+        size_t pos = lowerPath.find("/planes/");
         if (pos == std::string::npos)
-            pos = path.find("\\planes\\");
+            pos = lowerPath.find("\\planes\\");
     
         return pos != std::string::npos;
     }
