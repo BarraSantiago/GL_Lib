@@ -36,6 +36,8 @@ private:
     void setupModelHierarchy();
     void testHierarchyTransformations();
     void handleTestInputs();
+    void buildBSP();
+    
 protected:
     void init() override;
     void drawObjects();
@@ -106,14 +108,16 @@ void Game::init()
 
     try
     {
-        model = new Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
-        std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << '\n';
-        model1 = new Model("models/wall.fbx", false);
+        model1 = new Model("models/planes/wall.fbx", false);
         std::cout << "Scene model loaded successfully with " << model1->meshes.size() << " meshes." << '\n';
         model2 = new Model("models/tank_1.fbx", false);
         std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << '\n';
-        model3 = new Model("models/Backpack/backpack.mtl", false);
-        std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << '\n';
+        
+        
+        //model = new Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
+        //std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << '\n';
+        //model3 = new Model("models/Backpack/backpack.mtl", false);
+        //std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << '\n';
     }
     catch (const std::exception& e)
     {
@@ -121,24 +125,15 @@ void Game::init()
         model = nullptr;
     }
 
-    model1 = new Model("models/wall.fbx", false);
+    glm::vec3 rotationEuler = {0.0f, 0.0f, 90.0f};
     model1->transform.scale *= .1;
     model1->transform.position = {0.0f, 0.0f, 0.0f};
-    glm::vec3 rotationEuler = {0.0f, 0.0f, 90.0f};
     model1->transform.setRotation(rotationEuler);
-
-    // Convert wall entity to BSP plane
-    model1->makeBSPPlane(&bspSystem);
-
-    // PLANOS NO HARDCODEADOS
-    bspSystem.buildBSP();
-    
-    
-    model2->transform.scale *= .5;
-    model2->transform.position = {-20.0f, 0.0f, 0.0f};
     
     rotationEuler = {270.0f, 0.0f, 0.0f};
     
+    model2->transform.scale *= .5;
+    model2->transform.position = {-20.0f, 0.0f, 0.0f};
     model2->transform.setRotation(rotationEuler);
     model2->setMaterial(new Material(Material::emerald()));
 
@@ -157,17 +152,11 @@ void Game::init()
         model2->setMaterialForTransform(model2->transform.children[2]->children[1], new Material(Material::ruby()));
     }
     
-    bspSystem.addModel(model1); 
-    bspSystem.addModel(model2); 
+    bspSystem.addModel(model2);
+    bspSystem.addModel(model1);
     
-    model->transform.scale *= 10;
-    model->transform.position = {10.0f, 0.0f, 10.0f};
-    model->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
+    buildBSP();
     
-    model3->transform.scale *= 10;
-    model3->transform.position = {10.0f, 0.0f, 10.0f};
-    model3->transform.rotationQuat = {0.0f, 0.0f, 0.30f, 0.0f};
-
     srand(time(nullptr));
     window->setTitle("Engine - BSP Test (IJKL to move chicken)");
     
@@ -175,6 +164,8 @@ void Game::init()
     std::cout << "Wall (partition) at X=0" << '\n';
     std::cout << "Tank starts at X=" << model2->transform.position.x << '\n';
     std::cout << "Use IJKL keys to move chicken across the wall" << '\n';
+    rotationEuler = {90.0f, 0.0f, 90.0f};
+    model1->transform.setRotation(rotationEuler);
 }
 
 
@@ -345,6 +336,17 @@ void Game::handleTestInputs()
         lastReportedX = currentX;
     }
     
+}
+
+void Game::buildBSP()
+{
+    for (Model* mod : Model::getLoadedModels())
+    {
+        if (!mod->isFromPlanesFolder()) continue;
+        mod->makeBSPPlane(&bspSystem);
+    }
+    
+    bspSystem.buildBSP();
 }
 
 void Game::movement(Entity* player)

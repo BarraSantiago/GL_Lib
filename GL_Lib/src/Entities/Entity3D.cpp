@@ -7,7 +7,7 @@ namespace gllib
     Entity3D::Entity3D() : Entity2()
     {
         material = new Material();
-        
+
         vertexQty = 24;
         indexQty = 36;
         id = 1;
@@ -79,7 +79,7 @@ namespace gllib
             0.f, 0.f, 1.f,
             0.f, 0.f, 1.f
         };
-        
+
         textureCoords = new float[vertexQty * 2]
         {
             0.0f, 0.0f,
@@ -179,7 +179,7 @@ namespace gllib
     void Entity3D::makeBSPPlane(BSPSystem* bspSystem)
     {
         if (!bspSystem) return;
-        
+
         BSPPlane plane = createBSPPlane();
         bspSystem->addPlane(plane);
     }
@@ -187,16 +187,21 @@ namespace gllib
     BSPPlane Entity3D::createBSPPlane() const
     {
         BSPPlane plane;
-        
-        // Transform the local +Z normal by the rotation
+
+        // Get the world transform matrix
+        glm::mat4 worldMatrix = transform.getTransformMatrix();
+
+        // Extract rotation component (ignore scale for normal direction)
+        glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(worldMatrix)));
+
+        // Transform the local +Z normal (assuming the model's "forward" is +Z)
         glm::vec3 localNormal(0.0f, 0.0f, 1.0f);
-        glm::mat3 rotationMatrix = glm::toMat3(transform.rotationQuat);
-        plane.normal = glm::normalize(rotationMatrix * localNormal);
-        
-        // Distance from origin to plane along normal
+        plane.normal = glm::normalize(normalMatrix * localNormal);
+
+        // Use the world position as a point on the plane
         glm::vec3 pointOnPlane = transform.position;
         plane.distance = -glm::dot(plane.normal, pointOnPlane);
-        
+
         return plane;
     }
 }

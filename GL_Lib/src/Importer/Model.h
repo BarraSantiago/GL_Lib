@@ -49,5 +49,8 @@ namespace gllib
         static void registerModel(Transform* transform, Model* model);
         static void unregisterModel(Transform* transform);
         static Model* getModelFromTransform(Transform* transform);
+        static const std::list<Model*>& getLoadedModels();
+        
     };
+    static std::list<Model*> loadedModels;
 }

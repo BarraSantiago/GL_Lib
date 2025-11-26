@@ -11,6 +11,10 @@
 
 namespace gllib
 {
+    const std::list<Model*>& Model::getLoadedModels()
+    {
+        return loadedModels;
+    }
     std::unordered_map<Transform*, Model*> Model::transformToModelMap;
 
     Model::Model(std::string const& path, bool gamma)
@@ -58,6 +62,7 @@ namespace gllib
 
         registerModel(&transform, this);
 
+        loadedModels.push_back(this);
         std::cout << "Model loaded with " << transform.children.size() << " child transforms" << std::endl;
     }
 
