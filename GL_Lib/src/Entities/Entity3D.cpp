@@ -180,28 +180,37 @@ namespace gllib
     {
         if (!bspSystem) return;
 
-        BSPPlane plane = createBSPPlane();
-        bspSystem->addPlane(plane);
+        //BSPPlane plane = createBSPPlane();
+        //bspSystem->addPlane(plane);
     }
 
-    BSPPlane Entity3D::createBSPPlane() const
+    std::vector<BSPPlane> Entity3D::createBSPPlanes() const
     {
-        BSPPlane plane;
-
-        // Get the world transform matrix
-        glm::mat4 worldMatrix = transform.getTransformMatrix();
-
-        // Extract rotation component (ignore scale for normal direction)
-        glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(worldMatrix)));
-
-        // Transform the local +Z normal (assuming the model's "forward" is +Z)
-        glm::vec3 localNormal(0.0f, 0.0f, 1.0f);
-        plane.normal = glm::normalize(normalMatrix * localNormal);
-
-        // Use the world position as a point on the plane
-        glm::vec3 pointOnPlane = transform.position;
-        plane.distance = -glm::dot(plane.normal, pointOnPlane);
-
-        return plane;
+        std::vector<BSPPlane> planes;
+        
+        // Recursively search for nodes named "Plane"
+        std::function<void(const Transform*)> searchPlaneNodes = [&](const Transform* t)
+        {
+            // Check if this transform corresponds to a node named "Plane"
+            // You'll need to store node names in Transform or pass them separately
+            
+            BSPPlane plane;
+            glm::mat4 worldMatrix = t->getTransformMatrix();
+            glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(worldMatrix)));
+            
+            glm::vec3 localNormal(0.0f, 0.0f, 1.0f);
+            plane.normal = glm::normalize(normalMatrix * localNormal);
+            plane.distance = -glm::dot(plane.normal, t->position);
+            
+            planes.push_back(plane);
+            
+            for (const Transform* child : t->children)
+            {
+                searchPlaneNodes(child);
+            }
+        };
+        
+        searchPlaneNodes(&transform);
+        return planes;
     }
 }

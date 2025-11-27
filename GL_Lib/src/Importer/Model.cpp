@@ -15,6 +15,7 @@ namespace gllib
     {
         return loadedModels;
     }
+
     std::unordered_map<Transform*, Model*> Model::transformToModelMap;
 
     Model::Model(std::string const& path, bool gamma)
@@ -125,7 +126,7 @@ namespace gllib
         {
             if (mesh.associatedTransform == &transform)
             {
-                Renderer::drawModel3D(mesh.VAO, mesh.indices.size(),transform.getTransformMatrix(), mesh.textures);
+                Renderer::drawModel3D(mesh.VAO, mesh.indices.size(), transform.getTransformMatrix(), mesh.textures);
             }
         }
 
@@ -166,7 +167,7 @@ namespace gllib
     {
         transformMaterials[transform] = material;
     }
-    
+
     Material* Model::getMaterialForTransform(Transform* transform)
     {
         auto it = transformMaterials.find(transform);
@@ -176,7 +177,7 @@ namespace gllib
         }
         return material; // Fallback to model's default material
     }
-    
+
     void Model::draw()
     {
     }
@@ -206,7 +207,7 @@ namespace gllib
         }
 
         const bool cameraInFront = bspPlane->isPointInFront(cameraPos);
-        
+
         drawNodeWithBSP(&transform, frustum, bspPlane, cameraInFront);
     }
 
@@ -221,9 +222,9 @@ namespace gllib
             if (mesh.associatedTransform != t) continue;
 
             const glm::mat4 worldM = t->getTransformMatrix();
-            
+
             const glm::vec3 min = mesh.minAABB, max = mesh.maxAABB;
-            
+
             const glm::vec3 corners[8] = {
                 {min.x, min.y, min.z}, {max.x, min.y, min.z},
                 {min.x, max.y, min.z}, {max.x, max.y, min.z},
@@ -233,7 +234,7 @@ namespace gllib
 
             glm::vec3 wMin(std::numeric_limits<float>::max());
             glm::vec3 wMax(-std::numeric_limits<float>::max());
-            
+
             for (int i = 0; i < 8; ++i)
             {
                 const glm::vec3 wc = glm::vec3(worldM * glm::vec4(corners[i], 1.0f));
@@ -396,8 +397,9 @@ namespace gllib
         glDrawArrays(GL_LINES, 0, 24);
         glBindVertexArray(0);
     }
-    
-    bool aabbCompletelyOnOppositeSide(const glm::vec3& wMin, const glm::vec3& wMax,const BSPPlane* plane, bool cameraInFront)
+
+    bool aabbCompletelyOnOppositeSide(const glm::vec3& wMin, const glm::vec3& wMax, const BSPPlane* plane,
+                                      bool cameraInFront)
     {
         if (!plane) return false;
 
@@ -442,11 +444,66 @@ namespace gllib
         {
             lowerPath[i] = static_cast<char>(std::tolower(path[i]));
         }
-        
+
         size_t pos = lowerPath.find("/planes/");
         if (pos == std::string::npos)
             pos = lowerPath.find("\\planes\\");
-    
+
         return pos != std::string::npos;
+    }
+
+    std::vector<BSPPlane> Model::createBSPPlanesFromNodes()
+    {
+        std::vector<BSPPlane> planes;
+    
+        std::function<void(Transform*, const std::string&)> searchForPlaneNodes =
+            [&](Transform* t, const std::string& nodeName)
+        {
+            std::string lowerName = nodeName;
+            for (char& c : lowerName)
+                c = static_cast<char>(std::tolower(c));
+    
+            if (lowerName.find("plane") != std::string::npos)
+            {
+                // Find meshes associated with this transform
+                for (const Mesh& mesh : meshes)
+                {
+                    if (mesh.associatedTransform != t) continue;
+    
+                    // Need at least 3 vertices to define a plane
+                    if (mesh.vertices.size() < 3) continue;
+    
+                    glm::mat4 worldMatrix = t->getTransformMatrix();
+    
+                    // Transform first 3 vertices to world space
+                    glm::vec3 p0 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[0].Position, 1.0f));
+                    glm::vec3 p1 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[1].Position, 1.0f));
+                    glm::vec3 p2 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[2].Position, 1.0f));
+    
+                    // Calculate plane normal from cross product
+                    glm::vec3 v1 = p1 - p0;
+                    glm::vec3 v2 = p2 - p0;
+                    glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+    
+                    // Calculate plane distance
+                    float distance = -glm::dot(normal, p0);
+    
+                    BSPPlane plane;
+                    plane.normal = normal;
+                    plane.distance = distance;
+    
+                    planes.push_back(plane);
+                    break; // Only one plane per node
+                }
+            }
+    
+            for (Transform* child : t->children)
+            {
+                searchForPlaneNodes(child, child->nodeName);
+            }
+        };
+    
+        searchForPlaneNodes(&transform, transform.nodeName);
+        return planes;
     }
 }

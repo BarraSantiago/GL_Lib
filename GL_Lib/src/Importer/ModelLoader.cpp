@@ -36,11 +36,9 @@ namespace gllib
     }
     
     void ModelLoader::processNode(aiNode* node, const aiScene* scene, std::vector<Mesh>& meshes, bool gamma,
-                                 glm::vec3& minAABB, glm::vec3& maxAABB,
-                                 Transform* rootTransform, Transform* parentTransform)
+                                 glm::vec3& minAABB, glm::vec3& maxAABB, Transform* rootTransform, Transform* parentTransform)
     {
         Transform* currentTransform;
-        
         // If this is the root node call and parentTransform is null, use the provided rootTransform
         if (parentTransform == nullptr)
         {
@@ -54,6 +52,7 @@ namespace gllib
         }
     
         // Convert Assimp matrix to glm and extract transform components
+        currentTransform->nodeName = std::string(node->mName.C_Str());
         aiMatrix4x4 aiMat = node->mTransformation;
         glm::mat4 mat(
             aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1,

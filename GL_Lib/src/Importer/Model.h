@@ -14,34 +14,33 @@ namespace gllib
     class DLLExport Model : public Entity3D
     {
     private:
-        void drawHierarchical(const Frustum& frustum);
-        void drawChildTransform(Transform* childTransform, const Frustum& frustum);
-        void drawTransformAABB(Transform* t, const glm::mat4& view, const glm::mat4& projection);
-        bool subtreeHasAnyOnCameraSide(const Transform* t, const BSPPlane* plane, bool cameraInFront);
-        void drawNodeWithBSP(Transform* t, const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront);
-        
         std::vector<Transform*> allTransforms;
+        std::unordered_map<Transform*, Material*> transformMaterials;
         static std::unordered_map<Transform*, Model*> transformToModelMap;
 
         bool isPlaneModel_ = false;
         unsigned int aabbVAO = 0;
         unsigned int aabbVBO = 0;
         bool aabbInitialized = false;
+
+        void drawHierarchical(const Frustum& frustum);
+        void drawChildTransform(Transform* childTransform, const Frustum& frustum);
+        void drawTransformAABB(Transform* t, const glm::mat4& view, const glm::mat4& projection);
+        bool subtreeHasAnyOnCameraSide(const Transform* t, const BSPPlane* plane, bool cameraInFront);
+        void drawNodeWithBSP(Transform* t, const Frustum& frustum, const BSPPlane* bspPlane, bool cameraInFront);
         void initializeAABBVisualization();
 
-        std::unordered_map<Transform*, Material*> transformMaterials;
-        
     public:
-        void setMaterialForTransform(Transform* transform, Material* material);
-        Material* getMaterialForTransform(Transform* transform);
         std::vector<Mesh> meshes;
+        
         Model(std::string const& path, bool gamma);
         ~Model();
-        
+
+        void draw() override;
         static bool isPlaneModel(const std::string& path);
         bool isFromPlanesFolder() const { return isPlaneModel_; }
+        void setMaterialForTransform(Transform* transform, Material* material);
         void draw(const Camera& camera);
-        void draw() override;
         void drawAABBDebug(const glm::mat4& view, const glm::mat4& projection);
         void drawAllAABBsDebug(const glm::mat4& view, const glm::mat4& projection);
         void drawWithFrustum(const Frustum& frustum);
@@ -50,7 +49,9 @@ namespace gllib
         static void unregisterModel(Transform* transform);
         static Model* getModelFromTransform(Transform* transform);
         static const std::list<Model*>& getLoadedModels();
-        
+        Material* getMaterialForTransform(Transform* transform);
+        std::vector<BSPPlane> createBSPPlanesFromNodes();
     };
+
     static std::list<Model*> loadedModels;
 }

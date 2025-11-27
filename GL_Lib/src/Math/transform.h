@@ -3,6 +3,8 @@
 
 #include "Core/deps.h"
 #define GLM_ENABLE_EXPERIMENTAL
+#include <string>
+
 #include "gtx/quaternion.hpp"
 #ifdef _WIN32
 #include "glm.hpp"
@@ -79,6 +81,7 @@ namespace gllib
 
     struct DLLExport Transform
     {
+        std::string nodeName;
         glm::vec3 position;
         glm::vec3 scale;
         Quaternion rotationQuat;
@@ -174,6 +177,7 @@ namespace gllib
         Transform operator/(float i)
         {
             return {
+                "",
                 position / i,
                 scale / i,
                 {rotationQuat.w / i, rotationQuat.x / i, rotationQuat.y / i, rotationQuat.z / i},
@@ -186,6 +190,7 @@ namespace gllib
         Transform operator*(float i)
         {
             return {
+                "",
                 position * i,
                 scale * i,
                 {rotationQuat.w * i, rotationQuat.x * i, rotationQuat.y * i, rotationQuat.z * i},

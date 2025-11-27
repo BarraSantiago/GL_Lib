@@ -17,6 +17,9 @@ namespace gllib
         BSPPlane activePlane_;
         bool hasActivePlane_;
 
+        bool isModelOnCameraSideOfAllPlanes(const glm::vec3& modelMin, const glm::vec3& modelMax, const glm::vec3& cameraPos) const;
+        void buildBSPTree(BSPNode* node, const std::vector<BSPPlane>& remainingPlanes, const std::vector<Model*>& models);
+        void renderNode(BSPNode* node, const Frustum& frustum, const glm::vec3& cameraPos);
         bool aabbFullyOpposite(const glm::vec3& wMin, const glm::vec3& wMax, const BSPPlane& plane, bool cameraInFront);
 
     public:

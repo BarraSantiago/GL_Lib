@@ -13,6 +13,8 @@ using namespace gllib;
 class Game : public BaseGame
 {
 private:
+    float playerSpeed = 250.0f;
+    float tankSpeed = 75;
     std::vector<BSPPlane> separatingPlanes;
 
     BSPSystem bspSystem;
@@ -33,11 +35,10 @@ private:
     bool mouseLocked = true;
 
     void movement(Entity* player);
-    void setupModelHierarchy();
-    void testHierarchyTransformations();
     void handleTestInputs();
     void buildBSP();
-    
+    void autoLoadModels();
+
 protected:
     void init() override;
     void drawObjects();
@@ -100,41 +101,42 @@ void Game::init()
     cout << "External init!\n";
 
     camera->setTarget(player);
-    camera->setDistance(100.0f);
+    camera->setDistance(150.0f);
     camera->setHeight(2.0f);
     camera->setPerspective(45.0f, window->getWidth() / (float)window->getHeight(), 0.1f, 1000.0f);
 
     camera->setRotation(0.0f, 0.0f);
 
-    try
-    {
-        model1 = new Model("models/planes/wall.fbx", false);
+    //try
+    //{
+        model1 = new Model("models/planes/wall2.fbx", false);
         std::cout << "Scene model loaded successfully with " << model1->meshes.size() << " meshes." << '\n';
         model2 = new Model("models/tank_1.fbx", false);
         std::cout << "Scene model loaded successfully with " << model2->meshes.size() << " meshes." << '\n';
-        
-        
-        //model = new Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
-        //std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << '\n';
-        //model3 = new Model("models/Backpack/backpack.mtl", false);
-        //std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << '\n';
-    }
-    catch (const std::exception& e)
-    {
-        std::cout << "Failed to load scene model: " << e.what() << '\n';
-        model = nullptr;
-    }
-
-    glm::vec3 rotationEuler = {0.0f, 0.0f, 90.0f};
-    model1->transform.scale *= .1;
-    model1->transform.position = {0.0f, 0.0f, 0.0f};
-    model1->transform.setRotation(rotationEuler);
-    
-    rotationEuler = {270.0f, 0.0f, 0.0f};
-    
-    model2->transform.scale *= .5;
-    model2->transform.position = {-20.0f, 0.0f, 0.0f};
-    model2->transform.setRotation(rotationEuler);
+    //    model3 = new Model("models/planes/wall1.fbx", false);
+    //    
+    //    
+    //    //model = new Model("models/claire/source/LXG1NDL0BZ814059Q0RW9HZXE.obj", false);
+    //    //std::cout << "Scene model loaded successfully with " << model->meshes.size() << " meshes." << '\n';
+    //    //model3 = new Model("models/Backpack/backpack.mtl", false);
+    //    //std::cout << "Scene model loaded successfully with " << model3->meshes.size() << " meshes." << '\n';
+    //}
+    //catch (const std::exception& e)
+    //{
+    //    std::cout << "Failed to load scene model: " << e.what() << '\n';
+    //    model = nullptr;
+    //}
+//
+    //glm::vec3 rotationEuler = {0.0f, 0.0f, 90.0f};
+    //model1->transform.scale *= .1;
+    //model1->transform.position = {0.0f, 0.0f, 0.0f};
+    //model1->transform.setRotation(rotationEuler);
+    //
+    //rotationEuler = {270.0f, 0.0f, 0.0f};
+    //
+    //model2->transform.scale *= .5;
+    //model2->transform.position = {-20.0f, 0.0f, 0.0f};
+    //model2->transform.setRotation(rotationEuler);
     model2->setMaterial(new Material(Material::emerald()));
 
     if (model2->transform.children.size() > 0)
@@ -152,9 +154,7 @@ void Game::init()
         model2->setMaterialForTransform(model2->transform.children[2]->children[1], new Material(Material::ruby()));
     }
     
-    bspSystem.addModel(model2);
-    bspSystem.addModel(model1);
-    
+    //autoLoadModels();
     buildBSP();
     
     srand(time(nullptr));
@@ -162,10 +162,10 @@ void Game::init()
     
     std::cout << "=== BSP SETUP ===" << '\n';
     std::cout << "Wall (partition) at X=0" << '\n';
-    std::cout << "Tank starts at X=" << model2->transform.position.x << '\n';
+    //std::cout << "Tank starts at X=" << model2->transform.position.x << '\n';
     std::cout << "Use IJKL keys to move chicken across the wall" << '\n';
-    rotationEuler = {90.0f, 0.0f, 90.0f};
-    model1->transform.setRotation(rotationEuler);
+    //rotationEuler = {90.0f, 0.0f, 90.0f};
+    //model1->transform.setRotation(rotationEuler);
 }
 
 
@@ -173,11 +173,6 @@ void Game::update()
 {
     // Update
     handleTestInputs();
-
-    if (hierarchyTestMode)
-    {
-        testHierarchyTransformations();
-    }
 
     movement(player);
     if (cameraController->getCameraMode() == CameraMode::ThirdPerson)
@@ -229,34 +224,6 @@ void Game::drawObjects()
     Shader::setShaderProgram(shaderProgramSolidColor);
 }
 
-void Game::setupModelHierarchy()
-{
-    if (!model || !model1 || !model2 || !model3)
-        return;
-
-    std::cout << "=== CHECKING LOADED HIERARCHY ===" << '\n';
-    std::cout << "Model has " << model->transform.children.size() << " loaded children" << '\n';
-    std::cout << "Model1 has " << model1->transform.children.size() << " loaded children" << '\n';
-    std::cout << "Model2 has " << model2->transform.children.size() << " loaded children" << '\n';
-    std::cout << "Model3 has " << model3->transform.children.size() << " loaded children" << '\n';
-
-    // Position the models in the scene
-    model->transform.setPosition({0.0f, 0.0f, 0.0f});
-    model1->transform.setPosition({30.0f, 0.0f, 0.0f});
-    model2->transform.setPosition({-30.0f, 0.0f, 0.0f});
-    model3->transform.setPosition({0.0f, 0.0f, 30.0f});
-
-    std::cout << "Hierarchy test will use the loaded node structure from the model files." << '\n';
-}
-
-void Game::testHierarchyTransformations()
-{
-    if (!hierarchyTestMode || !model)
-        return;
-
-    testTimer += gllib::LibTime::getDeltaTime();
-}
-
 
 
 void Game::handleTestInputs()
@@ -278,27 +245,26 @@ void Game::handleTestInputs()
         bKeyWasPressed = false;
     }
 
-    const float speed = 25;
     static float lastReportedX = model2->transform.position.x;
     
     if (Input::getKeyPressed(Key_I))
     {
-        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
+        glm::vec3 forward = {tankSpeed * LibTime::getDeltaTime(), 0, 0.0f};
         model2->transform.setPosition(model2->transform.position + forward);
     }
     if (Input::getKeyPressed(Key_K))
     {
-        glm::vec3 forward = {speed * LibTime::getDeltaTime(), 0, 0.0f};
+        glm::vec3 forward = {tankSpeed * LibTime::getDeltaTime(), 0, 0.0f};
         model2->transform.setPosition(model2->transform.position - forward);
     }
     if (Input::getKeyPressed(Key_J))
     {
-        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
+        glm::vec3 right = {0.0f, 0, tankSpeed * LibTime::getDeltaTime()};
         model2->transform.setPosition(model2->transform.position + right);
     }
     if (Input::getKeyPressed(Key_L))
     {
-        glm::vec3 right = {0.0f, 0, speed * LibTime::getDeltaTime()};
+        glm::vec3 right = {0.0f, 0, tankSpeed * LibTime::getDeltaTime()};
         model2->transform.setPosition(model2->transform.position - right);
     }
     const float rotationSpeed = 90.0f;
@@ -342,8 +308,13 @@ void Game::buildBSP()
 {
     for (Model* mod : Model::getLoadedModels())
     {
-        if (!mod->isFromPlanesFolder()) continue;
-        mod->makeBSPPlane(&bspSystem);
+        bspSystem.addModel(mod);
+        
+        std::vector<BSPPlane> planes = mod->createBSPPlanesFromNodes();
+        for (const BSPPlane& plane : planes)
+        {
+            bspSystem.addPlane(plane);
+        }
     }
     
     bspSystem.buildBSP();
@@ -353,7 +324,7 @@ void Game::movement(Entity* player)
 {
     Transform transform2 = player->getTransform();
     transform2.position.y += 1.f;
-    float speed = 80 * LibTime::getDeltaTime();
+    playerSpeed = 80 * LibTime::getDeltaTime();
 
     if (!Input::isAnyKeyPressed())
     {
@@ -379,7 +350,7 @@ void Game::movement(Entity* player)
 
     if (Input::getKeyPressed(Key_W))
     {
-        moveVector = cameraFront * speed;
+        moveVector = cameraFront * playerSpeed;
         transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
@@ -391,7 +362,7 @@ void Game::movement(Entity* player)
 
     if (Input::getKeyPressed(Key_S))
     {
-        moveVector = -cameraFront * speed;
+        moveVector = -cameraFront * playerSpeed;
         transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
@@ -403,7 +374,7 @@ void Game::movement(Entity* player)
 
     if (Input::getKeyPressed(Key_A))
     {
-        moveVector = -cameraRight * speed;
+        moveVector = -cameraRight * playerSpeed;
         transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
@@ -415,7 +386,7 @@ void Game::movement(Entity* player)
 
     if (Input::getKeyPressed(Key_D))
     {
-        moveVector = cameraRight * speed;
+        moveVector = cameraRight * playerSpeed;
         transform.position += moveVector;
         if (!collisionManager->checkCollision(transform))
         {
@@ -439,6 +410,45 @@ void Game::movement(Entity* player)
     {
         pos += cameraFront * 2.0f;
         playerLight->setPosition(pos);
+    }
+}
+
+
+#include <filesystem>
+
+void Game::autoLoadModels()
+{
+    namespace fs = std::filesystem;
+    std::string modelsPath = "models";
+    
+    if (!fs::exists(modelsPath) || !fs::is_directory(modelsPath))
+    {
+        std::cout << "Models folder not found!" << '\n';
+        return;
+    }
+    
+    for (const auto& entry : fs::recursive_directory_iterator(modelsPath))
+    {
+        if (!entry.is_regular_file())
+            continue;
+        
+        std::string ext = entry.path().extension().string();
+        for (char& c : ext)
+            c = static_cast<char>(std::tolower(c));
+        
+        if (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb")
+        {
+            try
+            {
+                std::string path = entry.path().string();
+                std::cout << "Auto-loading: " << path << '\n';
+                new Model(path, false);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << "Failed to load " << entry.path() << ": " << e.what() << '\n';
+            }
+        }
     }
 }
 

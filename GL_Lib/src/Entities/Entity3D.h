@@ -23,6 +23,6 @@ namespace gllib
         void setMaterial(Material* material);
         
         void makeBSPPlane(BSPSystem* bspSystem);
-        BSPPlane createBSPPlane() const;
+        std::vector<BSPPlane> createBSPPlanes() const;
     };
 }
