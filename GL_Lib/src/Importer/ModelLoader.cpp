@@ -51,7 +51,6 @@ namespace gllib
             parentTransform->addChild(currentTransform);
         }
     
-        // Convert Assimp matrix to glm and extract transform components
         currentTransform->nodeName = std::string(node->mName.C_Str());
         aiMatrix4x4 aiMat = node->mTransformation;
         glm::mat4 mat(

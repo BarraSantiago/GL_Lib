@@ -28,6 +28,20 @@ void Window::swapBuffers() {
 	glfwSwapBuffers(window);
 }
 
+void Window::framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+    
+    // Update projection matrix with new aspect ratio
+    float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    Renderer::setPerspectiveProjectionMatrix(45.0f, aspectRatio, 0.1f, 1000.0f);
+}
+
+void Window::setupResizeCallback()
+{
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+}
+
 GLFWwindow* Window::getReference() {
 	return window;
 }

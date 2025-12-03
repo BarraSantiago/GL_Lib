@@ -455,55 +455,53 @@ namespace gllib
     std::vector<BSPPlane> Model::createBSPPlanesFromNodes()
     {
         std::vector<BSPPlane> planes;
-    
-        std::function<void(Transform*, const std::string&)> searchForPlaneNodes =
-            [&](Transform* t, const std::string& nodeName)
-        {
-            std::string lowerName = nodeName;
-            for (char& c : lowerName)
-                c = static_cast<char>(std::tolower(c));
-    
-            if (lowerName.find("plane") != std::string::npos)
-            {
-                // Find meshes associated with this transform
-                for (const Mesh& mesh : meshes)
-                {
-                    if (mesh.associatedTransform != t) continue;
-    
-                    // Need at least 3 vertices to define a plane
-                    if (mesh.vertices.size() < 3) continue;
-    
-                    glm::mat4 worldMatrix = t->getTransformMatrix();
-    
-                    // Transform first 3 vertices to world space
-                    glm::vec3 p0 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[0].Position, 1.0f));
-                    glm::vec3 p1 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[1].Position, 1.0f));
-                    glm::vec3 p2 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[2].Position, 1.0f));
-    
-                    // Calculate plane normal from cross product
-                    glm::vec3 v1 = p1 - p0;
-                    glm::vec3 v2 = p2 - p0;
-                    glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
-    
-                    // Calculate plane distance
-                    float distance = -glm::dot(normal, p0);
-    
-                    BSPPlane plane;
-                    plane.normal = normal;
-                    plane.distance = distance;
-    
-                    planes.push_back(plane);
-                    break; // Only one plane per node
-                }
-            }
-    
-            for (Transform* child : t->children)
-            {
-                searchForPlaneNodes(child, child->nodeName);
-            }
-        };
-    
-        searchForPlaneNodes(&transform, transform.nodeName);
+        searchForPlaneNodes(&transform, transform.nodeName, planes);
         return planes;
+    }
+    
+    void Model::searchForPlaneNodes(Transform* t, const std::string& nodeName, std::vector<BSPPlane>& planes)
+    {
+        std::string lowerName = nodeName;
+        for (char& c : lowerName)
+            c = static_cast<char>(std::tolower(c));
+    
+        if (lowerName.find("plane") != std::string::npos)
+        {
+            // Find meshes associated with this transform
+            for (const Mesh& mesh : meshes)
+            {
+                if (mesh.associatedTransform != t) continue;
+    
+                // Need at least 3 vertices to define a plane
+                if (mesh.vertices.size() < 3) continue;
+    
+                glm::mat4 worldMatrix = t->getTransformMatrix();
+    
+                // Transform first 3 vertices to world space
+                glm::vec3 p0 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[0].Position, 1.0f));
+                glm::vec3 p1 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[1].Position, 1.0f));
+                glm::vec3 p2 = glm::vec3(worldMatrix * glm::vec4(mesh.vertices[2].Position, 1.0f));
+    
+                // Calculate plane normal from cross product
+                glm::vec3 v1 = p1 - p0;
+                glm::vec3 v2 = p2 - p0;
+                glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
+    
+                // Calculate plane distance
+                float distance = -glm::dot(normal, p0);
+    
+                BSPPlane plane;
+                plane.normal = normal;
+                plane.distance = distance;
+    
+                planes.push_back(plane);
+                break; // Only one plane per node
+            }
+        }
+    
+        for (Transform* child : t->children)
+        {
+            searchForPlaneNodes(child, child->nodeName, planes);
+        }
     }
 }

@@ -8,6 +8,8 @@ namespace gllib {
 	class DLLExport Window {
 	private:
 		GLFWwindow* window;
+		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+
 	public:
 		/// <summary>
 		/// The constructor creates a window and opens it
@@ -26,7 +28,8 @@ namespace gllib {
 		/// Swaps render buffers
 		/// </summary>
 		void swapBuffers();
-
+		void setupResizeCallback();
+		
 		/// <summary>
 		/// Returns the variable window
 		/// </summary>

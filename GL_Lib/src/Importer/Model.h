@@ -51,6 +51,7 @@ namespace gllib
         static const std::list<Model*>& getLoadedModels();
         Material* getMaterialForTransform(Transform* transform);
         std::vector<BSPPlane> createBSPPlanesFromNodes();
+        void searchForPlaneNodes(Transform* t, const std::string& nodeName, std::vector<BSPPlane>& planes);
     };
 
     static std::list<Model*> loadedModels;

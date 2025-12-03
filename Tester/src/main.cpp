@@ -58,7 +58,7 @@ Game::Game()
 
 
     Transform trs2;
-    trs2.position = {0, 0, 0.0f};
+    trs2.position = {0, 100, 0.0f};
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.scale = {5.0f, 5.0f, 5.0f};
     player = new Cube(trs2, new Material(Material::gold()));
@@ -99,7 +99,8 @@ Game::~Game()
 void Game::init()
 {
     cout << "External init!\n";
-
+    
+    window->setupResizeCallback();
     camera->setTarget(player);
     camera->setDistance(150.0f);
     camera->setHeight(2.0f);
@@ -154,6 +155,7 @@ void Game::init()
         model2->setMaterialForTransform(model2->transform.children[2]->children[1], new Material(Material::ruby()));
     }
     
+    model1->transform.setPosition(model1->transform.position -= glm::vec3(0.0f, 40.0f, 0.0f)) ;
     //autoLoadModels();
     buildBSP();
     
