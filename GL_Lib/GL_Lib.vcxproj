@@ -56,7 +56,6 @@
     <ClInclude Include="src\shape.h" />
     <ClInclude Include="src\sprite.h" />
     <ClInclude Include="src\stb_image.h" />
-    <ClInclude Include="src\TileMap\json.hpp" />
     <ClInclude Include="src\TileMap\Tile.h" />
     <ClInclude Include="src\TileMap\TileLayer.h" />
     <ClInclude Include="src\TileMap\TileMap.h" />

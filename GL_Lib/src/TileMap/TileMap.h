@@ -8,7 +8,6 @@
 #include <cmath>
 #include <algorithm>
 
-#include "json.hpp"
 #include "Tileset.h"
 #include "tinyxml2.h"
 #include "../renderer.h"
@@ -47,7 +46,7 @@ namespace gllib
         std::vector<Tileset> tilesets;
         std::vector<TileLayer> layers;
 
-        static TileMap LoadFromTiledJSON(const std::string& jsonPath);
+        static TileMap LoadFromTiledXML(const std::string& tmxPath);
 
         void draw(unsigned int atlasTextureID) const;
 

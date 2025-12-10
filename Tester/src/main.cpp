@@ -38,7 +38,7 @@ Game::Game()
     unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
     tileMapTex = gllib::Loader::loadTexture("tilemapPacck.png", true);
     
-    tileMap = gllib::TileMap::LoadFromTiledJSON("test3.json");
+    tileMap = gllib::TileMap::LoadFromTiledXML("test.tmx");
     
     
     gllib::Transform trs2;
