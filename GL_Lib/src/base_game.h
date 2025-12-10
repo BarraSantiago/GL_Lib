@@ -12,6 +12,7 @@
 #include "sprite.h"
 #include "animation.h"
 #include "shader.h"
+#include "TileMap/TileMap.h"
 
 namespace gllib {
 

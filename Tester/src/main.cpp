@@ -8,16 +8,13 @@ using namespace std;
 
 class Game : public gllib::BaseGame {
 private:
-    gllib::Triangle* triangle;
-    gllib::Sprite* sprite;
-    gllib::Sprite* background;
     gllib::Animation* coin;
     gllib::Animation* player;
     gllib::Rectangle* floorCollision;
     gllib::collisionManager* collisionManager;
+    gllib::TileMap tileMap;
     float animSpeed, nextFrame;
 
-    void moveRectangle(float speed);
     void movement(gllib::Animation* player);
 
 protected:
@@ -26,6 +23,7 @@ protected:
     void update() override;
     void uninit() override;
 
+    unsigned int tileMapTex;
 public:
     Game();
     ~Game() override;
@@ -36,28 +34,21 @@ Game::Game()
     window->setVsyncEnabled(false);
     cout << "Game created!\n";
 
-    gllib::Transform trs;
-    trs.position = { 100.0f, 100.0f, 0.0f };
-    trs.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs.scale = { 57.74f, 50.0f, 0.0f };
-    triangle = new gllib::Triangle(trs, { 0.85f, 0.2f, 0.4f, 1.0f });
+    unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
+    unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
+    tileMapTex = gllib::Loader::loadTexture("tilemapPacck.png", true);
+    
+    tileMap = gllib::TileMap::LoadFromTiledJSON("test3.json");
+    
     
     gllib::Transform trs2;
     trs2.position = { 400.0f, 400.0f, 0.0f };
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
-    sprite = new gllib::Sprite(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     trs2.position = { window->getWidth() * .5f, window->getHeight() * .5f, 0.0f };
     player = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
-
-    gllib::Transform trs3;
-    trs3.position = { window->getWidth() * .5f, window->getHeight() * .5f, 0.0f };
-    trs3.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs3.scale = { 640.0f, 480.0f, 0.0f };
-    background = new gllib::Sprite(trs3, { 1.0f, 1.0f, 1.0f, 1.0f });
-    background->addTexture("background.png", true);
-
+    
     gllib::Transform trs4;
     trs4.position = {window->getWidth() * .5f, window->getHeight() * .95f, 0};
     trs4.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -66,14 +57,10 @@ Game::Game()
 
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
     
-    sprite->addTexture("sus.png", true);
-    sprite->setMirroredX(true);
     int textureWidth = 16;
-    unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
     coin->addFrames(coinTex, textureWidth, 16, 8, 1);
     coin->setCurrentFrame(7);
 
-    unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
     player->addFrame(sonicTex, 273, 118, 33, 41);
     player->addFrame(sonicTex, 305, 118, 33, 41);
     player->addFrame(sonicTex, 340, 118, 35, 41);
@@ -116,18 +103,10 @@ void Game::update() {
     // Update
     movement(player);
 
-    coin->update();
+    //coin->update();
     player->update();
-
-    gllib::Quaternion rot = triangle->getRotationQuat();
-    rot.z += gllib::LibTime::getDeltaTime() * 30.0f;
-    triangle->setRotationQuat(rot);
-
-    moveRectangle(100);
-
+    
     // Draw
-    
-    
     drawObjects();
 }
 
@@ -137,48 +116,17 @@ void Game::drawObjects()
     gllib::Renderer::clear();
 
     gllib::Shader::useShaderProgram(shaderProgramTexture);
-    background->draw();
-    sprite->draw();
-    coin->draw();
+   
+    //coin->draw();
+    tileMap.draw(tileMapTex);
     player->draw();
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
-    triangle->draw();
 }
 
 static int x = 1;
 static int y = 1;
 
-void Game::moveRectangle(float speed) {
-    if (sprite->getPosition().x - (sprite->getScale().x * .5) <= 0) {
-        x = 1;
-        sprite->setMirroredX(true);
-    }
-    if (sprite->getPosition().x + (sprite->getScale().x * .5) >= window->getWidth()) {
-        x = -1;
-        sprite->setMirroredX(false);
-        gllib::Vector3 scale = coin->getScale();
-    }
-
-    if (sprite->getPosition().y - (sprite->getScale().y * .5) <= 0) {
-        y = 1;
-        sprite->setMirroredY(true);
-    }
-    if (sprite->getPosition().y + (sprite->getScale().y * .5) >= window->getHeight()) {
-        y = -1;
-        sprite->setMirroredY(false);
-    }
-    
-    gllib::Vector3 scale = coin->getScale();
-    scale.x += (25.0f * gllib::LibTime::getDeltaTime()) * x;
-    scale.y += (25.0f * gllib::LibTime::getDeltaTime()) * x;
-    coin->setScale(scale);
-
-    sprite->move({static_cast<float>(x * (speed * gllib::LibTime::getDeltaTime())), 
-                  static_cast<float>(y * (speed * gllib::LibTime::getDeltaTime())), 
-                  0.0f});
-    //sprite->rotate({ 0.0f, 0.0f, static_cast<float>(gllib::LibTime::getDeltaTime() * -60.0f) });
-}
 
 void Game::movement(gllib::Animation* player)
 {
@@ -248,9 +196,8 @@ void Game::movement(gllib::Animation* player)
 
 void Game::uninit() {
     cout << "External uninit!!!\n";
-    delete triangle;
-    delete sprite;
     delete coin;
+    delete player;
 }
 
 int main() {

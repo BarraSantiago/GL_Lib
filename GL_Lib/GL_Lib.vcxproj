@@ -34,6 +34,8 @@
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\sprite.cpp" />
+    <ClCompile Include="src\TileMap\TileMap.cpp" />
+    <ClCompile Include="src\TileMap\tinyxml2.cpp" />
     <ClCompile Include="src\triangle.cpp" />
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
@@ -54,6 +56,12 @@
     <ClInclude Include="src\shape.h" />
     <ClInclude Include="src\sprite.h" />
     <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\TileMap\json.hpp" />
+    <ClInclude Include="src\TileMap\Tile.h" />
+    <ClInclude Include="src\TileMap\TileLayer.h" />
+    <ClInclude Include="src\TileMap\TileMap.h" />
+    <ClInclude Include="src\TileMap\Tileset.h" />
+    <ClInclude Include="src\TileMap\tinyxml2.h" />
     <ClInclude Include="src\transform.h" />
     <ClInclude Include="src\triangle.h" />
     <ClInclude Include="src\window.h" />
