@@ -36,9 +36,9 @@ Game::Game()
 
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
     unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
-    tileMapTex = gllib::Loader::loadTexture("tilemapPacck.png", true);
+    tileMapTex = gllib::Loader::loadTexture("free_pixel_16_woods.png", true);
     
-    tileMap = gllib::TileMap::LoadFromTiledXML("test.tmx");
+    tileMap = gllib::TileMap::LoadFromTiledXML("baseMap2.tmx", tileMapTex);
     
     
     gllib::Transform trs2;
@@ -118,7 +118,7 @@ void Game::drawObjects()
     gllib::Shader::useShaderProgram(shaderProgramTexture);
    
     //coin->draw();
-    tileMap.draw(tileMapTex);
+    tileMap.draw();
     player->draw();
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);

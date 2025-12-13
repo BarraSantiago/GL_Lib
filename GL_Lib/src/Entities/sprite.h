@@ -17,15 +17,16 @@ namespace gllib {
 
 	class DLLExport Sprite : public Shape {
 	private:
-		std::vector<Frame> textures;
 		Color color;
-		int currentFrame;
-		int frameCount;
 		bool mirrorX;
 		bool mirrorY;
 
-		void updateRenderData();
 	protected:
+		std::vector<Frame> textures;
+		int currentFrame;
+		int frameCount;
+		
+		void updateRenderData();
 		int getCurrentFrame();
 		int getFrameCount();
 
@@ -47,6 +48,7 @@ namespace gllib {
 		void addTexture(std::string path, bool transparent);
 
 		void addFrame(unsigned int textureID, int offsetX, int offsetY, int width, int height);
+		void addRawFrame(unsigned int textureID, float offsetX, float offsetY, float width, float height);
 
 		virtual void draw() override;
 	};

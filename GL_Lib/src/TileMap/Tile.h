@@ -1,6 +1,6 @@
 #pragma once
-#include "../Core/deps.h"
-using namespace std;
+#include "../Entities/sprite.h"
+
 namespace gllib
 {
     struct DLLExport Vec2
@@ -15,17 +15,18 @@ namespace gllib
         float u1 = 0.f, v1 = 0.f;
     };
     
-    // --------------------
-    // Tile
-    // --------------------
-    struct DLLExport Tile
+    class DLLExport Tile : public Sprite
     {
-        uint32_t gid = 0; // global id en Tiled (ya limpio de flags)
-        int localId = -1; // id dentro del tileset
-        Vec2 worldPos; // posición del tile en mundo
-        UVRect uv; // rect UV
-        bool walkable = true; // por defecto caminable
+        public:
+        uint32_t gid = 0;
+        int localId = -1;
+        bool walkable = true;
 
+        Tile();
+        Tile(uint32_t gid, int localId, Vec2 worldPos, UVRect uv, bool walkable, int tileWidth, int tileHeight, unsigned int textureID);
+        
+        void draw() override;
         bool empty() const { return gid == 0; }
+        void setUVCoords(const UVRect& uv);
     };
 }

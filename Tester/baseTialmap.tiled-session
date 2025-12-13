@@ -1,0 +1,83 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "free_pixel_16_woods.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "baseMap.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 162,
+                "y": 171
+            }
+        },
+        "free_pixel_16_woods.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 3
+        },
+        "spritesheet(2).tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "spritesheet.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 0.5
+        },
+        "test.tmx": {
+            "scale": 0.9965104166666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 480.1756128155542,
+                "y": 320.11707521036953
+            }
+        },
+        "test.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "test3.json": {
+            "scale": 0.9965104166666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 480.1756128155542,
+                "y": 320.11707521036953
+            }
+        }
+    },
+    "last.exportedFilePath": "E:/Image Campus/Image 2025/Cuatrimestre 1/Graficos/GL_Lib/Tester",
+    "last.imagePath": "E:/Image Campus/Image 2025/Cuatrimestre 1/Graficos/GL_Lib/Tester",
+    "map.height": 40,
+    "map.lastUsedExportFilter": "Archivos de mapas de Tiled (*.tmx *.xml)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 40,
+    "openFiles": [
+        "baseMap.tmx",
+        "free_pixel_16_woods.tsx"
+    ],
+    "project": "baseTialmap.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "baseMap.tmx",
+        "free_pixel_16_woods.tsx",
+        "spritesheet(2).tsx",
+        "spritesheet.tsx",
+        "test3.json",
+        "test.tsx",
+        "test.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

@@ -175,6 +175,28 @@ void Sprite::addFrame(unsigned int textureID, int offsetX, int offsetY, int widt
     updateRenderData();
 }
 
+void Sprite::addRawFrame(unsigned int textureID, float offsetX, float offsetY, float width, float height) {
+    Frame tex;
+    tex.textureID = textureID;
+    if (tex.textureID == 0) return;
+    int textureWidth = 0, textureHeight = 0;
+    Renderer::getTextureSize(tex.textureID, &textureWidth, &textureHeight);
+    //float uMin = static_cast<float>( * textureWidth)/ textureWidth;
+    //float vMin = static_cast<float>( * textureHeight)/ textureHeight;
+    //float uMax = static_cast<float>( * textureWidth )/ textureWidth;
+    //float vMax = static_cast<float>( * textureHeight )/ textureHeight;
+
+    tex.uvCoords[0] = { width, height };
+    tex.uvCoords[1] = { width, offsetY };
+    tex.uvCoords[2] = { offsetX, offsetY };
+    tex.uvCoords[3] = { offsetX, height };
+
+    textures.push_back(tex);
+    currentFrame = textures.size() - 1;
+    frameCount = currentFrame;
+    updateRenderData();
+}
+
 void Sprite::draw() {
     if (!textures.empty()) {
         Renderer::bindTexture(textures[currentFrame].textureID);

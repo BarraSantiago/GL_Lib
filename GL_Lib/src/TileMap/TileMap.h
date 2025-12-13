@@ -46,9 +46,9 @@ namespace gllib
         std::vector<Tileset> tilesets;
         std::vector<TileLayer> layers;
 
-        static TileMap LoadFromTiledXML(const std::string& tmxPath);
+        static TileMap LoadFromTiledXML(const std::string& tmxPath, unsigned int atlasTextureID);
 
-        void draw(unsigned int atlasTextureID) const;
+        void draw() const;
 
         bool checkCollisionAABB(float x, float y, float w, float h) const;
 

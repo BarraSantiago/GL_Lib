@@ -1175,6 +1175,7 @@
       <AdditionalIncludeDirectories>E:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glm;E:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\lib\glfw-3.4.bin.WIN64\include;E:\Image Campus\Image 2025\Cuatrimestre 1\Graficos\GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\TileMap\Tile.cpp" />
     <ClCompile Include="src\TileMap\TileMap.cpp" />
     <ClCompile Include="src\TileMap\tinyxml2.cpp" />
     <ClCompile Include="src\Window\window.cpp">
