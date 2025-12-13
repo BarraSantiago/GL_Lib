@@ -58,6 +58,5 @@ namespace gllib
         static uint32_t ClearGidFlags(uint32_t gid);
     };
 
-    // Utilidad simple para leer archivo a string
     std::string ReadTextFile(const std::string& path);
 }

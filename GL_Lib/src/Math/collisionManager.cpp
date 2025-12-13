@@ -2,7 +2,8 @@
 
 namespace gllib
 {
-    collisionManager::collisionManager(const std::vector<Entity*>& obstacles) : obstacles{obstacles}
+    collisionManager::collisionManager(const std::vector<Entity*>& obstacles, TileMap* tilemap)
+        : obstacles{obstacles}, tilemap{tilemap}
     {
     }
 
@@ -18,18 +19,35 @@ namespace gllib
 
     bool collisionManager::checkCollision(Entity* player)
     {
+        Transform t = player->getTransform();
+        
+        // Check entity obstacles
         for (Entity* obstacle : obstacles)
         {
-            if (obstacle->isColliding(player->getTransform()))
+            if (obstacle->isColliding(t))
             {
                 return true;
             }
         }
+
+        // Check tilemap collision
+        if (tilemap != nullptr)
+        {
+            Vector3 pos = t.position;
+            Vector3 scale = t.scale;
+            
+            if (tilemap->checkCollisionAABB(pos.x, pos.y, scale.x, scale.y))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 
     bool collisionManager::checkCollision(Transform transform)
     {
+        // Check entity obstacles
         for (Entity* obstacle : obstacles)
         {
             if (obstacle->isColliding(transform))
@@ -37,6 +55,19 @@ namespace gllib
                 return true;
             }
         }
+
+        // Check tilemap collision
+        if (tilemap != nullptr)
+        {
+            Vector3 pos = transform.position;
+            Vector3 scale = transform.scale;
+            
+            if (tilemap->checkCollisionAABB(pos.x, pos.y, scale.x, scale.y))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -55,5 +86,10 @@ namespace gllib
                 break;
             }
         }
+    }
+
+    void collisionManager::setTileMap(TileMap* tilemap)
+    {
+        this->tilemap = tilemap;
     }
 }

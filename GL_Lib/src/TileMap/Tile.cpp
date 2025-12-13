@@ -21,7 +21,6 @@ namespace gllib
     
         if (textureID != 0)
         {
-            // Convert normalized UV back to pixel coordinates
             int textureWidth = 0, textureHeight = 0;
             Renderer::getTextureSize(textureID, &textureWidth, &textureHeight);
             
@@ -36,11 +35,5 @@ namespace gllib
     {
         updateRenderData();
         Sprite::draw();
-    }
-
-    void Tile::setUVCoords(const UVRect& uv)
-    {
-        // Update the sprite's texture coordinates manually
-        // This requires exposing the texture frame data or rebuilding with custom UV
     }
 }

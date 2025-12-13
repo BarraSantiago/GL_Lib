@@ -40,7 +40,6 @@ Game::Game()
     
     tileMap = gllib::TileMap::LoadFromTiledXML("baseMap2.tmx", tileMapTex);
     
-    
     gllib::Transform trs2;
     trs2.position = { 400.0f, 400.0f, 0.0f };
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -55,7 +54,7 @@ Game::Game()
     trs4.scale = {static_cast<float>(window->getWidth()), 80, 0};
     floorCollision = new gllib::Rectangle(trs4, {0.8f, 0.0f, 1.0f, 0.5f});
 
-    collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)});
+    collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)}, &tileMap);
     
     int textureWidth = 16;
     coin->addFrames(coinTex, textureWidth, 16, 8, 1);
@@ -88,14 +87,14 @@ Game::Game()
 }
 
 Game::~Game() {
-    cout << "Game destroyed!\n";
+    cout << "Game destroyed\n";
 }
 
 void Game::init() {
-    cout << "External init!!!!\n";
+    cout << "External init\n";
 
     srand(time(nullptr));
-    window->setTitle("Example game lmao");
+    window->setTitle("Tilemap");
 }
 
 

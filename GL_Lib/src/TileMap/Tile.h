@@ -27,6 +27,5 @@ namespace gllib
         
         void draw() override;
         bool empty() const { return gid == 0; }
-        void setUVCoords(const UVRect& uv);
     };
 }
