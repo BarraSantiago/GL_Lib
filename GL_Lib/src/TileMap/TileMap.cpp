@@ -8,9 +8,6 @@ using namespace tinyxml2;
 
 namespace gllib
 {
-    // --------------------
-    // File utils
-    // --------------------
     std::string ReadTextFile(const std::string& path)
     {
         std::ifstream f(path);
@@ -20,9 +17,7 @@ namespace gllib
         return ss.str();
     }
 
-    // --------------------
-    // Tileset::LoadTSX
-    // --------------------
+
     Tileset Tileset::LoadTSX(const std::string& tsxPath, int firstGidIn)
     {
         XMLDocument doc;
@@ -34,21 +29,21 @@ namespace gllib
         XMLElement* tilesetElem = doc.FirstChildElement("tileset");
         if (!tilesetElem) throw std::runtime_error("ERROR. TSX sin <tileset> válido.");
 
-        Tileset ts;
-        ts.firstGid = firstGidIn;
+        Tileset tileset;
+        tileset.firstGid = firstGidIn;
 
-        tilesetElem->QueryIntAttribute("tilewidth", &ts.tileWidth);
-        tilesetElem->QueryIntAttribute("tileheight", &ts.tileHeight);
-        tilesetElem->QueryIntAttribute("columns", &ts.columns);
-        tilesetElem->QueryIntAttribute("tilecount", &ts.tileCount);
+        tilesetElem->QueryIntAttribute("tilewidth", &tileset.tileWidth);
+        tilesetElem->QueryIntAttribute("tileheight", &tileset.tileHeight);
+        tilesetElem->QueryIntAttribute("columns", &tileset.columns);
+        tilesetElem->QueryIntAttribute("tilecount", &tileset.tileCount);
 
         XMLElement* imageElem = tilesetElem->FirstChildElement("image");
         if (!imageElem) throw std::runtime_error("TSX without <image>.");
         const char* src = imageElem->Attribute("source");
-        ts.imageSource = src ? src : "";
+        tileset.imageSource = src ? src : "";
 
-        imageElem->QueryIntAttribute("width", &ts.imageWidth);
-        imageElem->QueryIntAttribute("height", &ts.imageHeight);
+        imageElem->QueryIntAttribute("width", &tileset.imageWidth);
+        imageElem->QueryIntAttribute("height", &tileset.imageHeight);
 
         // tile properties
         for (XMLElement* tileElem = tilesetElem->FirstChildElement("tile");
@@ -80,46 +75,36 @@ namespace gllib
                         std::transform(s.begin(), s.end(), s.begin(), ::tolower);
                         walk = !(s == "false" || s == "0");
                     }
-                    ts.walkableOverride[id] = walk;
+                    tileset.walkableOverride[id] = walk;
                 }
             }
         }
 
-        return ts;
+        return tileset;
     }
-
-    // --------------------
-    // Tilemap helpers
-    // --------------------
-    // Flags típicos de Tiled en GID (flip horizontal/vertical/diagonal).
+    
     uint32_t TileMap::ClearGidFlags(uint32_t gid)
     {
-        // 0xE0000000 son los 3 bits altos usados para flips.
         return gid & 0x1FFFFFFF;
     }
 
     const Tileset* TileMap::findTilesetForGid(uint32_t gid) const
     {
         if (gid == 0) return nullptr;
-
-        // Tiled define firstgid por tileset, ordenados por firstgid.
-        // El tileset correcto es el de mayor firstgid <= gid.
-        const Tileset* best = nullptr;
+        
+        const Tileset* tileSet = nullptr;
         for (const Tileset& ts : tilesets)
         {
             if (gid >= static_cast<uint32_t>(ts.firstGid))
             {
-                if (!best || ts.firstGid > best->firstGid)
-                    best = &ts;
+                if (!tileSet || ts.firstGid > tileSet->firstGid)
+                    tileSet = &ts;
             }
         }
-        if (best && best->containsGid(gid)) return best;
+        if (tileSet && tileSet->containsGid(gid)) return tileSet;
         return nullptr;
     }
-
-    // --------------------
-    // TileMap::LoadFromTiledXML
-    // --------------------
+    
     TileMap TileMap::LoadFromTiledXML(const std::string& tmxPath, unsigned int atlasTextureID)
     {
         XMLDocument doc;
@@ -141,7 +126,7 @@ namespace gllib
         if (map.width <= 0 || map.height <= 0 || map.tileWidth <= 0 || map.tileHeight <= 0)
             throw std::runtime_error("Invalid map (dimensions).");
 
-        // ---- tilesets ----
+        // tilesets
         size_t lastSlash = tmxPath.find_last_of("/\\");
         std::string baseDir = (lastSlash == std::string::npos) ? "" : tmxPath.substr(0, lastSlash + 1);
 
@@ -163,7 +148,7 @@ namespace gllib
         std::sort(map.tilesets.begin(), map.tilesets.end(),
                   [](const Tileset& a, const Tileset& b) { return a.firstGid < b.firstGid; });
 
-        // ---- layers ----
+        // layers
         for (XMLElement* layerElem = mapElem->FirstChildElement("layer");
              layerElem;
              layerElem = layerElem->NextSiblingElement("layer"))
@@ -201,7 +186,6 @@ namespace gllib
             std::string token;
             while (std::getline(ss, token, ','))
             {
-                // Trim whitespace
                 token.erase(0, token.find_first_not_of(" \t\n\r"));
                 token.erase(token.find_last_not_of(" \t\n\r") + 1);
 
@@ -213,17 +197,17 @@ namespace gllib
                 throw std::runtime_error("Data size doesn't match width*height.");
 
             layer.tiles.resize(layer.height);
-            for (int r = 0; r < layer.height; ++r)
+            for (int row = 0; row < layer.height; ++row)
             {
-                layer.tiles[r].resize(layer.width);
+                layer.tiles[row].resize(layer.width);
             }
 
             // Build tiles
-            for (int r = 0; r < layer.height; ++r)
+            for (int row = 0; row < layer.height; ++row)
             {
-                for (int c = 0; c < layer.width; ++c)
+                for (int col = 0; col < layer.width; ++col)
                 {
-                    int idx = r * layer.width + c;
+                    int idx = row * layer.width + col;
                     uint32_t rawGid = gids[idx];
                     uint32_t gid = ClearGidFlags(rawGid);
             
@@ -234,17 +218,17 @@ namespace gllib
                             throw std::runtime_error("Tileset not found for gid=" + std::to_string(gid));
             
                         Tile t(gid, ts->toLocalId(gid),
-                               {static_cast<float>(c * map.tileWidth), static_cast<float>(r * map.tileHeight)},
+                               {static_cast<float>(col * map.tileWidth), static_cast<float>(row * map.tileHeight)},
                                ts->uvForLocalId(ts->toLocalId(gid)),
                                ts->isWalkable(ts->toLocalId(gid)),
                                map.tileWidth, map.tileHeight,
                                atlasTextureID);
             
-                        layer.tiles[r][c] = t;
+                        layer.tiles[row][col] = t;
                     }
                     else
                     {
-                        layer.tiles[r][c] = Tile(); // Empty tile
+                        layer.tiles[row][col] = Tile();
                     }
                 }
             }
@@ -254,10 +238,7 @@ namespace gllib
 
         return map;
     }
-
-    // --------------------
-    // TileMap::draw
-    // --------------------
+    
     void TileMap::draw() const
     {
         for (const TileLayer& layer : layers)
@@ -277,10 +258,7 @@ namespace gllib
             }
         }
     }
-
-    // --------------------
-    // TileMap::checkCollisionAABB
-    // --------------------
+    
     bool TileMap::checkCollisionAABB(float x, float y, float w, float h) const
     {
         Rect obj{x, y, w, h};
@@ -300,11 +278,11 @@ namespace gllib
 
         for (const TileLayer& layer : layers)
         {
-            for (int r = minRow; r <= maxRow; ++r)
+            for (int row = minRow; row <= maxRow; ++row)
             {
-                for (int c = minCol; c <= maxCol; ++c)
+                for (int col = minCol; col <= maxCol; ++col)
                 {
-                    const Tile& t = layer.tiles[r][c];
+                    const Tile& t = layer.tiles[row][col];
                     if (t.empty()) continue;
                     if (t.walkable) continue;
 

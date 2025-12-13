@@ -1,5 +1,7 @@
 ﻿#include "entity.h"
 
+#include <vector>
+
 #include "../Math/myMaths.h"
 
 namespace gllib
@@ -119,10 +121,16 @@ namespace gllib
 
     bool Entity::isColliding(float x, float y, float width, float height) const
     {
-        if (transform.position.x + transform.scale.x >= x &&		
-            transform.position.x <= x + width &&    
-            transform.position.y + transform.scale.y >= y &&			
-            transform.position.y <= y + height) {    
+        float xOffset = 0.5f * transform.scale.x;
+        float yOffset = 0.5f * transform.scale.y;
+    
+        float thisAdjustedX = transform.position.x - xOffset;
+        float thisAdjustedY = transform.position.y - yOffset;
+    
+        if (thisAdjustedX + transform.scale.x >= x &&
+            thisAdjustedX <= x + width &&
+            thisAdjustedY + transform.scale.y >= y &&
+            thisAdjustedY <= y + height) {
             return true;
         }
         return false;

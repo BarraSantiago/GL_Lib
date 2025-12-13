@@ -46,6 +46,7 @@ Game::Game()
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     trs2.position = { window->getWidth() * .5f, window->getHeight() * .5f, 0.0f };
+    trs2.scale = { 25.0f, 25.0f, 0.0f };
     player = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     
     gllib::Transform trs4;
@@ -123,9 +124,6 @@ void Game::drawObjects()
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
 }
 
-static int x = 1;
-static int y = 1;
-
 
 void Game::movement(gllib::Animation* player)
 {
@@ -133,10 +131,10 @@ void Game::movement(gllib::Animation* player)
     transform2.position.y += 1.f;
     float speed = 80 * gllib::LibTime::getDeltaTime();
     float gravity = 40 * gllib::LibTime::getDeltaTime();
-    if (!collisionManager->checkCollision(transform2))
-    {
-        player->move({0.f, gravity, 0});
-    }
+    //if (!collisionManager->checkCollision(transform2))
+    //{
+    //    player->move({0.f, gravity, 0});
+    //}
 
     if (Input::getKeyReleased(Key_R)) {
         player->setAnimationPaused(true);

@@ -20,11 +20,12 @@ namespace gllib
     bool collisionManager::checkCollision(Entity* player)
     {
         Transform t = player->getTransform();
-        
+        Vector3 pos = t.position;
+        Vector3 scale = t.scale;
         // Check entity obstacles
         for (Entity* obstacle : obstacles)
         {
-            if (obstacle->isColliding(t))
+            if (obstacle->isColliding(pos.x, pos.y, scale.x, scale.y))
             {
                 return true;
             }
@@ -33,8 +34,7 @@ namespace gllib
         // Check tilemap collision
         if (tilemap != nullptr)
         {
-            Vector3 pos = t.position;
-            Vector3 scale = t.scale;
+            
             
             if (tilemap->checkCollisionAABB(pos.x, pos.y, scale.x, scale.y))
             {
