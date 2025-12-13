@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include <vector>
 
-#include "rectangle.h"
-
+#include "../Rendering/renderer.h"
+#include "../Entities/rectangle.h"
 namespace gllib
 {
     class DLLExport collisionManager

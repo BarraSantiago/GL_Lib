@@ -1,8 +1,8 @@
-#include "base_game.h"
+#include "Core/base_game.h"
 
 #include <iostream>
 
-#include "collisionManager.h"
+#include "Math/collisionManager.h"
 
 using namespace std;
 
