@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "../Core/deps.h"
 #ifdef _WIN32 // Directory is different in linux
-#include "glm.hpp"
+#include "../../../lib/glm/glm.hpp"
 #else
-#include "glm/glm.hpp"
+#include "../../../lib/glm/glm.hpp"
 #endif // _WIN32
 
 namespace gllib
