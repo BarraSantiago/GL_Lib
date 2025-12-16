@@ -6,9 +6,9 @@
 
 using namespace std;
 
+//TODO SEPARATE IN CLASSES, CLEAN UP
 class Game : public gllib::BaseGame {
 private:
-    gllib::Animation* coin;
     gllib::Animation* player;
     gllib::Rectangle* floorCollision;
     gllib::collisionManager* collisionManager;
@@ -34,17 +34,14 @@ Game::Game()
     window->setVsyncEnabled(false);
     cout << "Game created!\n";
 
-    unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
-    unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
     tileMapTex = gllib::Loader::loadTexture("free_pixel_16_woods.png", true);
     unsigned int battleCityTex = gllib::Loader::loadTexture("Battle City Atlas.png", true);
-    tileMap = gllib::TileMap::LoadFromTiledXML("BattleCity.tmx", battleCityTex);
+    unsigned int baseTex = gllib::Loader::loadTexture("free_pixel_16_woods.png", true);
+    tileMap = gllib::TileMap::LoadFromTiledXML("baseMap2.tmx", baseTex);
     
     gllib::Transform trs2;
     trs2.position = { 400.0f, 400.0f, 5.0f };
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
-    trs2.scale = { 100.0f, 100.0f, 0.0f };
-    coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     trs2.position = { window->getWidth() * .5f, window->getHeight() * .5f, 2.5f };
     trs2.scale = { 25.0f, 25.0f, 1.0f };
     player = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -57,35 +54,12 @@ Game::Game()
 
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)}, &tileMap);
     
-    int textureWidth = 16;
-    coin->addFrames(coinTex, textureWidth, 16, 8, 1,0,0);
-    coin->setCurrentFrame(7);
-
-    
     player->addFrames(battleCityTex, 16,16, 2,1,0,0);
     player->setCurrentAnimation(1);
     player->addFrames(battleCityTex, 16,16, 4,1,2,0);
-    //player->addFrame(sonicTex, 273, 118, 33, 41);
-    //player->addFrame(sonicTex, 305, 118, 33, 41);
-    //player->addFrame(sonicTex, 340, 118, 35, 41);
-    //player->addFrame(sonicTex, 379, 118, 38, 41);
-    //player->addFrame(sonicTex, 418, 118, 36, 41);
-    //player->addFrame(sonicTex, 456, 118, 32, 41);
-    //player->addFrame(sonicTex, 488, 118, 32, 41);
-    //player->addFrame(sonicTex, 522, 118, 32, 41);
-    //player->addFrame(sonicTex, 558, 118, 34, 41);
-    //player->addFrame(sonicTex, 595, 118, 37, 41);
-    //player->addFrame(sonicTex, 636, 118, 34, 41);
-    //player->addFrame(sonicTex, 673, 118, 32, 41);
-
-    //player->addFramesFromAtlas(sonicTex, 277, 118, 35, 40, 12, 1);
 
     player->setCurrentFrame(0);
     player->setDurationInSecs(1.f);
-    
-    coin->setCurrentFrame(0);
-
-    coin->setDurationInSecs(.6);
 
     animSpeed = .075f;
     nextFrame = 0;
@@ -107,7 +81,6 @@ void Game::update() {
     // Update
     movement(player);
 
-    //coin->update();
     player->update();
     
     // Draw
@@ -121,14 +94,13 @@ void Game::drawObjects()
 
     gllib::Shader::useShaderProgram(shaderProgramTexture);
    
-    //coin->draw();
     tileMap.draw();
     player->draw();
 
     gllib::Shader::useShaderProgram(shaderProgramSolidColor);
 }
 
-
+// TODO MOVE THE ACTUAL PLAYER, NOT USE A TRANSFORM COPY
 void Game::movement(gllib::Animation* player)
 {
     float speed = 80 * gllib::LibTime::getDeltaTime();
@@ -197,7 +169,6 @@ void Game::movement(gllib::Animation* player)
 
 void Game::uninit() {
     cout << "External uninit!!!\n";
-    delete coin;
     delete player;
 }
 

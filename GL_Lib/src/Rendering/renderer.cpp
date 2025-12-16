@@ -24,6 +24,7 @@ void Renderer::setUpVertexAttributes() {
     glEnableVertexAttribArray(2);
 }
 
+// TODO MOVE TO SPRITE
 void Renderer::setUpMVP() {
     // TRS
     // the mpv matrix is calculated multiplying p*v*m

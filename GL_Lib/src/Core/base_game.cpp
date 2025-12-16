@@ -32,7 +32,8 @@ BaseGame::~BaseGame() {
 }
 
 // Private
-
+// TODO CHANGE SHADER INIT TO SHADER
+// TODO ADD MORE SHADERS
 bool BaseGame::initInternal() {
 	// Check if the PC has a working OpenGL driver
 	cout << glGetString(GL_VERSION) << "\n";
@@ -49,9 +50,7 @@ bool BaseGame::initInternal() {
 	Shader::useShaderProgram(shaderProgramSolidColor);
 
 	init();
-	updateInternal();
-	Shader::destroyShader(shaderProgramSolidColor);
-	Shader::destroyShader(shaderProgramTexture);
+	
 	return true;
 }
 
@@ -69,12 +68,17 @@ void BaseGame::updateInternal() {
 }
 
 void BaseGame::uninitInternal() {
+	Shader::destroyShader(shaderProgramSolidColor);
+	Shader::destroyShader(shaderProgramTexture);
 	uninit();
 }
 
 // Public
 
 void BaseGame::start() {
-	initInternal();
+	if(initInternal())
+	{
+		updateInternal();
+	}
 	uninitInternal();
 }

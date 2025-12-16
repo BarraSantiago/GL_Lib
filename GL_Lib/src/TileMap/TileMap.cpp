@@ -261,7 +261,8 @@ namespace gllib
             }
         }
     }
-    
+
+    // TODO USE COLLISION MANAGER AABB
     bool TileMap::checkCollisionAABB(float x, float y, float w, float h) const
     {
         Rect obj{x, y, w, h};

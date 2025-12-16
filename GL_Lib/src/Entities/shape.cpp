@@ -64,6 +64,8 @@ void Shape::setRenderData(const float vertexData[], int vertexDataSize, const in
     renderData = Renderer::createRenderData(vertexData, vertexDataSize, index, indexSize);
 }
 
+// TODO DO TRS AFTER MODIFYING ANY OF THE TRS COMPONENTS
+// TODO MAKE IT HAVE A REFERENCE TO THE SHADER, AND APPLY IT USES
 void Shape::internalDraw() {
     glm::mat4 trs = glm::mat4(1.0f);
 

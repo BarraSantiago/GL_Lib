@@ -23,6 +23,8 @@ Triangle::~Triangle() {
     cout << "Destroyed triangle.\n";
 }
 
+
+//TODO REMOVE UV
 void Triangle::updateRenderData(Color color) {
     // Values for the vertices
     float triangleVertexData[] = {

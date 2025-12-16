@@ -7,6 +7,7 @@
 
 namespace gllib
 {
+    // TODO REMOVE SPRITE INHERITANCE
     class DLLExport Animation : public Sprite {
     private:
         double durationInSecs;
