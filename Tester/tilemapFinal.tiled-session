@@ -3,10 +3,23 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "BattleCity.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
+        "Battle City Atlas.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 2
+        },
+        "BattleCity.tmx": {
+            "scale": 11,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 392.9090909090909,
+                "y": 405.5
+            }
+        }
     },
     "last.imagePath": "C:/Users/Aula 2/Documents/GitHub/GL_Lib/Tester",
     "map.height": 40,
@@ -15,10 +28,14 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
+        "BattleCity.tmx",
+        "Battle City Atlas.tsx"
     ],
     "project": "tilemapFinal.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "Battle City Atlas.tsx",
+        "BattleCity.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
