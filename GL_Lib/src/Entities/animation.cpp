@@ -47,11 +47,11 @@ namespace gllib
         }
     }
 
-    void Animation::addFrames(unsigned int textureID, int frameWidth, int frameHeight, int columns, int rows)
+    void Animation::addFrames(unsigned int textureID, int frameWidth, int frameHeight, int columns, int rows, int columnsOffset, int rowsOffset)
     {
-        for (int y = 0; y < rows; ++y)
+        for (int y = rowsOffset; y < rows; ++y)
         {
-            for (int x = 0; x < columns; ++x)
+            for (int x = columnsOffset; x < columns; ++x)
             {
                 int offsetX = x * frameWidth;
                 int offsetY = y * frameHeight;

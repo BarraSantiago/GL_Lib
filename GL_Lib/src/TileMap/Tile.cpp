@@ -9,9 +9,9 @@ namespace gllib
         walkable = true;
     }
 
-    Tile::Tile(uint32_t gid, int localId, Vec2 worldPos, UVRect uv, bool walkable,
+    Tile::Tile(uint32_t gid, int localId, Vector3 worldPos, UVRect uv, bool walkable,
                int tileWidth, int tileHeight, unsigned int textureID)
-        : Sprite({Vector3(worldPos.x, worldPos.y, 0.0f),
+        : Sprite({Vector3(worldPos.x, worldPos.y, worldPos.z),
                   Vector3(static_cast<float>(tileWidth), static_cast<float>(tileHeight), 1.0f)},
                  {1.0f, 1.0f, 1.0f, 1.0f})
     {

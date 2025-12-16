@@ -22,14 +22,14 @@ namespace gllib {
 		bool mirrorY;
 
 	protected:
-		std::vector<Frame> textures;
+		std::vector<std::vector<Frame>> textures;
 		int currentFrame;
 		int frameCount;
+		int currentAnimation = 0;
 		
 		void updateRenderData();
 		int getCurrentFrame();
 		int getFrameCount();
-
 	public:
 		Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
 		Sprite(Transform transform, Color color);
@@ -39,6 +39,7 @@ namespace gllib {
 		Color getColor();
 
 		void setColor(Color color);
+		void setCurrentAnimation(int animation);
 		void setCurrentFrame(unsigned int frame);
 		void setCurrentFrameNext();
 		void setMirroredX(bool mirrored);

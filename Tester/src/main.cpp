@@ -37,16 +37,16 @@ Game::Game()
     unsigned int coinTex = gllib::Loader::loadTexture("coin.png", true);
     unsigned int sonicTex = gllib::Loader::loadTexture("Sonic_Atlas.png", true);
     tileMapTex = gllib::Loader::loadTexture("free_pixel_16_woods.png", true);
-    
-    tileMap = gllib::TileMap::LoadFromTiledXML("baseMap2.tmx", tileMapTex);
+    unsigned int battleCityTex = gllib::Loader::loadTexture("Battle City Atlas.png", true);
+    tileMap = gllib::TileMap::LoadFromTiledXML("BattleCity.tmx", battleCityTex);
     
     gllib::Transform trs2;
-    trs2.position = { 400.0f, 400.0f, 0.0f };
+    trs2.position = { 400.0f, 400.0f, 5.0f };
     trs2.rotationQuat = { 0.0f, 0.0f, 0.0f, 0.0f };
     trs2.scale = { 100.0f, 100.0f, 0.0f };
     coin = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
-    trs2.position = { window->getWidth() * .5f, window->getHeight() * .5f, 0.0f };
-    trs2.scale = { 25.0f, 25.0f, 0.0f };
+    trs2.position = { window->getWidth() * .5f, window->getHeight() * .5f, 2.5f };
+    trs2.scale = { 25.0f, 25.0f, 1.0f };
     player = new gllib::Animation(trs2, { 1.0f, 1.0f, 1.0f, 1.0f });
     
     gllib::Transform trs4;
@@ -58,21 +58,25 @@ Game::Game()
     collisionManager = new gllib::collisionManager({static_cast<gllib::Entity*>(floorCollision)}, &tileMap);
     
     int textureWidth = 16;
-    coin->addFrames(coinTex, textureWidth, 16, 8, 1);
+    coin->addFrames(coinTex, textureWidth, 16, 8, 1,0,0);
     coin->setCurrentFrame(7);
 
-    player->addFrame(sonicTex, 273, 118, 33, 41);
-    player->addFrame(sonicTex, 305, 118, 33, 41);
-    player->addFrame(sonicTex, 340, 118, 35, 41);
-    player->addFrame(sonicTex, 379, 118, 38, 41);
-    player->addFrame(sonicTex, 418, 118, 36, 41);
-    player->addFrame(sonicTex, 456, 118, 32, 41);
-    player->addFrame(sonicTex, 488, 118, 32, 41);
-    player->addFrame(sonicTex, 522, 118, 32, 41);
-    player->addFrame(sonicTex, 558, 118, 34, 41);
-    player->addFrame(sonicTex, 595, 118, 37, 41);
-    player->addFrame(sonicTex, 636, 118, 34, 41);
-    player->addFrame(sonicTex, 673, 118, 32, 41);
+    
+    player->addFrames(battleCityTex, 16,16, 2,1,0,0);
+    player->setCurrentAnimation(1);
+    player->addFrames(battleCityTex, 16,16, 4,1,2,0);
+    //player->addFrame(sonicTex, 273, 118, 33, 41);
+    //player->addFrame(sonicTex, 305, 118, 33, 41);
+    //player->addFrame(sonicTex, 340, 118, 35, 41);
+    //player->addFrame(sonicTex, 379, 118, 38, 41);
+    //player->addFrame(sonicTex, 418, 118, 36, 41);
+    //player->addFrame(sonicTex, 456, 118, 32, 41);
+    //player->addFrame(sonicTex, 488, 118, 32, 41);
+    //player->addFrame(sonicTex, 522, 118, 32, 41);
+    //player->addFrame(sonicTex, 558, 118, 34, 41);
+    //player->addFrame(sonicTex, 595, 118, 37, 41);
+    //player->addFrame(sonicTex, 636, 118, 34, 41);
+    //player->addFrame(sonicTex, 673, 118, 32, 41);
 
     //player->addFramesFromAtlas(sonicTex, 277, 118, 35, 40, 12, 1);
 
@@ -127,14 +131,7 @@ void Game::drawObjects()
 
 void Game::movement(gllib::Animation* player)
 {
-    gllib::Transform transform2 = player->getTransform();
-    transform2.position.y += 1.f;
     float speed = 80 * gllib::LibTime::getDeltaTime();
-    float gravity = 40 * gllib::LibTime::getDeltaTime();
-    //if (!collisionManager->checkCollision(transform2))
-    //{
-    //    player->move({0.f, gravity, 0});
-    //}
 
     if (Input::getKeyReleased(Key_R)) {
         player->setAnimationPaused(true);
@@ -152,7 +149,9 @@ void Game::movement(gllib::Animation* player)
     {
         // D
         transform.position.x += 2.0f;
-        player->setMirroredX(false);
+        player->setMirroredX(true);
+        player->setCurrentAnimation(1);
+        player->setRotationEuler({0,180,0});
         if (!collisionManager->checkCollision(transform))
         {
             player->move({speed, 0.f, 0.f});
@@ -163,7 +162,8 @@ void Game::movement(gllib::Animation* player)
     {
         // A
         transform.position.x -= 2.0f;
-        player->setMirroredX(true);
+        player->setCurrentAnimation(1);
+        player->setMirroredX(false);
         if (!collisionManager->checkCollision(transform))
         {
             player->move({-speed, 0.f, 0.f});
@@ -174,6 +174,8 @@ void Game::movement(gllib::Animation* player)
     {
         // W
         transform.position.y -= 2.0f;
+        player->setCurrentAnimation(0);
+        player->setMirroredY(false);
         if (!collisionManager->checkCollision(transform))
         {
             player->move({0.f, -speed, 0.f});
@@ -183,6 +185,8 @@ void Game::movement(gllib::Animation* player)
     if (Input::getKeyPressed(Key_S))
     {
         // S
+        player->setMirroredY(true);
+        player->setCurrentAnimation(0);
         transform.position.y += 2.0f;
         if (!collisionManager->checkCollision(transform))
         {

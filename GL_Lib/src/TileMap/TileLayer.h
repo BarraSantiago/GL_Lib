@@ -15,6 +15,7 @@ namespace gllib
         std::string name;
         int width = 0;
         int height = 0;
+        int z = 0;
         bool visible = true;
 
         // tiles[row][col]

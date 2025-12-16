@@ -148,11 +148,13 @@ namespace gllib
         std::sort(map.tilesets.begin(), map.tilesets.end(),
                   [](const Tileset& a, const Tileset& b) { return a.firstGid < b.firstGid; });
 
+        int layerCount = 0;
         // layers
         for (XMLElement* layerElem = mapElem->FirstChildElement("layer");
              layerElem;
              layerElem = layerElem->NextSiblingElement("layer"))
         {
+            layerCount++;
             TileLayer layer;
 
             const char* name = layerElem->Attribute("name");
@@ -160,6 +162,7 @@ namespace gllib
 
             layerElem->QueryIntAttribute("width", &layer.width);
             layerElem->QueryIntAttribute("height", &layer.height);
+            layerElem->QueryIntAttribute("Z", &layer.z);
 
             int visible = 1;
             layerElem->QueryIntAttribute("visible", &visible);
@@ -218,7 +221,7 @@ namespace gllib
                             throw std::runtime_error("Tileset not found for gid=" + std::to_string(gid));
             
                         Tile t(gid, ts->toLocalId(gid),
-                               {static_cast<float>(col * map.tileWidth), static_cast<float>(row * map.tileHeight)},
+                               {static_cast<float>(col * map.tileWidth), static_cast<float>(row * map.tileHeight), static_cast<float>(layerCount)},
                                ts->uvForLocalId(ts->toLocalId(gid)),
                                ts->isWalkable(ts->toLocalId(gid)),
                                map.tileWidth, map.tileHeight,

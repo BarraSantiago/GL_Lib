@@ -82,6 +82,9 @@ RenderData Renderer::createRenderData(const float vertexData[], GLsizei vertexDa
 
     //cout << "Render data created! VAO: " << rData.VAO << ", VBO: " << rData.VBO << ", EBO: " << rData.EBO << ".\n";
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    
     // Unbinding after finishing simply for the sake of better binding understanding.
     glBindVertexArray(0);
     return rData;
@@ -129,9 +132,9 @@ void Renderer::setModelMatrix(glm::mat4 newModelMatrix) {
 }
 
 void Renderer::setOrthoProjectionMatrix(float width, float height) {
-    projMatrix = glm::ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
+    projMatrix = glm::ortho(0.0f, width, height, 0.0f, -100.0f, 100.0f);
 }
 
 void Renderer::clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

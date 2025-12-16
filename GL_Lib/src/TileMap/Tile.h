@@ -23,7 +23,7 @@ namespace gllib
         bool walkable = true;
 
         Tile();
-        Tile(uint32_t gid, int localId, Vec2 worldPos, UVRect uv, bool walkable, int tileWidth, int tileHeight, unsigned int textureID);
+        Tile(uint32_t gid, int localId, Vector3 worldPos, UVRect uv, bool walkable, int tileWidth, int tileHeight, unsigned int textureID);
         
         void draw() override;
         bool empty() const { return gid == 0; }

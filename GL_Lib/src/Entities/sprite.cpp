@@ -11,6 +11,8 @@ Sprite::Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color
     mirrorY = false;
     currentFrame = 0;
     frameCount = 0;
+    textures.resize(2);
+
     updateRenderData();
     cout << "Created sprite.\n";
 }
@@ -22,6 +24,8 @@ Sprite::Sprite(Transform transform, Color color) :
     mirrorY = false;
     currentFrame = 0;
     frameCount = 0;
+    textures.resize(2);
+
     updateRenderData();
     cout << "Created sprite.\n";
 }
@@ -35,6 +39,8 @@ Sprite::Sprite(Sprite const& other) :
     mirrorX(other.mirrorX),
     mirrorY(other.mirrorY)
 {
+    textures.resize(2);
+
     updateRenderData();
     cout << "Created sprite.\n";
 }
@@ -45,18 +51,26 @@ Sprite::~Sprite() {
 
 // Private
 
+void Sprite::setCurrentAnimation(int animation)
+{
+    currentAnimation = animation;
+}
+
 void Sprite::updateRenderData() {
     float uMin = 0.0f;
     float vMin = 0.0f;
     float uMax = 1.0f;
     float vMax = 1.0f;
 
-    if (!textures.empty()) {
-        uMin = textures[currentFrame].uvCoords[2].u;
-        vMin = textures[currentFrame].uvCoords[2].v;
-        uMax = textures[currentFrame].uvCoords[0].u;
-        vMax = textures[currentFrame].uvCoords[0].v;
-    }
+    if (!textures.empty() && 
+        currentAnimation < textures.size() && 
+        !textures[currentAnimation].empty() && 
+        currentFrame < textures[currentAnimation].size()) {
+        uMin = textures[currentAnimation][currentFrame].uvCoords[2].u;
+        vMin = textures[currentAnimation][currentFrame].uvCoords[2].v;
+        uMax = textures[currentAnimation][currentFrame].uvCoords[0].u;
+        vMax = textures[currentAnimation][currentFrame].uvCoords[0].v;
+        }
 
     // Check for mirroring 
     if (mirrorX) { 
@@ -141,9 +155,10 @@ void Sprite::addTexture(unsigned int textureID) {
     tex.uvCoords[1] = { 1.0f, 0.0f };
     tex.uvCoords[2] = { 0.0f, 0.0f };
     tex.uvCoords[3] = { 0.0f, 1.0f };
-    textures.push_back(tex);
+    textures[currentAnimation].push_back(tex);
     currentFrame = textures.size() - 1;
     frameCount = currentFrame;
+    currentFrame = 0;
     updateRenderData();
 }
 
@@ -168,10 +183,11 @@ void Sprite::addFrame(unsigned int textureID, int offsetX, int offsetY, int widt
     tex.uvCoords[1] = { uMax, vMin };
     tex.uvCoords[2] = { uMin, vMin };
     tex.uvCoords[3] = { uMin, vMax };
-
-    textures.push_back(tex);
+    
+    textures[currentAnimation].push_back(tex);
     currentFrame = textures.size() - 1;
     frameCount = currentFrame;
+    currentFrame = 0;
     updateRenderData();
 }
 
@@ -191,15 +207,20 @@ void Sprite::addRawFrame(unsigned int textureID, float offsetX, float offsetY, f
     tex.uvCoords[2] = { offsetX, offsetY };
     tex.uvCoords[3] = { offsetX, height };
 
-    textures.push_back(tex);
+    textures[currentAnimation].push_back(tex);
     currentFrame = textures.size() - 1;
     frameCount = currentFrame;
+    currentFrame = 0;
     updateRenderData();
 }
 
 void Sprite::draw() {
-    if (!textures.empty()) {
-        Renderer::bindTexture(textures[currentFrame].textureID);
+    if (!textures.empty() && 
+        currentAnimation < textures.size() && 
+        !textures[currentAnimation].empty() && 
+        currentFrame < textures[currentAnimation].size())
+        {
+        Renderer::bindTexture(textures[currentAnimation][currentFrame].textureID);
     }
     internalDraw();
 }
