@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 //#include "window.h"
-#include "../../../lib/glfw-3.4.bin.WIN64/include/GLFW/glfw3.h"
-#include "../Window/window.h"
+#include "GLFW/glfw3.h"
+#include "Window/window.h"
 
 enum Keys
 {

@@ -2,17 +2,17 @@
 
 #include "core.h"
 #include "Input.h"
-#include "../Window/window.h"
-#include "../Rendering/renderer.h"
+#include "Window/window.h"
+#include "Rendering/renderer.h"
 #include "lib_time.h"
-#include "../Rendering/loader.h"
+#include "Rendering/loader.h"
 
-#include "../Entities/triangle.h"
-#include "../Entities/rectangle.h"
-#include "../Entities/sprite.h"
-#include "../Entities/animation.h"
-#include "../Rendering/shader.h"
-#include "../TileMap/TileMap.h"
+#include "Entities/triangle.h"
+#include "Entities/rectangle.h"
+#include "Entities/sprite.h"
+#include "Entities/animation.h"
+#include "Rendering/shader.h"
+#include "TileMap/TileMap.h"
 
 namespace gllib {
 

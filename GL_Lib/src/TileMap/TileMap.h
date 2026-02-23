@@ -1,5 +1,5 @@
 #pragma once
-#include "../Core/deps.h"
+#include "Core/deps.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -10,7 +10,7 @@
 
 #include "Tileset.h"
 #include "tinyxml2.h"
-#include "../Rendering/renderer.h"
+#include "Rendering/renderer.h"
 namespace gllib
 {
     // --------------------

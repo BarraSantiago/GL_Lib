@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "../Math/myMaths.h"
+#include "Math/myMaths.h"
 
 namespace gllib
 {

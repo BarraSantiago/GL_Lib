@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "../Rendering/renderer.h"
+#include "Rendering/renderer.h"
 
 using namespace gllib;
 using namespace std;

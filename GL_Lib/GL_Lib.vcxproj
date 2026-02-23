@@ -93,7 +93,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -174,7 +174,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -255,7 +255,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -336,7 +336,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -417,7 +417,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -498,7 +498,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -579,7 +579,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -660,7 +660,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -741,7 +741,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -822,7 +822,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -904,7 +904,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -985,7 +985,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -1066,7 +1066,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -1147,7 +1147,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -1228,7 +1228,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -1327,7 +1327,7 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDLL;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\lib\glm;$(SolutionDir)GL_Lib\lib\glfw-3.4.bin.WIN64\include;$(SolutionDir)GL_Lib\GL_Lib\src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDebugDLL</RuntimeLibrary>
@@ -1472,8 +1472,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\src\Core;$(ProjectDir)src;$(ProjectDir)src\Core;$(ProjectDir)src\Importer;$(ProjectDir)src\Rendering;$(ProjectDir)src\Rendering\Camera;$(ProjectDir)src\Rendering\Light;$(ProjectDir)src\Window;$(ProjectDir)src\Math;$(SolutionDir)lib;$(ProjectDir)src;$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_Lib\src\Core;$(ProjectDir)src;$(ProjectDir)src\Core;$(ProjectDir)src\Importer;$(ProjectDir)src\Rendering;$(ProjectDir)src\Rendering\Camera;$(ProjectDir)src\Rendering\Light;$(ProjectDir)src\Window;$(ProjectDir)src\Math;$(ProjectDir)src;$(SolutionDir)lib\glm;$$(SolutionDir)lib;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)GL_Lib\src\Core;$(ProjectDir)src;$(ProjectDir)src\Core;$(ProjectDir)src\Importer;$(ProjectDir)src\Rendering;$(ProjectDir)src\Rendering\Camera;$(ProjectDir)src\Rendering\Light;$(ProjectDir)src\Window;$(ProjectDir)src\Math;$(SolutionDir)lib;$(ProjectDir)src;$(SolutionDir)lib\glm;$(SolutionDir)lib\glfw-3.4.bin.WIN64\include;$(ProjectDir)src\glad\include;%(AdditionalIncludeDirectories)</AdditionalUsingDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

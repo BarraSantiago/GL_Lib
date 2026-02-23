@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include <vector>
 
-#include "../Rendering/renderer.h"
-#include "../Entities/rectangle.h"
-#include "../TileMap/TileMap.h"
+#include "Rendering/renderer.h"
+#include "Entities/rectangle.h"
+#include "TileMap/TileMap.h"
 
 namespace gllib
 {

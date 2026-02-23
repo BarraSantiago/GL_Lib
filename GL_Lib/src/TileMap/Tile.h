@@ -1,5 +1,5 @@
 #pragma once
-#include "../Entities/sprite.h"
+#include "Entities/sprite.h"
 
 namespace gllib
 {

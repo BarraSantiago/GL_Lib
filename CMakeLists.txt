@@ -20,10 +20,4 @@ target_link_libraries(glLib PRIVATE ${OPENGL_LIBRARIES} glfw glm::glm m)
 
 target_include_directories(your_target_name PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/GL_Lib/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/GL_Lib/src/Core
-)
-
-target_include_directories(GL_RenderingLib PRIVATE 
-    ${CMAKE_SOURCE_DIR}/GL_Lib/src/Core
-    ${CMAKE_SOURCE_DIR}/GL_Lib/src
 )

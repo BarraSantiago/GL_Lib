@@ -1,9 +1,9 @@
 #pragma once
-#include "../Core/deps.h"
+#include "Core/deps.h"
 #ifdef _WIN32 // Directory is different in linux
-#include "../../../lib/glm/glm.hpp"
-#include "../../../lib/glm/gtc/matrix_transform.hpp"
-#include "../../../lib/glm/gtc/type_ptr.hpp"
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 #else
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

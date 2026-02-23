@@ -40,8 +40,8 @@ void Rectangle::updateRenderData(Color color) {
     alignVertex(rectangleVertexData, 4, 9);
 
     // Aquire the size of each buffer
-    int vertexDataSize = sizeof(rectangleVertexData) / sizeof(rectangleVertexData[0]);
-    int indexSize = sizeof(rectangleIndex) / sizeof(rectangleIndex[0]);
+    int vertexDataSize = std::size(rectangleVertexData);
+    int indexSize = std::size(rectangleIndex);
 
     // Initialize the render data on shape
     setRenderData(rectangleVertexData, vertexDataSize, rectangleIndex, indexSize);

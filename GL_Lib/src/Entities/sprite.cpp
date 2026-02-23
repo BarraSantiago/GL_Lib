@@ -1,5 +1,5 @@
 #include "sprite.h"
-#include "../Rendering/loader.h"
+#include "Rendering/loader.h"
 
 using namespace gllib;
 using namespace std;

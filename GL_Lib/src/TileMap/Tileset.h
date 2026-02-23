@@ -1,5 +1,5 @@
 #pragma once
-#include "../Core/deps.h"
+#include "Core/deps.h"
 #include "TileLayer.h"
 
 namespace gllib

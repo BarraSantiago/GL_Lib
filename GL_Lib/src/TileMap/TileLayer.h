@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Tile.h"
-#include "../Core/deps.h"
+#include "Core/deps.h"
 
 namespace gllib
 {

@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 
-#include "../Math/transform.h"
+#include "Math/transform.h"
 #include "sprite.h"
 
 namespace gllib
