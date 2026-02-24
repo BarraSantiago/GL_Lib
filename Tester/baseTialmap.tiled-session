@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "free_pixel_16_woods.tsx",
+    "activeFile": "BattleCity.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -11,12 +11,31 @@
         ":/automap-tiles.tsx": {
             "scaleInDock": 1
         },
+        "Battle City Atlas.tsx": {
+            "scaleInDock": 1
+        },
+        "BattleCity.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 246,
+                "y": 388
+            }
+        },
         "baseMap.tmx": {
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 162,
-                "y": 171
+                "x": 480,
+                "y": 480
+            }
+        },
+        "baseMap2.tmx": {
+            "scale": 0.26916666666666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 479.2569659442724,
+                "y": 479.25696594427234
             }
         },
         "free_pixel_16_woods.tsx": {
@@ -62,13 +81,17 @@
     "map.width": 40,
     "openFiles": [
         "baseMap.tmx",
-        "free_pixel_16_woods.tsx"
+        "free_pixel_16_woods.tsx",
+        "baseMap2.tmx",
+        "BattleCity.tmx"
     ],
     "project": "baseTialmap.tiled-project",
     "property.type": "int",
     "recentFiles": [
         "baseMap.tmx",
         "free_pixel_16_woods.tsx",
+        "baseMap2.tmx",
+        "BattleCity.tmx",
         "spritesheet(2).tsx",
         "spritesheet.tsx",
         "test3.json",
