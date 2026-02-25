@@ -14,7 +14,7 @@ Game::Game()
     gllib::Transform trs2;
     trs2.rotationQuat = {0.0f, 0.0f, 0.0f, 0.0f};
     trs2.position = {window->getWidth() * .5f, window->getHeight() * .5f, 2.5f};
-    trs2.scale = {25.0f, 25.0f, 1.0f};
+    trs2.scale = {32.0f, 32.0f, 1.0f};
     player = new gllib::Animation(trs2, {1.0f, 1.0f, 1.0f, 1.0f});
     
     collisionManager = new gllib::collisionManager({}, &tileMap);
@@ -86,54 +86,53 @@ void Game::movement(gllib::Animation* player)
     }
 
     if (!Input::isAnyKeyPressed()) return;
-    gllib::Transform transform = player->getTransform();
 
     if (Input::getKeyPressed(Key_D))
     {
         // D
-        transform.position.x += 2.0f;
+        player->move({speed, 0.f, 0.f});
         player->setMirroredX(true);
         player->setCurrentAnimation(1);
         player->setRotationEuler({0, 180, 0});
-        if (!collisionManager->checkCollision(transform))
+        if (collisionManager->checkCollision(player->getTransform()))
         {
-            player->move({speed, 0.f, 0.f});
+            player->move({- speed, 0.f, 0.f});
         }
     }
 
     if (Input::getKeyPressed(Key_A))
     {
         // A
-        transform.position.x -= 2.0f;
+        player->move({-speed, 0.f, 0.f});
         player->setCurrentAnimation(1);
         player->setMirroredX(false);
-        if (!collisionManager->checkCollision(transform))
+        if (collisionManager->checkCollision(player->getTransform()))
         {
-            player->move({-speed, 0.f, 0.f});
+            player->move({speed, 0.f, 0.f});
         }
     }
 
     if (Input::getKeyPressed(Key_W))
     {
         // W
-        transform.position.y -= 2.0f;
+        player->move({0.f, -speed, 0.f});
         player->setCurrentAnimation(0);
         player->setMirroredY(false);
-        if (!collisionManager->checkCollision(transform))
+        if (collisionManager->checkCollision(player->getTransform()))
         {
-            player->move({0.f, -speed, 0.f});
+            player->move({0.f, speed, 0.f});
         }
     }
 
     if (Input::getKeyPressed(Key_S))
     {
         // S
+        player->move({0.f, speed, 0.f});
         player->setMirroredY(true);
         player->setCurrentAnimation(0);
-        transform.position.y += 2.0f;
-        if (!collisionManager->checkCollision(transform))
+        if (collisionManager->checkCollision(player->getTransform()))
         {
-            player->move({0.f, speed, 0.f});
+            player->move({0.f, -speed, 0.f});
         }
     }
 }

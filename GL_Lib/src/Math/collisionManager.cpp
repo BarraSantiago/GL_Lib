@@ -37,15 +37,20 @@ namespace gllib
 
         return checkTileMapCollision(transform);
     }
-    
+
     bool collisionManager::checkTileMapCollision(const Transform& transform) const
     {
         if (tilemap == nullptr) return false;
 
-        int minCol = static_cast<int>(std::floor(transform.position.x / tilemap->tileWidth));
-        int minRow = static_cast<int>(std::floor(transform.position.y / tilemap->tileHeight));
-        int maxCol = static_cast<int>(std::floor((transform.position.x + transform.scale.x - 0.001f) / tilemap->tileWidth));
-        int maxRow = static_cast<int>(std::floor((transform.position.y + transform.scale.y - 0.001f) / tilemap->tileHeight));
+        float left = transform.position.x - 0.5f * transform.scale.x;
+        float top = transform.position.y - 0.5f * transform.scale.y;
+        float right = transform.position.x + 0.5f * transform.scale.x;
+        float bottom = transform.position.y + 0.5f * transform.scale.y;
+
+        int minCol = static_cast<int>(std::floor(left / tilemap->tileWidth) - 2);
+        int minRow = static_cast<int>(std::floor(top / tilemap->tileHeight) - 2);
+        int maxCol = static_cast<int>(std::ceil(right / tilemap->tileWidth)) + 2;
+        int maxRow = static_cast<int>(std::ceil(bottom / tilemap->tileHeight)) + 2;
 
         minCol = std::max(0, minCol);
         minRow = std::max(0, minRow);
@@ -71,7 +76,7 @@ namespace gllib
 
         return false;
     }
-    
+
     void collisionManager::addObstacle(Entity* obstacle)
     {
         obstacles.push_back(obstacle);
