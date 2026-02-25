@@ -9,8 +9,8 @@ using namespace std;
 Shape::Shape(Vector3 translation, Vector3 rotation, Vector3 scale) :
     Entity(translation, rotation, scale),
     shaderProgram(0),
-    cachedModelMatrix(glm::mat4(1.0f)),
-    hasModelMatrixCache(false) {
+    cachedModelMatrix(glm::mat4(1.0f))
+{
     renderData.VAO = 0;
     renderData.VBO = 0;
     renderData.EBO = 0;
@@ -21,8 +21,8 @@ Shape::Shape(Vector3 translation, Vector3 rotation, Vector3 scale) :
 Shape::Shape(Transform transform) :
     Entity(transform),
     shaderProgram(0),
-    cachedModelMatrix(glm::mat4(1.0f)),
-    hasModelMatrixCache(false) {
+    cachedModelMatrix(glm::mat4(1.0f))
+{
     renderData.VAO = 0;
     renderData.VBO = 0;
     renderData.EBO = 0;
@@ -30,7 +30,8 @@ Shape::Shape(Transform transform) :
     cout << "Created shape.\n";
 }
 
-Shape::~Shape() {
+Shape::~Shape()
+{
     cout << "Destroyed shape.\n";
     // Destroy the render data to free up vram
     Renderer::destroyRenderData(renderData);
@@ -38,11 +39,13 @@ Shape::~Shape() {
 
 // Protected
 
-void Shape::alignVertex(float* vertexData, int vertexCount, int vertexStride) {
+void Shape::alignVertex(float* vertexData, int vertexCount, int vertexStride)
+{
     // Calculate the centroid
     float centerX = 0.0f, centerY = 0.0f, centerZ = 0.0f;
 
-    for (int i = 0; i < vertexCount; ++i) {
+    for (int i = 0; i < vertexCount; ++i)
+    {
         centerX += vertexData[i * vertexStride];
         centerY += vertexData[i * vertexStride + 1];
         centerZ += vertexData[i * vertexStride + 2];
@@ -53,15 +56,18 @@ void Shape::alignVertex(float* vertexData, int vertexCount, int vertexStride) {
     centerZ /= vertexCount;
 
     // Adjust each vertex to center it around the origin
-    for (int i = 0; i < vertexCount; ++i) {
+    for (int i = 0; i < vertexCount; ++i)
+    {
         vertexData[i * vertexStride] -= centerX;
         vertexData[i * vertexStride + 1] = -(vertexData[i * vertexStride + 1] - centerY);
         vertexData[i * vertexStride + 2] -= centerZ;
     }
 }
 
-void Shape::setRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize) {
-    if (renderData.VAO > 0) {
+void Shape::setRenderData(const float vertexData[], int vertexDataSize, const int index[], int indexSize)
+{
+    if (renderData.VAO > 0)
+    {
         Renderer::destroyRenderData(renderData);
     }
     // Update the size of the index (The size will depend on the shape drawn)
@@ -71,23 +77,27 @@ void Shape::setRenderData(const float vertexData[], int vertexDataSize, const in
     renderData = Renderer::createRenderData(vertexData, vertexDataSize, index, indexSize);
 }
 
-unsigned int Shape::getActiveShaderProgram() const {
-    if (shaderProgram != 0) {
+unsigned int Shape::getActiveShaderProgram() const
+{
+    if (shaderProgram != 0)
+    {
         return shaderProgram;
     }
 
     GLint currentProgram = 0;
     glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
-    if (currentProgram > 0) {
+    if (currentProgram > 0)
+    {
         return static_cast<unsigned int>(currentProgram);
     }
 
     return Shader::shapeShaderProgram;
 }
 
-void Shape::updateModelMatrix() {
-
-    glm::mat4 trs = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+void Shape::updateModelMatrix()
+{
+    glm::mat4 trs = glm::translate(glm::mat4(1.0f),
+                                   glm::vec3(transform.position.x, transform.position.y, transform.position.z));
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.x), glm::vec3(1.0f, 0.0f, 0.0f));
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -96,9 +106,11 @@ void Shape::updateModelMatrix() {
     cachedModelMatrix = trs;
 }
 
-void Shape::internalDraw() {
+void Shape::internalDraw()
+{
     const unsigned int activeShaderProgram = getActiveShaderProgram();
-    if (activeShaderProgram != 0) {
+    if (activeShaderProgram != 0)
+    {
         Shader::useShaderProgram(activeShaderProgram);
     }
 
@@ -107,10 +119,12 @@ void Shape::internalDraw() {
     Renderer::drawElements(renderData, indexSize);
 }
 
-unsigned int Shape::getShaderProgram() const {
+unsigned int Shape::getShaderProgram() const
+{
     return shaderProgram;
 }
 
-void Shape::setShaderProgram(unsigned int shaderProgram) {
+void Shape::setShaderProgram(unsigned int shaderProgram)
+{
     this->shaderProgram = shaderProgram;
 }

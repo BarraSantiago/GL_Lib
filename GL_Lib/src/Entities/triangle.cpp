@@ -28,9 +28,9 @@ Triangle::~Triangle() {
 void Triangle::updateRenderData(Color color) {
     // Values for the vertices
     float triangleVertexData[] = {
-        -1.0f, -1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 0.0f, /* uv */
-         1.0f, -1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 1.0f, 0.0f, /* uv */
-         0.0f,  1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a, /* rgba */ 0.0f, 1.0f, /* uv */
+        -1.0f, -1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a,
+         1.0f, -1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a,
+         0.0f,  1.0f, 0.0f, /* xyz */ color.r, color.g, color.b, color.a,
     };
     // The order in which the vertices are drawn
     const int triangleIndex[] = {

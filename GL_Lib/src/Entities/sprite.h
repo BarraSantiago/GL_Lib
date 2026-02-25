@@ -50,6 +50,7 @@ namespace gllib {
 
 		void addFrame(unsigned int textureID, int offsetX, int offsetY, int width, int height);
 		void addRawFrame(unsigned int textureID, float offsetX, float offsetY, float width, float height);
+		int getCurrentAnimationFrameCount() const;
 
 		virtual void draw() override;
 	};

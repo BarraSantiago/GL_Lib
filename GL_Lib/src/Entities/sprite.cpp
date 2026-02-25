@@ -14,6 +14,7 @@ Sprite::Sprite(Vector3 translation, Vector3 rotation, Vector3 scale, Color color
     textures.resize(2);
 
     updateRenderData();
+    Shape::updateModelMatrix();
     cout << "Created sprite.\n";
 }
 
@@ -27,6 +28,7 @@ Sprite::Sprite(Transform transform, Color color) :
     textures.resize(2);
 
     updateRenderData();
+    Shape::updateModelMatrix();
     cout << "Created sprite.\n";
 }
 
@@ -42,6 +44,7 @@ Sprite::Sprite(Sprite const& other) :
     textures.resize(2);
 
     updateRenderData();
+    Shape::updateModelMatrix();
     cout << "Created sprite.\n";
 }
 
@@ -96,8 +99,8 @@ void Sprite::updateRenderData() {
     alignVertex(rectangleVertexData, 4, 9);
 
     // Aquire the size of each buffer
-    int vertexDataSize = sizeof(rectangleVertexData) / sizeof(rectangleVertexData[0]);
-    int indexSize = sizeof(rectangleIndex) / sizeof(rectangleIndex[0]);
+    int vertexDataSize = std::size(rectangleVertexData);
+    int indexSize = std::size(rectangleIndex);
 
     // Initialize the render data on shape
     setRenderData(rectangleVertexData, vertexDataSize, rectangleIndex, indexSize);
@@ -214,6 +217,14 @@ void Sprite::addRawFrame(unsigned int textureID, float offsetX, float offsetY, f
     updateRenderData();
 }
 
+int Sprite::getCurrentAnimationFrameCount() const {
+    if (currentAnimation < 0 || currentAnimation >= static_cast<int>(textures.size())) {
+        return 0;
+    }
+
+    return static_cast<int>(textures[currentAnimation].size());
+}
+
 void Sprite::draw() {
     if (!textures.empty() && 
         currentAnimation < textures.size() && 
@@ -222,5 +233,6 @@ void Sprite::draw() {
         {
         Renderer::bindTexture(textures[currentAnimation][currentFrame].textureID);
     }
+    updateRenderData();
     internalDraw();
 }

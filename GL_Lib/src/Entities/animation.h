@@ -8,8 +8,10 @@
 namespace gllib
 {
     // TODO REMOVE SPRITE INHERITANCE
-    class DLLExport Animation : public Sprite {
+    class DLLExport Animation {
     private:
+        Sprite* sprite;
+        bool ownsSprite;
         double durationInSecs;
         double elapsedTime;
         bool paused;
@@ -17,7 +19,11 @@ namespace gllib
     public:
         Animation(Vector3 translation, Vector3 rotation, Vector3 scale, Color color);
         Animation(Transform transform, Color color);
-        virtual ~Animation() override;
+        Animation(Sprite* sprite, bool takeOwnership = false);
+        virtual ~Animation();
+
+        Animation(const Animation&) = delete;
+        Animation& operator=(const Animation&) = delete;
 
         void addFramesFromAtlas(unsigned int textureID, int startX, int startY, int frameWidth, int frameHeight, int columns, int rows);
         void addFrames(unsigned int textureID, int frameWidth, int frameHeight, int columns, int rows, int columnsOffset, int rowsOffset);
@@ -29,5 +35,16 @@ namespace gllib
         /// Sets the current frame to the first frame.
         /// </summary>
         void reset();
+
+        // Sprite delegation helpers
+        Sprite* getSprite() const;
+        void draw();
+        Transform getTransform() const;
+        void move(Vector3 direction);
+        void setRotationEuler(const Vector3& rotation);
+        void setMirroredX(bool mirrored);
+        void setMirroredY(bool mirrored);
+        void setCurrentAnimation(int animation);
+        void setCurrentFrame(unsigned int frame);
     };
 }
