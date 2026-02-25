@@ -4,6 +4,9 @@
 #include <sstream>
 #include <ext/matrix_transform.hpp>
 
+#include "myMaths.h"
+#include "Math/collisionManager.h"
+
 using namespace tinyxml2;
 
 namespace gllib
@@ -262,16 +265,13 @@ namespace gllib
         }
     }
 
-    // TODO USE COLLISION MANAGER AABB
-    bool TileMap::checkCollisionAABB(float x, float y, float w, float h) const
+    bool TileMap::checkCollisionAABB(Transform transform) const
     {
-        Rect obj{x, y, w, h};
-
         // Rango de tiles tocados por el objeto
-        int minCol = static_cast<int>(std::floor(x / tileWidth));
-        int minRow = static_cast<int>(std::floor(y / tileHeight));
-        int maxCol = static_cast<int>(std::floor((x + w - 0.001f) / tileWidth));
-        int maxRow = static_cast<int>(std::floor((y + h - 0.001f) / tileHeight));
+        int minCol = static_cast<int>(std::floor(transform.position.x / tileWidth));
+        int minRow = static_cast<int>(std::floor(transform.position.y / tileHeight));
+        int maxCol = static_cast<int>(std::floor((transform.position.x + transform.scale.x - 0.001f) / tileWidth));
+        int maxRow = static_cast<int>(std::floor((transform.position.y + transform.scale.y - 0.001f) / tileHeight));
 
         minCol = std::max(0, minCol);
         minRow = std::max(0, minRow);
@@ -289,15 +289,8 @@ namespace gllib
                     const Tile& t = layer.tiles[row][col];
                     if (t.empty()) continue;
                     if (t.walkable) continue;
-
-                    Rect tileRect{
-                        t.getPosition().x,
-                        t.getPosition().y,
-                        static_cast<float>(tileWidth),
-                        static_cast<float>(tileHeight)
-                    };
-
-                    if (Intersects(obj, tileRect))
+                    
+                    if (Maths::checkAABB(t.getTransform(), transform))
                         return true;
                 }
             }

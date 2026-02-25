@@ -54,4 +54,41 @@ namespace gllib
         result.z = (xz2 - wy2) * Vec.x + (yz2 + wx2) * Vec.y + (1.0f - (xx2 + yy2)) * Vec.z;
         return result;
     }
+
+    bool Maths::checkAABB(const Rect& a, const Rect& b)
+    {
+        return !(a.x + a.w <= b.x ||
+            b.x + b.w <= a.x ||
+            a.y + a.h <= b.y ||
+            b.y + b.h <= a.y);
+    }
+
+    bool Maths::checkAABB(const Transform& transform, const Transform& _transform)
+    {
+        float thisAdjustedX = transform.position.x - 0.5f * transform.scale.x;
+        float thisAdjustedY = transform.position.y - 0.5f * transform.scale.y;
+
+        float otherAdjustedX = _transform.position.x - 0.5f * _transform.scale.x;
+        float otherAdjustedY = _transform.position.y - 0.5f * _transform.scale.y;
+
+        return (thisAdjustedX + transform.scale.x >= otherAdjustedX &&
+            thisAdjustedX <= otherAdjustedX + _transform.scale.x &&
+            thisAdjustedY + transform.scale.y >= otherAdjustedY &&
+            thisAdjustedY <= otherAdjustedY + _transform.scale.y);
+    }
+
+    bool Maths::checkAABB(float x1, float y1, float width1, float height1,
+                            float x2, float y2, float width2, float height2)
+    {
+        float adjustedX1 = x1 - 0.5f * width1;
+        float adjustedY1 = y1 - 0.5f * height1;
+
+        float adjustedX2 = x2 - 0.5f * width2;
+        float adjustedY2 = y2 - 0.5f * height2;
+
+        return (adjustedX1 + width1 >= adjustedX2 &&
+            adjustedX1 <= adjustedX2 + width2 &&
+            adjustedY1 + height1 >= adjustedY2 &&
+            adjustedY1 <= adjustedY2 + height2);
+    }
 }

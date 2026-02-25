@@ -1,12 +1,16 @@
 #include "shape.h"
+#include "Rendering/shader.h"
 
 #include <iostream>
 
 using namespace gllib;
 using namespace std;
 
-Shape::Shape(Vector3 translation, Vector3 rotation, Vector3 scale) : 
-    Entity(translation, rotation, scale) {
+Shape::Shape(Vector3 translation, Vector3 rotation, Vector3 scale) :
+    Entity(translation, rotation, scale),
+    shaderProgram(0),
+    cachedModelMatrix(glm::mat4(1.0f)),
+    hasModelMatrixCache(false) {
     renderData.VAO = 0;
     renderData.VBO = 0;
     renderData.EBO = 0;
@@ -15,7 +19,10 @@ Shape::Shape(Vector3 translation, Vector3 rotation, Vector3 scale) :
 }
 
 Shape::Shape(Transform transform) :
-    Entity(transform){
+    Entity(transform),
+    shaderProgram(0),
+    cachedModelMatrix(glm::mat4(1.0f)),
+    hasModelMatrixCache(false) {
     renderData.VAO = 0;
     renderData.VBO = 0;
     renderData.EBO = 0;
@@ -64,17 +71,46 @@ void Shape::setRenderData(const float vertexData[], int vertexDataSize, const in
     renderData = Renderer::createRenderData(vertexData, vertexDataSize, index, indexSize);
 }
 
-// TODO DO TRS AFTER MODIFYING ANY OF THE TRS COMPONENTS
-// TODO MAKE IT HAVE A REFERENCE TO THE SHADER, AND APPLY IT USES
-void Shape::internalDraw() {
-    glm::mat4 trs = glm::mat4(1.0f);
+unsigned int Shape::getActiveShaderProgram() const {
+    if (shaderProgram != 0) {
+        return shaderProgram;
+    }
 
-    trs = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position.x, transform.position.y, transform.position.z));
-    trs = glm::rotate(trs, glm::radians(transform.rotationQuat.x), glm::vec3(1.0, 0.0f, 0.0f));
+    GLint currentProgram = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+    if (currentProgram > 0) {
+        return static_cast<unsigned int>(currentProgram);
+    }
+
+    return Shader::shapeShaderProgram;
+}
+
+void Shape::updateModelMatrix() {
+
+    glm::mat4 trs = glm::translate(glm::mat4(1.0f), glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+    trs = glm::rotate(trs, glm::radians(transform.rotationQuat.x), glm::vec3(1.0f, 0.0f, 0.0f));
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.y), glm::vec3(0.0f, 1.0f, 0.0f));
     trs = glm::rotate(trs, glm::radians(transform.rotationQuat.z), glm::vec3(0.0f, 0.0f, 1.0f));
     trs = glm::scale(trs, glm::vec3(transform.scale.x, transform.scale.y, 1.0f));
 
-    Renderer::setModelMatrix(trs);
+    cachedModelMatrix = trs;
+}
+
+void Shape::internalDraw() {
+    const unsigned int activeShaderProgram = getActiveShaderProgram();
+    if (activeShaderProgram != 0) {
+        Shader::useShaderProgram(activeShaderProgram);
+    }
+
+    updateModelMatrix();
+    Renderer::setModelMatrix(cachedModelMatrix);
     Renderer::drawElements(renderData, indexSize);
+}
+
+unsigned int Shape::getShaderProgram() const {
+    return shaderProgram;
+}
+
+void Shape::setShaderProgram(unsigned int shaderProgram) {
+    this->shaderProgram = shaderProgram;
 }

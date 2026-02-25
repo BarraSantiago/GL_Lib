@@ -18,19 +18,7 @@ namespace gllib
     // --------------------
     
 
-    struct DLLExport Rect
-    {
-        float x = 0.f, y = 0.f;
-        float w = 0.f, h = 0.f;
-    };
 
-    inline bool Intersects(const Rect& a, const Rect& b)
-    {
-        return !(a.x + a.w <= b.x ||
-            b.x + b.w <= a.x ||
-            a.y + a.h <= b.y ||
-            b.y + b.h <= a.y);
-    }
 
     // --------------------
     // Tilemap
@@ -50,7 +38,7 @@ namespace gllib
 
         void draw() const;
 
-        bool checkCollisionAABB(float x, float y, float w, float h) const;
+        bool checkCollisionAABB(Transform transform) const;
 
     private:
         const Tileset* findTilesetForGid(uint32_t gid) const;

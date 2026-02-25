@@ -18,6 +18,7 @@ namespace gllib
         void move(Vector3 direction);
         void rotate(Vector3 eulerRotation);
         void updateTransform();
+        virtual void updateModelMatrix() = 0;
 
         Vector3 upward() const;
         Vector3 forward() const;
@@ -34,10 +35,5 @@ namespace gllib
         void setScale(const Vector3& scale);
         void setRotationQuat(const Quaternion& rotation);
         void setRotationEuler(const Vector3& rotation);
-
-        bool isColliding(const Transform& _transform) const;
-        bool isColliding(float x, float y, float width, float height) const;
-
-        void drawAABB(const Color& color = {1.0f, 0.0f, 0.0f, 1.0f}) const; // Add this
     };
 }

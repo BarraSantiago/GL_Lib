@@ -21,6 +21,7 @@ namespace gllib
 
     void Entity::move(const Vector3 direction) {
         transform.position += direction;
+        updateModelMatrix();
     }
 
     void Entity::rotate(const Vector3 eulerRotation) {
@@ -29,12 +30,14 @@ namespace gllib
         rotationQuat.y = eulerRotation.y;
         rotationQuat.z = eulerRotation.z;
         transform.rotationQuat += rotationQuat;
+        updateModelMatrix();
     }
 
     void Entity::updateTransform() {
         transform.forward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 0, 1));
         transform.upward = Maths::Quat2Vec3(transform.rotationQuat, Vector3(0, 1, 0));
         transform.right = Maths::Quat2Vec3(transform.rotationQuat, Vector3(1, 0, 0));
+        updateModelMatrix();
     }
 
     Vector3 Entity::upward() const {
@@ -76,63 +79,26 @@ namespace gllib
 
     void Entity::setTransform(const Transform& transform) {
         this->transform = transform;
+        updateModelMatrix();
     }
 
     void Entity::setPosition(const Vector3& position) {
         transform.position = position;
+        updateModelMatrix();
     }
 
     void Entity::setScale(const Vector3& scale) {
         transform.scale = scale;
+        updateModelMatrix();
     }
 
     void Entity::setRotationQuat(const Quaternion& rotation) {
         transform.rotationQuat = rotation;
+        updateModelMatrix();
     }
 
     void Entity::setRotationEuler(const Vector3& rotation)	{
         transform.rotationQuat = Maths::Euler(rotation);
-    }
-
-    bool Entity::isColliding(const Transform& _transform) const
-    {
-        float xOffset = 0.5f * transform.scale.x;
-        float yOffset = 0.5f * transform.scale.y;
-
-        float thisAdjustedX = transform.position.x - xOffset;
-        float thisAdjustedY = transform.position.y - yOffset;
-
-        xOffset = 0.5f * _transform.scale.x;
-        yOffset = 0.5f * _transform.scale.y;
-
-        float otherAdjustedX = _transform.position.x - xOffset;
-        float otherAdjustedY = _transform.position.y - yOffset;
-
-        if (thisAdjustedX + transform.scale.x >= otherAdjustedX &&
-            thisAdjustedX <= otherAdjustedX + _transform.scale.x &&
-            thisAdjustedY + transform.scale.y >= otherAdjustedY &&
-            thisAdjustedY <= otherAdjustedY + _transform.scale.y)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    bool Entity::isColliding(float x, float y, float width, float height) const
-    {
-        float xOffset = 0.5f * transform.scale.x;
-        float yOffset = 0.5f * transform.scale.y;
-    
-        float thisAdjustedX = transform.position.x - xOffset;
-        float thisAdjustedY = transform.position.y - yOffset;
-    
-        if (thisAdjustedX + transform.scale.x >= x &&
-            thisAdjustedX <= x + width &&
-            thisAdjustedY + transform.scale.y >= y &&
-            thisAdjustedY <= y + height) {
-            return true;
-        }
-        return false;
+        updateModelMatrix();
     }
 }
