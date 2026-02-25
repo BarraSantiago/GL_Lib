@@ -25,11 +25,11 @@ namespace gllib {
 		void uninitInternal();
 
 	protected:
-		Window* window;
-		Input* input;
+		Window* window = nullptr;
+		Input* input = nullptr;
 
-		unsigned int shaderProgramSolidColor;
-		unsigned int shaderProgramTexture;
+		unsigned int shaderProgramSolidColor = 0;
+		unsigned int shaderProgramTexture = 0;
 
 		virtual void init() {};
 		virtual void update() {};

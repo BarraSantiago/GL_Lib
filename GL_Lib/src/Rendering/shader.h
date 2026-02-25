@@ -11,6 +11,9 @@ namespace gllib {
 	public:
 		static unsigned int shapeShaderProgram;
 		static unsigned int textureShaderProgram;
+
+		static bool initDefaultShaders();
+		static void destroyDefaultShaders();
 		
 		static unsigned int createShader(const char* vertexShader, const char* fragmentShader);
 		static void destroyShader(unsigned int program);

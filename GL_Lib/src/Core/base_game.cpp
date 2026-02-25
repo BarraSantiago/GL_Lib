@@ -32,20 +32,16 @@ BaseGame::~BaseGame() {
 }
 
 // Private
-// TODO CHANGE SHADER INIT TO SHADER
-// TODO ADD MORE SHADERS
 bool BaseGame::initInternal() {
 	// Check if the PC has a working OpenGL driver
 	cout << glGetString(GL_VERSION) << "\n";
 
-	// Load vertex and fragment shaders from files
-	const char* vertexSource1 = gllib::Shader::loadShader("solidColorV.glsl");
-	const char* fragmentSource1 = gllib::Shader::loadShader("solidColorF.glsl");
-	const char* vertexSource2 = gllib::Shader::loadShader("textureV.glsl");
-	const char* fragmentSource2 = gllib::Shader::loadShader("textureF.glsl");
-	// Create shader program
-	shaderProgramSolidColor = gllib::Shader::createShader(vertexSource1, fragmentSource1);
-	shaderProgramTexture = gllib::Shader::createShader(vertexSource2, fragmentSource2);
+	if (!Shader::initDefaultShaders()) {
+		return false;
+	}
+
+	shaderProgramSolidColor = Shader::shapeShaderProgram;
+	shaderProgramTexture = Shader::textureShaderProgram;
 	// Set current shader program
 	Shader::useShaderProgram(shaderProgramSolidColor);
 
@@ -68,8 +64,9 @@ void BaseGame::updateInternal() {
 }
 
 void BaseGame::uninitInternal() {
-	Shader::destroyShader(shaderProgramSolidColor);
-	Shader::destroyShader(shaderProgramTexture);
+	Shader::destroyDefaultShaders();
+	shaderProgramSolidColor = 0;
+	shaderProgramTexture = 0;
 	uninit();
 }
 

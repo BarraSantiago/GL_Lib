@@ -54,6 +54,38 @@ unsigned int Shader::compileShader(unsigned int type, string source) {
 
 // Public
 
+bool Shader::initDefaultShaders() {
+    if (shapeShaderProgram != 0 || textureShaderProgram != 0) {
+        destroyDefaultShaders();
+    }
+
+    const char* vertexSource1 = Shader::loadShader("solidColorV.glsl");
+    const char* fragmentSource1 = Shader::loadShader("solidColorF.glsl");
+    const char* vertexSource2 = Shader::loadShader("textureV.glsl");
+    const char* fragmentSource2 = Shader::loadShader("textureF.glsl");
+
+    shapeShaderProgram = Shader::createShader(vertexSource1, fragmentSource1);
+    textureShaderProgram = Shader::createShader(vertexSource2, fragmentSource2);
+
+    if (shapeShaderProgram == 0 || textureShaderProgram == 0) {
+        destroyDefaultShaders();
+        return false;
+    }
+
+    return true;
+}
+
+void Shader::destroyDefaultShaders() {
+    if (shapeShaderProgram != 0) {
+        Shader::destroyShader(shapeShaderProgram);
+        shapeShaderProgram = 0;
+    }
+    if (textureShaderProgram != 0) {
+        Shader::destroyShader(textureShaderProgram);
+        textureShaderProgram = 0;
+    }
+}
+
 unsigned int Shader::createShader(const char* vertexShader, const char* fragmentShader) {
     cout << "Creating Shader Program..." << endl;
     unsigned int program = glCreateProgram();
