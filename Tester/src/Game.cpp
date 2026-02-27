@@ -60,12 +60,12 @@ void Game::drawObjects()
 {
     gllib::Renderer::clear();
 
-    gllib::Shader::useShaderProgram(gllib::Shader::textureShaderProgram);
+    gllib::Shader::useShaderProgram(shaderProgramTexture);
 
     tileMap.draw();
     player->draw();
 
-    gllib::Shader::useShaderProgram(gllib::Shader::shapeShaderProgram);
+    gllib::Shader::useShaderProgram(shaderProgramSolidColor);
 }
 
 // TODO MOVE THE ACTUAL PLAYER, NOT USE A TRANSFORM COPY

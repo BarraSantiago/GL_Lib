@@ -40,8 +40,10 @@ bool BaseGame::initInternal() {
 		return false;
 	}
 
+	shaderProgramSolidColor = Shader::shapeShaderProgram;
+	shaderProgramTexture = Shader::textureShaderProgram;
 	// Set current shader program
-	Shader::useShaderProgram(Shader::shapeShaderProgram);
+	Shader::useShaderProgram(shaderProgramSolidColor);
 
 	init();
 	
@@ -63,6 +65,8 @@ void BaseGame::updateInternal() {
 
 void BaseGame::uninitInternal() {
 	Shader::destroyDefaultShaders();
+	shaderProgramSolidColor = 0;
+	shaderProgramTexture = 0;
 	uninit();
 }
 
